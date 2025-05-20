@@ -125,6 +125,7 @@
           noice-nvim
           mini-nvim
           neodev-nvim
+          copilot-lua
           # nvim-lspconfig
           # blink-cmp
           # mini-pairs
@@ -204,6 +205,7 @@
           aliases = [ "vim" ];
           # neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.neovim;
           hosts.python3.enable = true;
+          hosts.node.enable = true;
         };
         # and a set of categories that you want
         # (and other information to pass to lua)

@@ -1,4 +1,4 @@
---local logger = require("copilot.logger")
+local logger = require("copilot.logger")
 return {
 	"zbirenbaum/copilot.lua",
 	cmd = "Copilot",
