@@ -20,6 +20,9 @@ vim.keymap.set("n", "<leader>ql", function() require("persistence").load({ last 
 -- stop Persistence => session won't be saved on exit
 vim.keymap.set("n", "<leader>qd", function() require("persistence").stop() end)
 
+-- create a keymap for Lazy 
+vim.keymap.set('n', '<leader>l', function() require('lazy').home() end, { desc = 'Lazy' })
+
 -- Directional window movements
 vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Move to left window' })
 vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Move to right window' })
