@@ -3,7 +3,7 @@ result/
 .env
 .env.*
 .devenv*
-.direnv*
+.direnv/
 /.cache
 /.pre-commit-config.yaml
 man
