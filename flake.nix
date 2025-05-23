@@ -110,6 +110,8 @@
           lua-language-server
           lua51Packages.lua
           lua51Packages.luarocks
+          gumbo
+          # lua51Packages.luasocket
         ];
       };
 
@@ -178,7 +180,11 @@
       };
       # populates $LUA_PATH and $LUA_CPATH
       extraLuaPackages = {
-        test = [ (_:[]) ];
+        test = [ (lr: with lr; [
+          luasocket
+          luasec
+          # gumbo
+        ]) ];
       };
     };
 

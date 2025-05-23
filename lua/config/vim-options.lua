@@ -2,7 +2,7 @@ vim.cmd("set expandtab")
 vim.cmd("set tabstop=4")
 vim.cmd("set softtabstop=2")
 vim.cmd("set shiftwidth=2")
-vim.cmd("set nu")
+vim.cmd("set number")
 vim.cmd("set relativenumber")
 vim.cmd("set clipboard=unnamedplus")
 vim.g.mapleader = " "
@@ -22,10 +22,13 @@ vim.keymap.set("n", "<leader>qd", function() require("persistence").stop() end)
 
 -- create a keymap for Lazy 
 vim.keymap.set('n', '<leader>l', function() require('lazy').home() end, { desc = 'Lazy' })
-
+vim.keymap.set('i', 'jk', '<Esc>', { desc = 'Insert Escape' })
+-- vim.keymap.set('t', 'jk', '<Esc><Esc>', { desc = 'Terminal Escape' })
 -- Directional window movements
 vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Move to left window' })
 vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Move to right window' })
 
 vim.keymap.set('n', '<C-j>', '<C-w>j', { desc = 'Move to lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w>k', { desc = 'Move to upper window' })
+vim.keymap.set('t', '<C-k>', '<C-w>k', { desc = 'Move to upper window' })
+
