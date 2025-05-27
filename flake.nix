@@ -110,7 +110,7 @@
           lua-language-server
           lua51Packages.lua
           lua51Packages.luarocks
-          gumbo
+          # gumbo
           # lua51Packages.luasocket
         ];
       };
@@ -183,6 +183,11 @@
         test = [ (lr: with lr; [
           luasocket
           luasec
+          lrexlib-pcre
+          cjson
+          penlight
+          jsregexp
+          busted
           # gumbo
         ]) ];
       };
