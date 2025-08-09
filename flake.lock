@@ -31,10 +31,24 @@
         "type": "github"
       }
     },
+    "plugins-at-popup": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1748369935,
+        "narHash": "sha256-qxDGFIpJ3xp4PFS6LXEP3H+8A7F5hhc1JUnr1VVLXNI=",
+        "path": "/Users/oluwapelumiadeosun/Projects/lua-tutorials/at-popup/",
+        "type": "path"
+      },
+      "original": {
+        "path": "/Users/oluwapelumiadeosun/Projects/lua-tutorials/at-popup/",
+        "type": "path"
+      }
+    },
     "root": {
       "inputs": {
         "nixCats": "nixCats",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "plugins-at-popup": "plugins-at-popup"
       }
     }
   },
