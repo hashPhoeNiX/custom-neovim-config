@@ -13,7 +13,7 @@ end
 local lazyOptions = {
   lockfile = getlockfilepath(),
 }
-
+require("config.lsp")
 require("config.vim-options")
 -- plugins = require("plugins")
 
