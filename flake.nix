@@ -135,6 +135,7 @@
           mini-nvim
           neodev-nvim
           copilot-lua
+          vim-tmux-navigator
           # nvim-lspconfig
           # blink-cmp
           # mini-pairs
