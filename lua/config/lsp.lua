@@ -1,37 +1,32 @@
-local servers = {}
+--- LSP configuration for Neovim
 
-local lspconfig = require('lspconfig')
-if nixCats('neonixdev') then
-  vim.api.nvim_create_autocmd(
-    'FileType',
-    {
-      group = vim.api.nvim_create_augroup('nixCats-lazydev', { clear = true }),
-      pattern = { 'lua' },
-      callback = function(event)
-        vim.cmd.packadd('lazydev.nvim')
-        require('lazydev').setup({
-          library = {
-            { path = require('nixCats').nixCatsPath ..'/lua', words = { "nixCats" } },
-          }
-        })
-      end
-    }
-  ) 
-  servers.lua_ls = {
-    settings = {
-      Lua = {
-        formatters = {
-          ignoreComments = true,
-        },
-        signatureHelp = { enabled = true },
-        diagnostics = {
-          globals = { 'nixCats' },
-          disable = { 'missing-fields' },
-        },
-      },
-      telemetry = { enabled = false },
-    },
-    filetypes = { 'lua' },
-  }
+-- Enable servers with specific overrides for Lua
+vim.lsp.enable({
+	"lua_ls",
+	-- "pyright",
+	"nixd",
+})
+
+--- This file sets up the LSP client, key mappings, and autocommands for LSP features.
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(ev)
+		local client = vim.lsp.get_client_by_id(ev.data.client_id)
+		if client:supports_method("textDocument/completion") then
+			vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = false })
+		end
+	end,
+})
+-- This is copied straight from blink
+-- https://cmp.saghen.dev/installation#merging-lsp-capabilities
+if nixCats("neonixdev") then
+	local capabilities = {
+		textDocument = {
+			foldingRange = {
+				dynamicRegistration = false,
+				lineFoldingOnly = true,
+			},
+		},
+	}
+	capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
 
 end

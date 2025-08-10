@@ -2,6 +2,8 @@ require('nixCatsUtils').setup {
   non_nix_value = true,
 }
 
+require("config.lsp")
+require("config.vim-options")
 -- NOTE: You might want to move the lazy-lock.json file
 local function getlockfilepath()
   if require('nixCatsUtils').isNixCats and type(nixCats.settings.unwrappedCfgPath) == 'string' then
@@ -14,8 +16,6 @@ end
 local lazyOptions = {
   lockfile = getlockfilepath(),
 }
-
-require("config.vim-options")
 -- plugins = require("plugins")
 
 require('nixCatsUtils.lazyCat').setup(

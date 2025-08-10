@@ -23,7 +23,11 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
-
+    # Adding custom plugins
+    # plugins-at-popup = {
+    #   url = "path:/Users/oluwapelumiadeosun/Projects/lua-tutorials/at-popup/";
+    #   flake = false;
+    # };
     # neovim-nightly-overlay = {
     #   url = "github:nix-community/neovim-nightly-overlay";
     # };
@@ -117,7 +121,10 @@
 
       # This is for plugins that will load at startup without using packadd:
       startupPlugins = {
-        gitPlugins = with pkgs.neovimPlugins; [ ];
+        gitPlugins = with pkgs.neovimPlugins; [
+          # at-popup
+          # { name = "at-popup"; plugin = at-popup; }
+        ];
         general = with pkgs.vimPlugins; [
           catppuccin-nvim
           # { plugin = catppuccin-nvim; name = "catpuccin"; }
@@ -128,6 +135,7 @@
           mini-nvim
           neodev-nvim
           copilot-lua
+          vim-tmux-navigator
           # nvim-lspconfig
           # blink-cmp
           # mini-pairs
