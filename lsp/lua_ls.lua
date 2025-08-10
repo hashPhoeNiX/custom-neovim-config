@@ -20,7 +20,7 @@ return {
         path = vim.split(package.path, ';'),
       },
       diagnostics = {
-        globals = { 'vim' },
+        globals = { 'vim', 'nixCats' },
         workspaceDelay = -1,
       },
       workspace = {
