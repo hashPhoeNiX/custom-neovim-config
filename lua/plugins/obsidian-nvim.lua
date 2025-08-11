@@ -17,11 +17,11 @@ return {
     workspaces = {
       {
         name = "personal",
-        path = "~/Documents/personal-notes/obsidian-notes",
+        path = "~/personal-notes/obsidian-notes",
       },
       {
         name = "work",
-        path = "~/Documents/personal-notes/reliance-notes",
+        path = "~/personal-notes/reliance-notes",
       },
     },
 
