@@ -24,6 +24,10 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
     # Adding custom plugins
+    plugins-obsidian-nvim = {
+      url = "github:obsidian-nvim/obsidian.nvim";
+      flake = false;
+    };
     # plugins-at-popup = {
     #   url = "path:/Users/oluwapelumiadeosun/Projects/lua-tutorials/at-popup/";
     #   flake = false;
@@ -122,6 +126,7 @@
       # This is for plugins that will load at startup without using packadd:
       startupPlugins = {
         gitPlugins = with pkgs.neovimPlugins; [
+          { name = "obsidian.nvim"; plugin =  obsidian-nvim; }
           # at-popup
           # { name = "at-popup"; plugin = at-popup; }
         ];
