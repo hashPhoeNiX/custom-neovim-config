@@ -8,6 +8,7 @@ result/
 /.pre-commit-config.yaml
 man
 
+*/.DS_Store
 # Compiled Lua sources
 luac.out
 

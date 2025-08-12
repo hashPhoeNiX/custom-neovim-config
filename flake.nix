@@ -115,6 +115,8 @@
           ruff
           pyright
           basedpyright
+          imagemagick
+          python312Packages.jupytext
           lua-language-server
           lua51Packages.lua
           lua51Packages.luarocks
@@ -144,6 +146,21 @@
           # nvim-lspconfig
           # blink-cmp
           # mini-pairs
+          # nvim-treesitter.withAllGrammars
+          # This is for if you only want some of the grammars
+          # (nvim-treesitter.withPlugins (
+          #   plugins: with plugins; [
+          #     nix
+          #     lua
+          #     python
+          #   ]
+          # ))
+          # Data Engineering, Science and Analysis
+          molten-nvim
+          quarto-nvim
+          image-nvim
+          jupytext-nvim
+          otter-nvim
         ];
       };
 
@@ -180,6 +197,16 @@
         ];
       };
 
+      bashBeforeWrapper = {
+        general = ''
+            if [ ! -d "$HOME/Library/Jupyter/kernels/nixcats-python" ]; then
+          ${name}-python3 -m ipykernel install \
+                  --user \
+                  --name "nixCats-python" \
+                  --display-name "NixCats Python"
+            fi
+        '';
+      };
       # lists of the functions you would have passed to
       # python.withPackages or lua.withPackages
       # do not forget to set `hosts.python3.enable` in package settings
@@ -190,6 +217,21 @@
       # or run from nvim terminal via :!<packagename>-python3
       python3.libraries = {
         test = (_:[]);
+        general = (ps: with ps; [
+          pynvim
+          jupyter-client
+          cairosvg # for image rendering
+          pnglatex # for image rendering
+          # plotly # for image rendering
+          kaleido # for image rendering
+          pyperclip
+          nbformat
+          jupytext
+          ipykernel
+          pillow
+          # Disable Falcon tests here
+          #(ps.falcon.overridePythonAttrs (old: { doCheck = false; }))
+        ]);
       };
       # populates $LUA_PATH and $LUA_CPATH
       extraLuaPackages = {
@@ -203,6 +245,11 @@
           busted
           # gumbo
         ]) ];
+        general = [ 
+          (ps: with ps; [
+            magick
+          ])
+        ];
       };
     };
 
@@ -226,7 +273,7 @@
           wrapRc = true;
           # IMPORTANT:
           # your alias may not conflict with your other packages.
-          aliases = [ "vim" ];
+          aliases = [ "vim" "nv" ];
           # neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.neovim;
           hosts.python3.enable = true;
           hosts.node.enable = true;
