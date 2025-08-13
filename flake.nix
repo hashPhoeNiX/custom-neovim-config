@@ -222,7 +222,7 @@
           jupyter-client
           cairosvg # for image rendering
           pnglatex # for image rendering
-          # plotly # for image rendering
+          plotly # for image rendering
           kaleido # for image rendering
           pyperclip
           nbformat

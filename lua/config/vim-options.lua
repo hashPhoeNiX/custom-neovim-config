@@ -23,6 +23,8 @@ vim.keymap.set("n", "<leader>qd", function() require("persistence").stop() end)
 -- create a keymap for Lazy 
 vim.keymap.set('n', '<leader>l', function() require('lazy').home() end, { desc = 'Lazy' })
 vim.keymap.set('i', 'jk', '<Esc>', { desc = 'Insert Escape' })
+vim.keymap.set('i', 'jj', '<Esc>', { desc = 'Insert Escape' })
+vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', { noremap = true, silent = true, desc = "Terminal Escape" })
 -- vim.keymap.set('t', 'jk', '<Esc><Esc>', { desc = 'Terminal Escape' })
 -- Directional window movements
 vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Move to left window' })

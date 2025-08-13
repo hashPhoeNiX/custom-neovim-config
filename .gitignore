@@ -8,7 +8,10 @@ result/
 /.pre-commit-config.yaml
 man
 
+# Python
 */.DS_Store
+*.ipynb
+
 # Compiled Lua sources
 luac.out
 
