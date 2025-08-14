@@ -21,6 +21,9 @@ local lazyOptions = {
 require('nixCatsUtils.lazyCat').setup(
   nixCats.pawsible { 'allPlugins', 'start', 'lazy.nvim' },
   -- "plugins", --this works too
-  {import = "plugins"},
+  {
+    {import = "plugins"},
+    {import = "plugins.data-tools"},
+  },
   lazyOptions
 )
