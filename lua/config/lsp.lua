@@ -30,3 +30,9 @@ if nixCats("neonixdev") then
 	capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
 
 end
+
+vim.diagnostic.enable(true)
+vim.diagnostic.config({
+  -- signs = true,
+  virtual_text = true,
+})
