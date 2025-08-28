@@ -6,6 +6,7 @@ vim.cmd("set number")
 vim.cmd("set relativenumber")
 vim.cmd("set clipboard=unnamedplus")
 vim.g.mapleader = " "
+vim.g.maplocalleader = ","
 vim.opt.termguicolors = true
 
 -- load the session for the current directory
@@ -20,7 +21,7 @@ vim.keymap.set("n", "<leader>ql", function() require("persistence").load({ last 
 -- stop Persistence => session won't be saved on exit
 vim.keymap.set("n", "<leader>qd", function() require("persistence").stop() end)
 
--- create a keymap for Lazy 
+-- create a keymap for Lazy
 vim.keymap.set('n', '<leader>l', function() require('lazy').home() end, { desc = 'Lazy' })
 vim.keymap.set('i', 'jk', '<Esc>', { desc = 'Insert Escape' })
 vim.keymap.set('i', 'jj', '<Esc>', { desc = 'Insert Escape' })
@@ -33,4 +34,3 @@ vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Move to right window' })
 vim.keymap.set('n', '<C-j>', '<C-w>j', { desc = 'Move to lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w>k', { desc = 'Move to upper window' })
 vim.keymap.set('t', '<C-k>', '<C-w>k', { desc = 'Move to upper window' })
-
