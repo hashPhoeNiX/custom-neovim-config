@@ -16,6 +16,11 @@ end
 
 local lazyOptions = {
   lockfile = getlockfilepath(),
+  dev = {
+    path = "~/Projects",
+    patterns = {},   -- For example {"folke"}
+    fallback = true, -- Fallback to git when local plugin doesn't exist
+  }
 }
 -- plugins = require("plugins")
 

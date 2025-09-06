@@ -134,7 +134,7 @@
       startupPlugins = {
         gitPlugins = with pkgs.neovimPlugins; [
           { name = "obsidian.nvim"; plugin =  obsidian-nvim; }
-          { name = "youversion-linker.nvim"; plugin =  youversion-linker-nvim; }
+          { name = "youversion-linker"; plugin =  youversion-linker-nvim; }
           # at-popup
           # { name = "at-popup"; plugin = at-popup; }
         ];
