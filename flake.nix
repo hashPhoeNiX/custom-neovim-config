@@ -28,6 +28,11 @@
       url = "github:obsidian-nvim/obsidian.nvim";
       flake = false;
     };
+    plugins-youversion-linker-nvim = {
+      url = "github:hashPhoeNiX/youversion-linker.nvim/feat/initial-setup";
+      flake = false;
+    };
+
     # plugins-at-popup = {
     #   url = "path:/Users/oluwapelumiadeosun/Projects/lua-tutorials/at-popup/";
     #   flake = false;
@@ -129,6 +134,7 @@
       startupPlugins = {
         gitPlugins = with pkgs.neovimPlugins; [
           { name = "obsidian.nvim"; plugin =  obsidian-nvim; }
+          { name = "youversion-linker.nvim"; plugin =  youversion-linker-nvim; }
           # at-popup
           # { name = "at-popup"; plugin = at-popup; }
         ];

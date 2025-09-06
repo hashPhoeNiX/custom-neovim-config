@@ -47,11 +47,29 @@
         "type": "github"
       }
     },
+    "plugins-youversion-linker-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1757156487,
+        "narHash": "sha256-XQ21vtk+/ekgSMftlqkwhSV1ZbQpaSdAkaue/HZHdFM=",
+        "owner": "hashPhoeNiX",
+        "repo": "youversion-linker.nvim",
+        "rev": "fd3e1257e631f0a105d9fb857c86492f5c5039d6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hashPhoeNiX",
+        "ref": "feat/initial-setup",
+        "repo": "youversion-linker.nvim",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs",
-        "plugins-obsidian-nvim": "plugins-obsidian-nvim"
+        "plugins-obsidian-nvim": "plugins-obsidian-nvim",
+        "plugins-youversion-linker-nvim": "plugins-youversion-linker-nvim"
       }
     }
   },
