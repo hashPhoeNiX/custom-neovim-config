@@ -120,6 +120,7 @@
           ruff
           pyright
           basedpyright
+          nixfmt
           imagemagick
           python312Packages.jupytext
           lua-language-server
