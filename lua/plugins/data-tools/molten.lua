@@ -106,18 +106,25 @@ return {
       vim.g.molten_virt_lines_off_by_1 = true
       vim.g.molten_wrap_output = false
       -- vim.g.molten_virt_text_max_lines = 1
+
+      local which_key = require("which-key")
+
+      which_key.add({
+        { "<leader>m", group = " Molten group" },
+      })
+
       -- KEYMAPS
       -- New Cell
-      vim.keymap.set("n", "<leader>nc", function()
+      vim.keymap.set("n", "<leader>mnc", function()
         local line = vim.fn.getline('.')
         if vim.fn.search("^```$", "nW") > 0 then -- If we can find a closing ```
-          vim.fn.search("^```$")           -- Go to it
+          vim.fn.search("^```$")                 -- Go to it
         end
-        vim.cmd("normal! o")               -- New line
+        vim.cmd("normal! o")                     -- New line
         vim.fn.append(vim.fn.line('.'), { "", "```python", "", "```" })
         vim.fn.cursor(vim.fn.line('.') + 3, 1)
         vim.cmd("startinsert")
-      end, { desc = "New code cell" })
+      end, { desc = "Molten New code cell" })
 
       -- vim.keymap.set("n", "<leader>nc", "o<CR>```python<CR><CR>```<Esc>ki",
       --   { desc = "New code cell" }
@@ -127,6 +134,12 @@ return {
         silent = true,
         desc = "Molten Init Kernel",
       })
+
+      vim.keymap.set("n", "<leader>mdi", ":MoltenDeinit<CR>", {
+        silent = true,
+        desc = "Molten Deinit Kernel",
+      })
+
       vim.keymap.set("n", "<leader>ml", ":MoltenEvaluateLine<CR>", {
         silent = true,
         desc = "Molten Evaluate Line",
@@ -146,6 +159,11 @@ return {
         silent = true,
         desc = "Molten Hide Output",
       })
+      vim.keymap.set("n", "<leader>ms", ":MoltenShowOutput<CR>", {
+        silent = true,
+        desc = "Molten Show Output",
+      })
+
       vim.keymap.set(
         "n",
         "<leader>mo",
