@@ -114,7 +114,32 @@ return {
       })
 
       -- KEYMAPS
-      -- New Cell
+      -- Run Current cell
+      vim.keymap.set("n", "<CR>", function()
+        -- First, try to re-evaluate the existing cell you are in.
+        local status, _ = pcall(vim.cmd, "MoltenReevaluateCell")
+        if status then
+          -- If successful, move to the next cell.
+          vim.cmd("MoltenNext")
+        else
+          -- If there is no cell, evaluate the current line and move down.
+          vim.cmd("MoltenEvaluateLine")
+          vim.cmd("normal! j")
+        end
+      end, { silent = true, desc = "Run cell and go to next" })
+
+      -- Run current visual selection
+      vim.keymap.set("v", "<CR>", ":<C-u>MoltenEvaluateVisual<CR>",
+        { silent = true, desc = "Evaluate visual selection" })
+
+      -- Go to next cell
+      vim.keymap.set("n", "<S-Down>", ":MoltenNext<CR>", { silent = true, desc = "Go to next cell" })
+
+      -- Go to previous cell
+      vim.keymap.set("n", "<S-Up>", ":MoltenPrev<CR>", { silent = true, desc = "Go to previous cell" })
+
+
+      -- NEW CELL
       vim.keymap.set("n", "<leader>mnc", function()
         local line = vim.fn.getline('.')
         if vim.fn.search("^```$", "nW") > 0 then -- If we can find a closing ```
@@ -228,14 +253,14 @@ return {
       })
 
       -- automatically export output chunks to a jupyter notebook on write
-      vim.api.nvim_create_autocmd("BufWritePost", {
-        pattern = { "*.ipynb" },
-        callback = function()
-          if require("molten.status").initialized() == "Molten" then
-            vim.cmd("MoltenExportOutput!")
-          end
-        end,
-      })
+      -- vim.api.nvim_create_autocmd("BufWritePost", {
+      --   pattern = { "*.ipynb" },
+      --   callback = function()
+      --     if require("molten.status").initialized() == "Molten" then
+      --       vim.cmd("MoltenExportOutput!")
+      --     end
+      --   end,
+      -- })
 
       -- change the configuration when editing a python file
       vim.api.nvim_create_autocmd("BufEnter", {
@@ -281,6 +306,10 @@ return {
       --		vim.cmd("MoltenInit python3")
       --	end
       --end, { desc = "Initialize Molten for python3", silent = true })
+
+
+      -- Configure Molten Output Persist
+      require("config.molten_persist").setup()
     end,
   },
 }

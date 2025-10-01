@@ -7,6 +7,19 @@ return {
   ---@type render.md.UserConfig
   opts = {
     enabled = true,
+    -- ignore = function(buf)
+    --   -- Disable for .ipynb files or buffers with "jupyter" in the name
+    --   local filename = vim.api.nvim_buf_get_name(buf)
+    --   return string.match(filename, "%.ipynb$") or string.match(filename, "jupyter")
+    -- end,
+
+    -- For molten
+    code = {
+      enabled = true,
+      conceal_delimiters = false,
+      language = true,
+      border = 'thick',
+    },
     render_modes = true, -- Default: { 'n', 'c', 't' } -- normal, command, terminal
     completions = {
       blink = {
