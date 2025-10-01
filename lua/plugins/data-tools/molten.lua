@@ -309,7 +309,7 @@ return {
 
 
       -- Configure Molten Output Persist
-      -- require("config.molten_persist").setup()
+      require("config.molten_persist").setup()
     end,
   },
 }
