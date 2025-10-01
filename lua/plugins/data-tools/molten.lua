@@ -115,7 +115,7 @@ return {
 
       -- KEYMAPS
       -- Run Current cell
-      vim.keymap.set("n", "<S-Enter>", function()
+      vim.keymap.set("n", "<CR>", function()
         -- First, try to re-evaluate the existing cell you are in.
         local status, _ = pcall(vim.cmd, "MoltenReevaluateCell")
         if status then
@@ -128,11 +128,18 @@ return {
         end
       end, { silent = true, desc = "Run cell and go to next" })
 
-      -- Run current visual mode
-      vim.keymap.set("v", "<S-Enter>", ":<C-u>MoltenEvaluateVisual<CR>",
+      -- Run current visual selection
+      vim.keymap.set("v", "<CR>", ":<C-u>MoltenEvaluateVisual<CR>",
         { silent = true, desc = "Evaluate visual selection" })
 
-      -- New Cell
+      -- Go to next cell
+      vim.keymap.set("n", "<S-Down>", ":MoltenNext<CR>", { silent = true, desc = "Go to next cell" })
+
+      -- Go to previous cell
+      vim.keymap.set("n", "<S-Up>", ":MoltenPrev<CR>", { silent = true, desc = "Go to previous cell" })
+
+
+      -- NEW CELL
       vim.keymap.set("n", "<leader>mnc", function()
         local line = vim.fn.getline('.')
         if vim.fn.search("^```$", "nW") > 0 then -- If we can find a closing ```
