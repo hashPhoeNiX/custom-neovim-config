@@ -78,12 +78,12 @@ function M.setup()
     end,
   })
 
-  -- vim.api.nvim_create_autocmd("BufWritePost", {
-  --   pattern = "*.ipynb",
-  --   callback = function(ev)
-  --     M.save_notebook_state(ev.buf, ev.file)
-  --   end,
-  -- })
+  vim.api.nvim_create_autocmd("BufWritePost", {
+    pattern = "*.ipynb",
+    callback = function(ev)
+      M.save_notebook_state(ev.buf, ev.file)
+    end,
+  })
 
   vim.api.nvim_create_autocmd("VimLeavePre", {
     callback = function()
