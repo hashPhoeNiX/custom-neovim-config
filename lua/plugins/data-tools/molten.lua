@@ -114,6 +114,24 @@ return {
       })
 
       -- KEYMAPS
+      -- Run Current cell
+      vim.keymap.set("n", "<S-Enter>", function()
+        -- First, try to re-evaluate the existing cell you are in.
+        local status, _ = pcall(vim.cmd, "MoltenReevaluateCell")
+        if status then
+          -- If successful, move to the next cell.
+          vim.cmd("MoltenNext")
+        else
+          -- If there is no cell, evaluate the current line and move down.
+          vim.cmd("MoltenEvaluateLine")
+          vim.cmd("normal! j")
+        end
+      end, { silent = true, desc = "Run cell and go to next" })
+
+      -- Run current visual mode
+      vim.keymap.set("v", "<S-Enter>", ":<C-u>MoltenEvaluateVisual<CR>",
+        { silent = true, desc = "Evaluate visual selection" })
+
       -- New Cell
       vim.keymap.set("n", "<leader>mnc", function()
         local line = vim.fn.getline('.')
