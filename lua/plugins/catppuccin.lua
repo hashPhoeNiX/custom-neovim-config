@@ -167,6 +167,17 @@ return {
             Ignore = { fg = colors.subtext2 },
             Macro = { fg = colors.teal },
 
+            -- Molten-nvim cell border highlights
+            MoltenBorder = { fg = colors.surface0 },           -- Inactive cell border
+            MoltenCurrentBorder = { fg = colors.blue },        -- Active cell border
+            MoltenOutputBorder = { fg = colors.surface0 },     -- Output window border
+            MoltenOutputBorderSuccess = { fg = colors.green }, -- Success state border
+            MoltenOutputBorderFail = { fg = colors.red },      -- Error state border
+
+            -- Optional: Style the output window itself
+            MoltenOutputNormal = { bg = colors.mantle },
+            MoltenOutputPreview = { bg = colors.mantle },
+
             TSAnnotation = { fg = colors.mauve },
             TSAttribute = { fg = colors.mauve },
             TSBoolean = { fg = colors.mauve },
