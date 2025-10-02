@@ -17,11 +17,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1759070547,
-        "narHash": "sha256-JVZl8NaVRYb0+381nl7LvPE+A774/dRpif01FKLrYFQ=",
+        "lastModified": 1759133924,
+        "narHash": "sha256-eegjF6fo080481S/ZHyDENjeGG1ZgW2v86O9UZQxLJ8=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "647e5c14cbd5067f44ac86b74f014962df460840",
+        "rev": "9547cfd27b5158eb612a6812dfc5c7b3d118b996",
         "type": "github"
       },
       "original": {
@@ -31,14 +31,30 @@
         "type": "github"
       }
     },
+    "plugins-molten-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1758404333,
+        "narHash": "sha256-aG7hJvcv1lfyBQ9KR74+wn32VS6rPu0NjKfOmXLtvVE=",
+        "owner": "benlubas",
+        "repo": "molten-nvim",
+        "rev": "c98f8c6d7a8a801b46e4766e000c574e0402c491",
+        "type": "github"
+      },
+      "original": {
+        "owner": "benlubas",
+        "repo": "molten-nvim",
+        "type": "github"
+      }
+    },
     "plugins-obsidian-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1759150807,
-        "narHash": "sha256-CFuUj1CkZcRHJz9FDIVcqapXzlXmOnJ9hxndCutz6AQ=",
+        "lastModified": 1759355744,
+        "narHash": "sha256-nkSfoYpNz29U9Weh16QfO9N3dWNhYLu0/bt4B47yVEo=",
         "owner": "obsidian-nvim",
         "repo": "obsidian.nvim",
-        "rev": "8d8090ccb54f3a20a4091f243748526167ed9bbb",
+        "rev": "7ce99c902e1805b7584b4e9d67353cff0fed59df",
         "type": "github"
       },
       "original": {
@@ -68,6 +84,7 @@
       "inputs": {
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs",
+        "plugins-molten-nvim": "plugins-molten-nvim",
         "plugins-obsidian-nvim": "plugins-obsidian-nvim",
         "plugins-youversion-linker-nvim": "plugins-youversion-linker-nvim"
       }
