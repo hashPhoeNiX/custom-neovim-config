@@ -183,6 +183,7 @@
               copilot-lua
               vim-tmux-navigator
               conform-nvim
+              gitsigns-nvim
               # nvim-lspconfig
               # blink-cmp
               # mini-pairs
