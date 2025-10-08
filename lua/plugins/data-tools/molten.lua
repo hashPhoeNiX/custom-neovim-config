@@ -98,7 +98,7 @@ return {
       --	vim.fn.expand("/etc/profiles/per-user/oluwapelumiadeosun/bin/myHomeModuleNvim-python3")
       vim.g.molten_auto_open_output = true
       vim.g.molten_image_provider = "image.nvim"
-      -- vim.g.molten_output_win_max_height = 12
+      vim.g.molten_output_win_max_height = 1000
       -- vim.g.molten_output_win_hide_on_leave = false
       vim.g.molten_output_virt_lines = true
       -- vim.g.molten_output_show_more = true
