@@ -184,6 +184,7 @@
               vim-tmux-navigator
               conform-nvim
               gitsigns-nvim
+              project-nvim
               # nvim-lspconfig
               # blink-cmp
               # mini-pairs
@@ -196,6 +197,7 @@
               #     python
               #   ]
               # ))
+
               # Data Engineering, Science and Analysis
               # molten-nvim
               quarto-nvim
