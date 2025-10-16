@@ -188,7 +188,7 @@
               # nvim-lspconfig
               # blink-cmp
               # mini-pairs
-              # nvim-treesitter.withAllGrammars
+              nvim-treesitter.withAllGrammars
               # This is for if you only want some of the grammars
               # (nvim-treesitter.withPlugins (
               #   plugins: with plugins; [
@@ -235,9 +235,7 @@
           # If you dont, check this link out:
           # https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/setup-hooks/make-wrapper.sh
           extraWrapperArgs = {
-            test = [
-              ''--set CATTESTVAR2 "It worked again!"''
-            ];
+            test = [ ''--set CATTESTVAR2 "It worked again!"'' ];
           };
 
           bashBeforeWrapper = {
@@ -294,13 +292,7 @@
                 ]
               )
             ];
-            general = [
-              (
-                ps: with ps; [
-                  magick
-                ]
-              )
-            ];
+            general = [ (ps: with ps; [ magick ]) ];
           };
         };
 
@@ -354,9 +346,9 @@
       # In this section, the main thing you will need to do is change the default package name
       # to the name of the packageDefinitions entry you wish to use as the default.
       defaultPackageName = "nvim";
-    in
 
-    # see :help nixCats.flake.outputs.exports
+      # see :help nixCats.flake.outputs.exports
+    in
     forEachSystem (
       system:
       let
@@ -388,7 +380,7 @@
             name = defaultPackageName;
             packages = [ defaultPackage ];
             inputsFrom = [ ];
-            shellHook = '''';
+            shellHook = "";
           };
         };
 

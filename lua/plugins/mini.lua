@@ -13,4 +13,5 @@ return {
       require('mini.pairs').setup({})
     end
   },
+  { 'nvim-mini/mini.starter', version = false },
 }
