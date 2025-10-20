@@ -17,7 +17,7 @@ local function safe_kernels()
 end
 
 function M.get_state_path(nb_path)
-  local uv = vim.loop
+  local uv = vim.uv or vim.loop
   local dir = vim.fn.fnamemodify(nb_path, ":h")
   local fname = vim.fn.fnamemodify(nb_path, ":t")
   local state_folder = uv.fs_realpath(dir .. "/" .. M.state_dir)
@@ -65,7 +65,8 @@ function M.save_notebook_state(bufnr, nb_path)
 
   local stpath = M.get_state_path(nb_path)
   vim.cmd(("MoltenSave %s"):format(vim.fn.fnameescape(stpath)))
-  vim.cmd("MoltenExportOutput!")
+  -- Remove MoltenExportOutput to avoid nbformat compatibility issues
+  -- vim.cmd("MoltenExportOutput!")
 end
 
 function M.setup()
