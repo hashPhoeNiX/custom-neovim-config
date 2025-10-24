@@ -138,23 +138,78 @@ return {
       })
 
       -- KEYMAPS
-      -- Run Current cell
-      vim.keymap.set("n", "<CR>", function()
-        -- First, try to re-evaluate the existing cell you are in.
-        local status, _ = pcall(vim.cmd, "MoltenReevaluateCell")
-        if status then
-          -- If successful, move to the next cell.
-          vim.cmd("MoltenNext")
-        else
-          -- If there is no cell, evaluate the current line and move down.
-          vim.cmd("MoltenEvaluateLine")
-          vim.cmd("normal! j")
-        end
-      end, { silent = true, desc = "Run cell and go to next" })
+      -- Run Current cell (only for notebooks and Python files)
+      local function setup_cell_execution_keymaps()
+        vim.keymap.set("n", "<CR>", function()
+          -- First, try to re-evaluate the existing cell you are in.
+          local status, _ = pcall(vim.cmd, "MoltenReevaluateCell")
+          if status then
+            -- If successful, move to the next cell.
+            vim.cmd("MoltenNext")
+          else
+            -- No existing cell, try to evaluate the current code block
+            -- Get current position
+            local current_line = vim.fn.line('.')
+            local total_lines = vim.fn.line('$')
 
-      -- Run current visual selection
-      vim.keymap.set("v", "<CR>", ":<C-u>MoltenEvaluateVisual<CR>",
-        { silent = true, desc = "Evaluate visual selection" })
+            -- Find start of code block (search backwards for empty line or start of file)
+            local start_line = current_line
+            while start_line > 1 do
+              local line = vim.fn.getline(start_line - 1)
+              -- Stop if we hit an empty line, markdown heading, or code fence
+              if line:match("^%s*$") or line:match("^#") or line:match("^```") then
+                break
+              end
+              start_line = start_line - 1
+            end
+
+            -- Find end of code block (search forwards for empty line or end of file)
+            local end_line = current_line
+            while end_line < total_lines do
+              local line = vim.fn.getline(end_line + 1)
+              -- Stop if we hit an empty line, markdown heading, or code fence
+              if line:match("^%s*$") or line:match("^#") or line:match("^```") then
+                break
+              end
+              end_line = end_line + 1
+            end
+
+            -- If we found a multi-line block, evaluate it
+            if end_line > start_line then
+              -- Save current position
+              local pos = vim.fn.getpos('.')
+              -- Select the block
+              vim.fn.setpos('.', {0, start_line, 1, 0})
+              vim.cmd("normal! V")
+              vim.fn.setpos('.', {0, end_line, 1, 0})
+              -- Evaluate the selection
+              vim.cmd("MoltenEvaluateVisual")
+              -- Restore position and move to next cell
+              vim.fn.setpos('.', pos)
+              vim.cmd("MoltenNext")
+            else
+              -- Single line, evaluate it
+              vim.cmd("MoltenEvaluateLine")
+              vim.cmd("normal! j")
+            end
+          end
+        end, { silent = true, desc = "Run cell and go to next", buffer = true })
+
+        -- Run current visual selection
+        vim.keymap.set("v", "<CR>", ":<C-u>MoltenEvaluateVisual<CR>",
+          { silent = true, desc = "Evaluate visual selection", buffer = true })
+      end
+
+      -- Set up Enter key only for notebooks and Python files
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "python" },
+        callback = setup_cell_execution_keymaps,
+      })
+
+      vim.api.nvim_create_autocmd("BufEnter", {
+        pattern = { "*.ipynb", "*.qmd", "*.md" },
+        callback = setup_cell_execution_keymaps,
+      })
 
       -- Go to next cell
       vim.keymap.set("n", "<S-Down>", ":MoltenNext<CR>", { silent = true, desc = "Go to next cell" })
