@@ -53,7 +53,7 @@ end
 -- falls back to a kernel that matches the name of the active venv (if any)
 local imb = function(e) -- init molten buffer
   vim.schedule(function()
-    local molten_persist = require("config.molten_persist")
+    local molten_persist = require("config.molten-persist")
     local stpath = molten_persist.get_state_path(e.file)
 
     -- Debug logging
@@ -134,7 +134,12 @@ return {
       local which_key = require("which-key")
 
       which_key.add({
-        { "<leader>m", group = " Molten group" },
+        { "<leader>m", group = " Molten" },
+        { "<leader>mr", group = "Run" },
+        { "<leader>mk", group = "Kernel" },
+        { "<leader>mc", group = "Cell" },
+        { "<leader>mn", group = "Navigate" },
+        { "<leader>mo", group = "Output" },
       })
 
       -- KEYMAPS
@@ -307,6 +312,93 @@ return {
         { desc = "open output in browser", silent = true }
       )
 
+      -- ====================
+      -- Enhanced Jupyter Commands (from molten-commands.lua)
+      -- ====================
+      local molten_cmd = require("config.molten-commands")
+
+      -- Execution Commands
+      vim.keymap.set("n", "<leader>mra", molten_cmd.run_all, {
+        desc = "Run all cells",
+        silent = true,
+      })
+      vim.keymap.set("n", "<leader>mrA", molten_cmd.run_all_above, {
+        desc = "Run all above",
+        silent = true,
+      })
+      vim.keymap.set("n", "<leader>mrb", molten_cmd.run_all_below, {
+        desc = "Run all below",
+        silent = true,
+      })
+
+      -- Kernel Management
+      vim.keymap.set("n", "<leader>mkr", molten_cmd.restart_kernel, {
+        desc = "Restart kernel",
+        silent = true,
+      })
+      vim.keymap.set("n", "<leader>mkR", molten_cmd.restart_and_run_all, {
+        desc = "Restart & run all",
+        silent = true,
+      })
+      vim.keymap.set("n", "<leader>mki", molten_cmd.interrupt_kernel, {
+        desc = "Interrupt kernel",
+        silent = true,
+      })
+      vim.keymap.set("n", "<leader>mks", molten_cmd.show_kernel_status, {
+        desc = "Show kernel status",
+        silent = true,
+      })
+
+      -- Output Management
+      vim.keymap.set("n", "<leader>moc", molten_cmd.clear_output, {
+        desc = "Clear output",
+        silent = true,
+      })
+      vim.keymap.set("n", "<leader>moC", molten_cmd.clear_all_outputs, {
+        desc = "Clear all outputs",
+        silent = true,
+      })
+
+      -- Cell Manipulation
+      vim.keymap.set("n", "<leader>mcs", molten_cmd.select_cell, {
+        desc = "Select cell",
+        silent = true,
+      })
+      vim.keymap.set("n", "<leader>mcy", molten_cmd.yank_cell, {
+        desc = "Yank/copy cell",
+        silent = true,
+      })
+      vim.keymap.set("n", "<leader>mcp", molten_cmd.paste_cell_below, {
+        desc = "Paste cell below",
+        silent = true,
+      })
+      vim.keymap.set("n", "<leader>mcx", molten_cmd.split_cell, {
+        desc = "Split cell at cursor",
+        silent = true,
+      })
+      vim.keymap.set("n", "<leader>mcm", molten_cmd.merge_cell_below, {
+        desc = "Merge with cell below",
+        silent = true,
+      })
+      vim.keymap.set("n", "<leader>mcK", molten_cmd.move_cell_up, {
+        desc = "Move cell up",
+        silent = true,
+      })
+      vim.keymap.set("n", "<leader>mcJ", molten_cmd.move_cell_down, {
+        desc = "Move cell down",
+        silent = true,
+      })
+
+      -- Navigation
+      vim.keymap.set("n", "<leader>mng", molten_cmd.goto_first_cell, {
+        desc = "Go to first cell",
+        silent = true,
+      })
+      vim.keymap.set("n", "<leader>mnG", molten_cmd.goto_last_cell, {
+        desc = "Go to last cell",
+        silent = true,
+      })
+
       -- Extra config
       vim.api.nvim_create_user_command("NewNotebook", function(opts)
         new_notebook(opts.args)
@@ -388,7 +480,7 @@ return {
 
 
       -- Configure Molten Output Persist
-      require("config.molten_persist").setup()
+      require("config.molten-persist").setup()
     end,
   },
 }
