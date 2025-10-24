@@ -32,22 +32,17 @@ function M.get_state_path(nb_path)
   return state_folder .. "/" .. fname .. ".molten.json"
 end
 
+-- Note: Loading is now primarily handled in molten.lua's imb function
+-- This function is kept for manual loading if needed
 function M.load_notebook_state(bufnr, nb_path)
-  local in_molten, _ = safe_initialized()
-  local kernels = safe_kernels()
-  -- if molten not active or no kernel, skip
-  if not in_molten or kernels == nil or kernels == "" then
-    return
-  end
-
-  -- if notebook has embedded outputs, import
-  local ok1 = pcall(vim.cmd, "MoltenImportOutput")
-  if ok1 then
-    return
-  end
-
   local stpath = M.get_state_path(nb_path)
   if vim.fn.filereadable(stpath) == 1 then
+    local in_molten, _ = safe_initialized()
+    if in_molten then
+      -- Already initialized, can't use MoltenLoad
+      vim.notify("Molten already initialized. Cannot load saved state.", vim.log.levels.WARN)
+      return
+    end
     vim.cmd(("MoltenLoad %s"):format(vim.fn.fnameescape(stpath)))
   end
 end
@@ -70,14 +65,8 @@ function M.save_notebook_state(bufnr, nb_path)
 end
 
 function M.setup()
-  vim.api.nvim_create_autocmd("BufEnter", {
-    pattern = "*.ipynb",
-    callback = function(ev)
-      vim.schedule(function()
-        M.load_notebook_state(ev.buf, ev.file)
-      end)
-    end,
-  })
+  -- BufEnter autocmd removed - loading is now handled in molten.lua's imb function
+  -- to ensure proper timing after kernel initialization
 
   vim.api.nvim_create_autocmd("BufWritePost", {
     pattern = "*.ipynb",

@@ -53,23 +53,47 @@ end
 -- falls back to a kernel that matches the name of the active venv (if any)
 local imb = function(e) -- init molten buffer
   vim.schedule(function()
-    local kernels = vim.fn.MoltenAvailableKernels()
-    local try_kernel_name = function()
-      local metadata = vim.json.decode(io.open(e.file, "r"):read("a"))["metadata"]
-      return metadata.kernelspec.name
-    end
-    local ok, kernel_name = pcall(try_kernel_name)
-    if not ok or not vim.tbl_contains(kernels, kernel_name) then
-      kernel_name = nil
-      local venv = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX")
-      if venv ~= nil then
-        kernel_name = string.match(venv, "/.+/(.+)")
+    local molten_persist = require("config.molten_persist")
+    local stpath = molten_persist.get_state_path(e.file)
+
+    -- Debug logging
+    print("[DEBUG] Checking for saved state at: " .. stpath)
+    print("[DEBUG] File readable: " .. tostring(vim.fn.filereadable(stpath) == 1))
+
+    -- Check if we have saved state first
+    if vim.fn.filereadable(stpath) == 1 then
+      -- Load saved state (which will init Molten automatically)
+      print("[DEBUG] Loading saved state...")
+      local ok, err = pcall(vim.cmd, ("MoltenLoad %s"):format(vim.fn.fnameescape(stpath)))
+      if ok then
+        print("[DEBUG] Successfully loaded saved state")
+      else
+        print("[DEBUG] Error loading saved state: " .. tostring(err))
+      end
+    else
+      -- No saved state, init kernel and import outputs from notebook
+      print("[DEBUG] No saved state found, initializing kernel...")
+      local kernels = vim.fn.MoltenAvailableKernels()
+      local try_kernel_name = function()
+        local metadata = vim.json.decode(io.open(e.file, "r"):read("a"))["metadata"]
+        return metadata.kernelspec.name
+      end
+      local ok, kernel_name = pcall(try_kernel_name)
+      if not ok or not vim.tbl_contains(kernels, kernel_name) then
+        kernel_name = nil
+        local venv = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX")
+        if venv ~= nil then
+          kernel_name = string.match(venv, "/.+/(.+)")
+        end
+      end
+      if kernel_name ~= nil and vim.tbl_contains(kernels, kernel_name) then
+        vim.cmd(("MoltenInit %s"):format(kernel_name))
+        vim.cmd("MoltenImportOutput")
+        print("[DEBUG] Initialized kernel: " .. kernel_name)
+      else
+        print("[DEBUG] No suitable kernel found")
       end
     end
-    if kernel_name ~= nil and vim.tbl_contains(kernels, kernel_name) then
-      vim.cmd(("MoltenInit %s"):format(kernel_name))
-    end
-    vim.cmd("MoltenImportOutput")
   end)
 end
 
