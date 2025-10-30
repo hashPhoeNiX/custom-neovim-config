@@ -12,9 +12,9 @@ return {
     ft = { "sql", "md", "yaml" },
     config = function()
       require("dbtpal").setup({
-        path_to_dbt = "dbt", -- Use dbt Cloud CLI
-        path_to_dbt_project = "", -- Auto-detect
-        path_to_dbt_profiles_dir = vim.fn.expand("~/.dbt"),
+        path_to_dbt = "dbt",           -- Use dbt Cloud CLI
+        path_to_dbt_project = "",      -- Auto-detect
+        path_to_dbt_profiles_dir = "", -- Empty for dbt Cloud CLI (uses dbt_cloud.yml)
 
         -- Extended configuration
         extended_path_search = true,
