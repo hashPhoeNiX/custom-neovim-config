@@ -163,8 +163,9 @@
               lua51Packages.lua
               lua51Packages.luarocks
               # dbt CLI for dbt-power plugin
-              # Note: Add dbt-core or dbt-bigquery/snowflake/postgres as needed
-              # Uncomment the one you need:
+              # Note: nixpkgs 'dbt' is dbt-core, not dbt Cloud CLI
+              # For dbt Cloud CLI, install manually: https://docs.getdbt.com/docs/cloud/cloud-cli-installation
+              # Uncomment one if using dbt-core locally:
               # dbt
               # python312Packages.dbt-core
               # python312Packages.dbt-postgres
@@ -311,6 +312,7 @@
                 jupytext
                 ipykernel
                 pillow
+                dbt
                 # Disable Falcon tests here
                 #(ps.falcon.overridePythonAttrs (old: { doCheck = false; }))
               ]
