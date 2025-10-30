@@ -37,6 +37,20 @@
       flake = false;
     };
 
+    # dbt-related plugins
+    plugins-dbtpal = {
+      url = "github:PedramNavid/dbtpal";
+      flake = false;
+    };
+    plugins-cmp-dbt = {
+      url = "github:MattiasMTS/cmp-dbt";
+      flake = false;
+    };
+    plugins-dbt-power = {
+      url = "path:/Users/oluwapelumiadeosun/Projects/dbt-power.nvim";
+      flake = false;
+    };
+
     # plugins-at-popup = {
     #   url = "path:/Users/oluwapelumiadeosun/Projects/lua-tutorials/at-popup/";
     #   flake = false;
@@ -148,6 +162,14 @@
               lua-language-server
               lua51Packages.lua
               lua51Packages.luarocks
+              # dbt CLI for dbt-power plugin
+              # Note: Add dbt-core or dbt-bigquery/snowflake/postgres as needed
+              # Uncomment the one you need:
+              # dbt
+              # python312Packages.dbt-core
+              # python312Packages.dbt-postgres
+              # python312Packages.dbt-bigquery
+              # python312Packages.dbt-snowflake
               # gumbo
               # lua51Packages.luasocket
             ];
@@ -167,6 +189,19 @@
               {
                 name = "youversion-linker";
                 plugin = youversion-linker-nvim;
+              }
+              # dbt-related plugins from GitHub
+              {
+                name = "dbtpal";
+                plugin = dbtpal;
+              }
+              {
+                name = "cmp-dbt";
+                plugin = cmp-dbt;
+              }
+              {
+                name = "dbt-power.nvim";
+                plugin = dbt-power;
               }
               # at-popup
               # { name = "at-popup"; plugin = at-popup; }
@@ -204,6 +239,11 @@
               image-nvim
               jupytext-nvim
               otter-nvim
+
+              # Database and dbt plugins (from nixpkgs)
+              vim-dadbod
+              vim-dadbod-ui
+              vim-dadbod-completion
             ];
           };
 

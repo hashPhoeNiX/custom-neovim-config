@@ -5,6 +5,7 @@ return {
     -- your configuration comes here
     -- or leave it empty to use the default settings
     -- refer to the configuration section below
+    preset = "helix",
   },
   keys = {
     {
@@ -15,4 +16,23 @@ return {
       desc = "Buffer Local Keymaps (which-key)",
     },
   },
+  config = function(_, opts)
+    local wk = require("which-key")
+    wk.setup(opts)
+
+    -- dbt keymaps
+    wk.add({
+      { "<leader>d", group = "dbt" },
+      { "<leader>dr", desc = "Run current model" },
+      { "<leader>dR", desc = "Run all models" },
+      { "<leader>dt", desc = "Test current model" },
+      { "<leader>dT", desc = "Test all models" },
+      { "<leader>dc", desc = "Compile current model" },
+      { "<leader>dm", desc = "Find dbt model (Telescope)" },
+      { "<leader>dv", desc = "Preview compiled SQL" },
+      { "<leader>dC", desc = "Clear query results" },
+      { "<leader>dA", desc = "Toggle auto-compile" },
+      { "<leader>db", desc = "Toggle Database UI" },
+    })
+  end,
 }
