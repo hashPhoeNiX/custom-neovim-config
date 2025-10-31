@@ -12,12 +12,21 @@ Both provide similar query preview and execution capabilities, but with signific
 
 ## ⚠️ IMPORTANT CORRECTION
 
-**Initial research indicated both systems use a `dbt query` command, which was INCORRECT.** After verification against actual dbt CLI, here's the truth:
+**Initial research had multiple errors that have been corrected:**
 
-- **`dbt query` command DOES NOT EXIST** ❌
-- **`dbt show` command is the correct approach** ✅
+1. **`dbt query` command DOES NOT EXIST** ❌
+   - This was a false assumption
+   - dbt does not provide this command
 
-Both implementations now use `dbt show` to compile and preview dbt model results.
+2. **dbt Power User does NOT use `dbt show`** ❌ (my incorrect assumption)
+   - It uses the compile → wrap → execute pattern
+   - Wraps SQL with LIMIT clause manually
+
+3. **dbt-power.nvim uses `dbt show`** ✅ (correct, but different from Power User)
+   - Single command approach
+   - More efficient than Power User's multi-step process
+
+**Result**: The two implementations use DIFFERENT approaches, and dbt-power.nvim's approach is actually more modern and efficient.
 
 ---
 
@@ -76,7 +85,7 @@ Both implementations now use `dbt show` to compile and preview dbt model results
 - **Process Model**: Spawns child processes for dbt CLI
 - **UI Framework**: VSCode Webview API (Chromium-based)
 - **Database Access**: Via dbt adapters (Python)
-- **Query Method**: `dbt compile` → Wrap → Execute
+- **Query Method**: `dbt compile` + Manual LIMIT wrapping + Execute (3 steps)
 
 ### dbt-power.nvim (Neovim)
 
@@ -546,7 +555,9 @@ end
 |--------|-----------|-----------------|
 | **Language** | TypeScript | Lua |
 | **UI** | VSCode Webview (HTML) | Neovim Extmarks (text) |
-| **Query Method** | compile + wrap + execute | dbt show (single) |
+| **Query Method** | `dbt compile` + wrap + execute (3-step) | `dbt show` (single command) |
+| **LIMIT Handling** | Manual SQL wrapping | Automatic via --max-rows flag |
+| **Steps** | 3 (compile, wrap, execute) | 1 (dbt show) |
 | **Async** | ❌ Blocking | ✅ Non-blocking |
 | **Memory** | ~400-600 MB | ~155-310 MB |
 | **Concurrency** | ❌ Sequential | ✅ Parallel |
@@ -587,9 +598,34 @@ end
 
 ## Conclusion
 
-Both implementations achieve the core goal: **preview dbt model results without leaving your editor**. The choice depends on your priorities:
+Both implementations achieve the core goal: **preview dbt model results without leaving your editor**, but they use fundamentally different approaches:
 
-**dbt Power User**: Production-ready, feature-rich, perfect for analysis
-**dbt-power.nvim**: Modern, lightweight, perfect for development iteration
+### Implementation Approaches
 
-Both use **dbt show** as the execution engine (not the non-existent `dbt query`), making them both solid implementations of dbt in their respective editors.
+**dbt Power User** (3-step compile → wrap → execute):
+- More traditional multi-step process
+- Manual LIMIT wrapping in TypeScript
+- Works with any dbt version
+- Requires reading from filesystem (target/compiled/)
+- Blocking UI during execution
+
+**dbt-power.nvim** (single dbt show command):
+- More modern single-step approach
+- Automatic LIMIT via --max-rows flag
+- Async/non-blocking execution
+- Simpler code path (less moving parts)
+- Better for development iteration
+
+### Key Takeaway
+
+Contrary to my initial research, these implementations use **different approaches**, and dbt-power.nvim's approach is arguably **more efficient**:
+
+- ✅ Single command vs. three-step process
+- ✅ Automatic LIMIT handling
+- ✅ Non-blocking execution
+- ✅ Less filesystem I/O
+- ✅ 45-50% less memory usage
+
+**Choice criteria**:
+- Choose **dbt Power User** for: Rich analysis features, team sharing, production reports
+- Choose **dbt-power.nvim** for: Fast iteration, responsive IDE, lightweight setup, Jupyter integration
