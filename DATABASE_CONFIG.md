@@ -4,10 +4,12 @@ This guide explains how to set up database connections for inline query executio
 
 ## Overview
 
-Your dbt setup uses a two-layer approach for database execution:
+Your dbt setup uses the `dbt show` command for previewing model results:
 
-1. **Primary**: dbt query command (requires dbt >= 1.5)
-2. **Fallback**: vim-dadbod (when dbt query not available)
+- **Command**: `dbt show --select <model_name> --max-rows 500`
+- **What it does**: Compiles the model, executes the SQL, returns results preview
+- **No materialization**: Results are not saved to warehouse
+- **Available**: All dbt versions
 
 ## Step 1: Check Your dbt Version
 
@@ -15,7 +17,7 @@ Your dbt setup uses a two-layer approach for database execution:
 dbt --version
 ```
 
-You need `dbt >= 1.5.0` to use the `dbt query` command. If you have an older version:
+The `dbt show` command is available in all dbt versions. If you have an older version:
 
 **Option A: Install dbt Cloud CLI** (Recommended)
 ```bash
@@ -136,7 +138,7 @@ my_dbt_project:
       keepalives_idle: 0
 ```
 
-## Step 3: Test dbt Query Command
+## Step 3: Test dbt Show Command
 
 ```bash
 cd ~/Projects/custom-neovim/data-dpac-dbt-models
@@ -144,8 +146,8 @@ cd ~/Projects/custom-neovim/data-dpac-dbt-models
 # Test connection
 dbt debug
 
-# Test query execution
-dbt query "SELECT COUNT(*) as row_count FROM {{ ref('your_model') }}"
+# Test show command (preview results without materializing)
+dbt show --select stg_customers --max-rows 10
 ```
 
 If this works, you're ready to use inline query execution!
@@ -209,10 +211,11 @@ nvim models/staging/stg_customers.sql
 <leader>dv
 ```
 
-3. Test inline execution (if dbt query works):
+3. Test inline execution:
 ```vim
-" Position cursor at end of model file
-" Press Ctrl+Enter to execute
+" Open a dbt model file
+" Position cursor at the end
+" Press Ctrl+Enter to execute using dbt show
 <C-CR>
 
 " You should see results displayed inline as a markdown table
@@ -220,10 +223,10 @@ nvim models/staging/stg_customers.sql
 
 ## Troubleshooting
 
-### Error: "dbt query command not found"
+### Error: "dbt show command not found"
 
-- Your dbt version is < 1.5.0
-- Solution: Upgrade dbt or fallback to vim-dadbod
+- Your dbt version is older or dbt is not installed properly
+- Solution: Run `dbt --version` to check, or install/upgrade dbt
 
 ### Error: "Not in a dbt project"
 
@@ -319,9 +322,9 @@ Usage:
    - The inline execution already adds `LIMIT 500` by default
    - Configure in dbt.lua: `max_rows = 500`
 
-2. **Use dbt query for complex models**
-   - dbt query understands dbt syntax (ref, source, etc.)
-   - Faster than manual compilation
+2. **Use dbt show for quick previews**
+   - `dbt show` handles all dbt syntax (ref, source, macros) automatically
+   - Combines compilation and execution in one command
 
 3. **Cache compiled SQL**
    - Run `dbt compile` once, then use inline execution
