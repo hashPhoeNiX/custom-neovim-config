@@ -40,10 +40,15 @@ return {
         require("dbt-power.preview").show_compiled_sql()
       end, { desc = "Preview compiled SQL", silent = false })
 
-      -- Custom: Execute and show results inline
+      -- Custom: Execute and show results inline (Power User approach: compile -> wrap -> execute)
       vim.keymap.set("n", "<C-CR>", function()
         require("dbt-power.execute").execute_and_show_inline()
-      end, { desc = "Execute query and show results", silent = false })
+      end, { desc = "Execute query (Power User mode)", silent = false })
+
+      -- Custom: Execute using dbt show (alternative method)
+      vim.keymap.set("n", "<leader>ds", function()
+        require("dbt-power.execute").execute_with_dbt_show_command()
+      end, { desc = "Execute query (dbt show mode)", silent = false })
 
       -- Visual mode: Execute selection
       vim.keymap.set("v", "<C-CR>", function()
