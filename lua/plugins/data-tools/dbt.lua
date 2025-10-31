@@ -12,10 +12,10 @@ return {
     ft = { "sql", "md", "yaml" },
     config = function()
       require("dbtpal").setup({
-        path_to_dbt = "dbt",           -- Use dbt Cloud CLI
-        path_to_dbt_project = "",      -- Auto-detect
-        path_to_dbt_profiles_dir = "", -- Empty for dbt Cloud CLI (uses dbt_cloud.yml)
-
+        path_to_dbt = "dbt",          -- Use dbt Cloud CLI
+        path_to_dbt_project = "",     -- Auto-detect
+        include_profiles_dir = false, -- Don't pass --profiles-dir for dbt Cloud CLI
+        path_to_dbt_profiles_dir = vim.fn.expand("~/.dbt"),
         -- Extended configuration
         extended_path_search = true,
         protect_compiled_files = true,
@@ -26,34 +26,34 @@ return {
 
       -- Key mappings (non-overlapping)
       local dbt_keymap = vim.api.nvim_set_keymap
-      local opts = { noremap = true, silent = true }
+      local opts = { noremap = true, silent = false }
 
-      dbt_keymap("n", "<leader>dr", "<cmd>DbtRun<cr>", opts)
-      dbt_keymap("n", "<leader>dt", "<cmd>DbtTest<cr>", opts)
-      dbt_keymap("n", "<leader>dc", "<cmd>DbtCompile<cr>", opts)
+      dbt_keymap("n", "<leader>dr", "<cmd>lua require('dbtpal').run_model()<cr>", opts)
+      dbt_keymap("n", "<leader>dt", "<cmd>lua require('dbtpal').test_model()<cr>", opts)
+      dbt_keymap("n", "<leader>dc", "<cmd>lua require('dbtpal').compile_model()<cr>", opts)
       dbt_keymap("n", "<leader>dm", "<cmd>lua require('dbtpal.telescope').dbt_picker()<cr>", opts)
-      dbt_keymap("n", "<leader>dR", "<cmd>DbtRunAll<cr>", opts)
-      dbt_keymap("n", "<leader>dT", "<cmd>DbtTestAll<cr>", opts)
+      dbt_keymap("n", "<leader>dR", "<cmd>lua require('dbtpal').run_all_models()<cr>", opts)
+      dbt_keymap("n", "<leader>dT", "<cmd>lua require('dbtpal').test_all_models()<cr>", opts)
 
       -- Custom: Show compiled SQL in split
       vim.keymap.set("n", "<leader>dv", function()
         require("dbt-power.preview").show_compiled_sql()
-      end, { desc = "Preview compiled SQL", silent = true })
+      end, { desc = "Preview compiled SQL", silent = false })
 
       -- Custom: Execute and show results inline
       vim.keymap.set("n", "<C-CR>", function()
         require("dbt-power.execute").execute_and_show_inline()
-      end, { desc = "Execute query and show results", silent = true })
+      end, { desc = "Execute query and show results", silent = false })
 
       -- Visual mode: Execute selection
       vim.keymap.set("v", "<C-CR>", function()
         require("dbt-power.execute").execute_selection()
-      end, { desc = "Execute SQL selection", silent = true })
+      end, { desc = "Execute SQL selection", silent = false })
 
       -- Custom: Clear inline results
       vim.keymap.set("n", "<leader>dC", function()
         require("dbt-power.ui.inline_results").clear_all()
-      end, { desc = "Clear query results", silent = true })
+      end, { desc = "Clear query results", silent = false })
     end,
   },
 
