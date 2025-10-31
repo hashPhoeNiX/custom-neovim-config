@@ -312,7 +312,6 @@
                 jupytext
                 ipykernel
                 pillow
-                dbt
                 # Disable Falcon tests here
                 #(ps.falcon.overridePythonAttrs (old: { doCheck = false; }))
               ]
