@@ -45,10 +45,20 @@ return {
         require("dbt-power.execute").execute_and_show_inline()
       end, { desc = "Execute query (Power User mode)", silent = false })
 
-      -- Custom: Execute using dbt show (alternative method)
+      -- Custom: Execute using dbt show with inline results (default)
       vim.keymap.set("n", "<leader>ds", function()
         require("dbt-power.execute").execute_with_dbt_show_command()
-      end, { desc = "Execute query (dbt show mode)", silent = false })
+      end, { desc = "Execute query - inline results", silent = false })
+
+      -- Custom: Execute using dbt show with buffer output (full results)
+      vim.keymap.set("n", "<leader>dS", function()
+        require("dbt-power.execute").execute_with_dbt_show_buffer()
+      end, { desc = "Execute query - buffer results", silent = false })
+
+      -- Custom: Preview CTE with picker
+      vim.keymap.set("n", "<leader>dq", function()
+        require("dbt-power.dbt.cte_preview").show_cte_picker()
+      end, { desc = "Preview CTE", silent = false })
 
       -- Visual mode: Execute selection
       vim.keymap.set("v", "<C-CR>", function()
