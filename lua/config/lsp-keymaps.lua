@@ -27,6 +27,14 @@ map('gK', function()
   vim.lsp.buf.signature_help()
 end, 'Signature Help')
 
+map('K', function()
+  vim.lsp.buf.hover()
+end, 'Hover Documentation')
+
+map('gr', function()
+  vim.lsp.buf.references()
+end, 'Find References')
+
 map('<leader>uh', function()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled)
 end, 'Toggle Inlay Hints')

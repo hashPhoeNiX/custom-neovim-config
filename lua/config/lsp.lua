@@ -5,6 +5,7 @@ vim.lsp.enable({
 	"lua_ls",
 	-- "pyright",
 	"nixd",
+	"dbt",  -- dbt-language-server for code completion, hover, go-to-definition
 })
 
 --- This file sets up the LSP client, key mappings, and autocommands for LSP features.
