@@ -108,6 +108,8 @@
           # Once we add this overlay to our nixpkgs, we are able to
           # use `pkgs.neovimPlugins`, which is a set of our plugins.
           (utils.standardPluginOverlay inputs)
+          # Custom packages overlay
+          (final: prev: import ./pkgs { pkgs = final; })
           # add any other flake overlays here.
 
           # when other people mess up their overlays by wrapping them with system,
@@ -162,6 +164,8 @@
               lua-language-server
               lua51Packages.lua
               lua51Packages.luarocks
+              # dbt Language Server for LSP features (completion, hover, go-to-def)
+              dbt-language-server
               # dbt CLI for dbt-power plugin
               # Note: nixpkgs 'dbt' is dbt-core, not dbt Cloud CLI
               # For dbt Cloud CLI, install manually: https://docs.getdbt.com/docs/cloud/cloud-cli-installation
