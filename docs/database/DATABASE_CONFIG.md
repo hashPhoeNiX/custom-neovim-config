@@ -63,7 +63,7 @@ EOF
 Create `~/.dbt/profiles.yml`:
 
 ```yaml
-reliance_health:
+my_dbt_project:
   target: dev
   outputs:
     dev:
@@ -94,7 +94,7 @@ reliance_health:
 **Using Environment Variables** (More Secure):
 
 ```yaml
-reliance_health:
+my_dbt_project:
   target: dev
   outputs:
     dev:

@@ -282,7 +282,7 @@ vim.g.dbs = {
 
 Create `~/.dbt/profiles.yml`:
 ```yaml
-reliance_health:
+my_dbt_project:
   target: dev
   outputs:
     dev:

@@ -171,7 +171,7 @@ Language server dbt (id: 1) started by default handlers.
 
 Open a dbt model file:
 ```bash
-nvim data-dpac-dbt-models/models/staging/clean/.../stg_reliance_ml_ng_core__active_status.sql
+nvim data-dpac-dbt-models/models/staging/clean/.../stg_generic_source__active_status.sql
 ```
 
 **Test 1: Completion**

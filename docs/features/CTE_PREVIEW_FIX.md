@@ -70,7 +70,7 @@ dbt show --inline "<sql>" --limit 500
 ## Testing Verification
 
 ### Test 1: Model Compilation
-✅ `dbt compile --select stg_reliance_ml_ng_core__active_status` - Successful
+✅ `dbt compile --select stg_generic_source__active_status` - Successful
 
 ### Test 2: CTE Extraction
 ✅ Found CTEs in source SQL:

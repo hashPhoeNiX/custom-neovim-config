@@ -185,7 +185,7 @@ Your setup expects:
 
 2. **Configured dbt Profile**
    - Location: `~/.dbt/profiles.yml`
-   - Your project: `reliance_health` in `dbt_project.yml`
+   - Your project: `my_dbt_project` in `dbt_project.yml`
    - Matches Snowflake configuration
 
 3. **Database Connection**
@@ -255,7 +255,7 @@ See [DATABASE_CONFIG.md](DATABASE_CONFIG.md) for detailed setup.
 # Create dbt profiles
 mkdir -p ~/.dbt
 cat > ~/.dbt/profiles.yml << 'EOF'
-reliance_health:
+my_dbt_project:
   target: dev
   outputs:
     dev:

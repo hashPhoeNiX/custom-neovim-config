@@ -69,7 +69,7 @@ nvim
 Open a dbt SQL model file:
 
 ```bash
-nvim data-dpac-dbt-models/models/staging/clean/reliance_ml_ng_core/stg_reliance_ml_ng_core__active_status.sql
+nvim data-dpac-dbt-models/models/staging/clean/generic_source/stg_generic_source__active_status.sql
 ```
 
 ### Test Completion
