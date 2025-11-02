@@ -159,7 +159,7 @@ return {
           inline_results = {
             enabled = true,
             max_rows = 500,
-            max_column_width = 50,
+            max_column_width = 12,  -- Compact column width (was 50)
             auto_clear_on_execute = false,
             style = "markdown", -- or "simple"
           },
