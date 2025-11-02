@@ -11,9 +11,10 @@ map('<leader>cd', function()
   vim.diagnostic.open_float()
 end, 'Goto Definition')
 
+-- Override Snacks' gd with native LSP (Snacks picker doesn't work well with dbt-language-server)
 map('gd', function()
   vim.lsp.buf.definition()
-end, 'Goto Definition')
+end, 'Goto Definition', 'n')
 
 map('<leader>gI', function()
   vim.lsp.buf.implementation()
@@ -26,6 +27,14 @@ end, 'Goto Type Definition')
 map('gK', function()
   vim.lsp.buf.signature_help()
 end, 'Signature Help')
+
+map('K', function()
+  vim.lsp.buf.hover()
+end, 'Hover Documentation')
+
+map('gr', function()
+  vim.lsp.buf.references()
+end, 'Find References')
 
 map('<leader>uh', function()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled)

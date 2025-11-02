@@ -2,11 +2,11 @@
   "nodes": {
     "nixCats": {
       "locked": {
-        "lastModified": 1759730664,
-        "narHash": "sha256-boRlBQ/c4CaHsK/z04QL6+t81mcar37Io94HBX2GflY=",
+        "lastModified": 1761732732,
+        "narHash": "sha256-AP3KzTaFXFLjWWXysSnVTXUaGuC3hkUQZSlxUdGsLSs=",
         "owner": "BirdeeHub",
         "repo": "nixCats-nvim",
-        "rev": "77dffad8235eb77684fcb7599487c8e9f23d5b8f",
+        "rev": "6307455a6ccceadb9f873fc51d4cf7cd39bdace5",
         "type": "github"
       },
       "original": {
@@ -17,17 +17,62 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1761594641,
-        "narHash": "sha256-sImk6SJQASDLQo8l+0zWWaBgg7TueLS6lTvdH5pBZpo=",
+        "lastModified": 1761656231,
+        "narHash": "sha256-EiED5k6gXTWoAIS8yQqi5mAX6ojnzpHwAQTS3ykeYMg=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "1666250dbe4141e4ca8aaf89b40a3a51c2e36144",
+        "rev": "e99366c665bdd53b7b500ccdc5226675cfc51f45",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
         "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "plugins-cmp-dbt": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1710602335,
+        "narHash": "sha256-V1QOJQMrWwBHzYp4ivj0mUTqxSFurhz+kBhStZBir0M=",
+        "owner": "MattiasMTS",
+        "repo": "cmp-dbt",
+        "rev": "3ac763e8ffa69437b9bdc1f2015a131293509bb5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MattiasMTS",
+        "repo": "cmp-dbt",
+        "type": "github"
+      }
+    },
+    "plugins-dbt-power": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1761829743,
+        "narHash": "sha256-aE33PtmczhMLxGMF2O2984HfC0j/iRGnO/VlYZZgtfc=",
+        "path": "/Users/oluwapelumiadeosun/Projects/dbt-power.nvim",
+        "type": "path"
+      },
+      "original": {
+        "path": "/Users/oluwapelumiadeosun/Projects/dbt-power.nvim",
+        "type": "path"
+      }
+    },
+    "plugins-dbtpal": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1750350475,
+        "narHash": "sha256-jxyD1knlfCqENotkSvzHQr3+vVOiOD735umHwRWuCpY=",
+        "owner": "PedramNavid",
+        "repo": "dbtpal",
+        "rev": "981eab51609362712c64e3cf3fb773fe11f859b9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "PedramNavid",
+        "repo": "dbtpal",
         "type": "github"
       }
     },
@@ -84,6 +129,9 @@
       "inputs": {
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs",
+        "plugins-cmp-dbt": "plugins-cmp-dbt",
+        "plugins-dbt-power": "plugins-dbt-power",
+        "plugins-dbtpal": "plugins-dbtpal",
         "plugins-molten-nvim": "plugins-molten-nvim",
         "plugins-obsidian-nvim": "plugins-obsidian-nvim",
         "plugins-youversion-linker-nvim": "plugins-youversion-linker-nvim"

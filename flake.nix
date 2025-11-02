@@ -37,6 +37,20 @@
       flake = false;
     };
 
+    # dbt-related plugins
+    plugins-dbtpal = {
+      url = "github:PedramNavid/dbtpal";
+      flake = false;
+    };
+    plugins-cmp-dbt = {
+      url = "github:MattiasMTS/cmp-dbt";
+      flake = false;
+    };
+    plugins-dbt-power = {
+      url = "path:/Users/oluwapelumiadeosun/Projects/dbt-power.nvim";
+      flake = false;
+    };
+
     # plugins-at-popup = {
     #   url = "path:/Users/oluwapelumiadeosun/Projects/lua-tutorials/at-popup/";
     #   flake = false;
@@ -94,6 +108,8 @@
           # Once we add this overlay to our nixpkgs, we are able to
           # use `pkgs.neovimPlugins`, which is a set of our plugins.
           (utils.standardPluginOverlay inputs)
+          # Custom packages overlay
+          (final: prev: import ./pkgs { pkgs = final; })
           # add any other flake overlays here.
 
           # when other people mess up their overlays by wrapping them with system,
@@ -148,6 +164,17 @@
               lua-language-server
               lua51Packages.lua
               lua51Packages.luarocks
+              # dbt Language Server for LSP features (completion, hover, go-to-def)
+              dbt-language-server
+              # dbt CLI for dbt-power plugin
+              # Note: nixpkgs 'dbt' is dbt-core, not dbt Cloud CLI
+              # For dbt Cloud CLI, install manually: https://docs.getdbt.com/docs/cloud/cloud-cli-installation
+              # Uncomment one if using dbt-core locally:
+              # dbt
+              # python312Packages.dbt-core
+              # python312Packages.dbt-postgres
+              # python312Packages.dbt-bigquery
+              # python312Packages.dbt-snowflake
               # gumbo
               # lua51Packages.luasocket
             ];
@@ -167,6 +194,19 @@
               {
                 name = "youversion-linker";
                 plugin = youversion-linker-nvim;
+              }
+              # dbt-related plugins from GitHub
+              {
+                name = "dbtpal";
+                plugin = dbtpal;
+              }
+              {
+                name = "cmp-dbt";
+                plugin = cmp-dbt;
+              }
+              {
+                name = "dbt-power.nvim";
+                plugin = dbt-power;
               }
               # at-popup
               # { name = "at-popup"; plugin = at-popup; }
@@ -204,6 +244,11 @@
               image-nvim
               jupytext-nvim
               otter-nvim
+
+              # Database and dbt plugins (from nixpkgs)
+              vim-dadbod
+              vim-dadbod-ui
+              vim-dadbod-completion
             ];
           };
 

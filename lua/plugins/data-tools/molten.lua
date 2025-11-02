@@ -125,16 +125,16 @@ return {
       vim.g.molten_output_win_max_height = 1000
       -- vim.g.molten_output_win_hide_on_leave = false
       vim.g.molten_output_virt_lines = true
-      -- vim.g.molten_output_show_more = true
+      vim.g.molten_output_show_more = true  -- Show "X more lines" indicator
       vim.g.molten_virt_text_output = true
       vim.g.molten_virt_lines_off_by_1 = true
       vim.g.molten_wrap_output = false
-      -- vim.g.molten_virt_text_max_lines = 1
+      vim.g.molten_virt_text_max_lines = 100
 
       local which_key = require("which-key")
 
       which_key.add({
-        { "<leader>m", group = " Molten" },
+        { "<leader>m",  group = " Molten" },
         { "<leader>mr", group = "Run" },
         { "<leader>mk", group = "Kernel" },
         { "<leader>mc", group = "Cell" },
@@ -184,9 +184,9 @@ return {
               -- Save current position
               local pos = vim.fn.getpos('.')
               -- Select the block
-              vim.fn.setpos('.', {0, start_line, 1, 0})
+              vim.fn.setpos('.', { 0, start_line, 1, 0 })
               vim.cmd("normal! V")
-              vim.fn.setpos('.', {0, end_line, 1, 0})
+              vim.fn.setpos('.', { 0, end_line, 1, 0 })
               -- Evaluate the selection
               vim.cmd("MoltenEvaluateVisual")
               -- Restore position and move to next cell
@@ -275,7 +275,7 @@ return {
 
       vim.keymap.set(
         "n",
-        "<leader>mo",
+        "<leader>moo",
         ":noautocmd MoltenEnterOutput<CR>",
         { silent = true, desc = "Molten Enter Output" }
       )
@@ -356,6 +356,14 @@ return {
       })
       vim.keymap.set("n", "<leader>moC", molten_cmd.clear_all_outputs, {
         desc = "Clear all outputs",
+        silent = true,
+      })
+      vim.keymap.set("n", "<leader>mot", ":MoltenTailOutput<CR>", {
+        desc = "Show tail of outputs",
+        silent = true,
+      })
+      vim.keymap.set("n", "<leader>moT", ":MoltenTailToggle<CR>", {
+        desc = "Toggle tail output mode",
         silent = true,
       })
 
@@ -481,6 +489,14 @@ return {
 
       -- Configure Molten Output Persist
       require("config.molten-persist").setup()
+
+      -- Configure Molten Tail Output (show tail instead of head)
+      require("config.molten-tail-output").setup({
+        enabled = true,
+        max_lines = 100,  -- Maximum lines to show in tail
+        min_lines_to_truncate = 150,  -- Only truncate outputs longer than this
+        delay_ms = 800,  -- Wait time after execution to process output
+      })
     end,
   },
 }
