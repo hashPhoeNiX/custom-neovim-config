@@ -225,6 +225,7 @@
               conform-nvim
               gitsigns-nvim
               project-nvim
+              remote-sshfs-nvim
               # nvim-lspconfig
               # blink-cmp
               # mini-pairs
