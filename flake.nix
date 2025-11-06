@@ -36,6 +36,10 @@
       url = "github:hashPhoeNiX/youversion-linker.nvim/feat/initial-setup";
       flake = false;
     };
+    plugins-remote-ssh-nvim = {
+      url = "github:inhesrom/remote-ssh.nvim";
+      flake = false;
+    };
 
     # dbt-related plugins
     plugins-dbtpal = {
@@ -207,6 +211,10 @@
               {
                 name = "dbt-power.nvim";
                 plugin = dbt-power;
+              }
+              {
+                name = "remote-ssh.nvim";
+                plugin = remote-ssh-nvim;
               }
               # at-popup
               # { name = "at-popup"; plugin = at-popup; }

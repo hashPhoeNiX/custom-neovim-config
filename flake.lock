@@ -108,6 +108,22 @@
         "type": "github"
       }
     },
+    "plugins-remote-ssh-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1761777053,
+        "narHash": "sha256-SjMetcWGK38MVgixP+SLpyt3s+MokNvad35MRUzTrEc=",
+        "owner": "inhesrom",
+        "repo": "remote-ssh.nvim",
+        "rev": "3caf35ad6e571786c8b2ddfdb59d2e04e824c896",
+        "type": "github"
+      },
+      "original": {
+        "owner": "inhesrom",
+        "repo": "remote-ssh.nvim",
+        "type": "github"
+      }
+    },
     "plugins-youversion-linker-nvim": {
       "flake": false,
       "locked": {
@@ -134,6 +150,7 @@
         "plugins-dbtpal": "plugins-dbtpal",
         "plugins-molten-nvim": "plugins-molten-nvim",
         "plugins-obsidian-nvim": "plugins-obsidian-nvim",
+        "plugins-remote-ssh-nvim": "plugins-remote-ssh-nvim",
         "plugins-youversion-linker-nvim": "plugins-youversion-linker-nvim"
       }
     }
