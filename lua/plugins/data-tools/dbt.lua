@@ -40,12 +40,7 @@ return {
         require("dbt-power.preview").show_compiled_sql()
       end, { desc = "Preview compiled SQL", silent = false })
 
-      -- Custom: Execute and show results inline (Power User approach: compile -> wrap -> execute)
-      vim.keymap.set("n", "<C-CR>", function()
-        require("dbt-power.execute").execute_and_show_inline()
-      end, { desc = "Execute query (Power User mode)", silent = false })
-
-      -- Custom: Execute using dbt show with inline results (default)
+      -- Custom: Execute using dbt show with inline results
       vim.keymap.set("n", "<leader>ds", function()
         require("dbt-power.execute").execute_with_dbt_show_command()
       end, { desc = "Execute query - inline results", silent = false })
@@ -60,8 +55,13 @@ return {
         require("dbt-power.dbt.cte_preview").show_cte_picker()
       end, { desc = "Preview CTE", silent = false })
 
-      -- Visual mode: Execute selection
-      vim.keymap.set("v", "<C-CR>", function()
+      -- Custom: Create ad-hoc temporary model
+      vim.keymap.set("n", "<leader>da", function()
+        require("dbt-power.dbt.adhoc").create_adhoc_model()
+      end, { desc = "Create ad-hoc temporary model", silent = false })
+
+      -- Custom: Execute visual selection
+      vim.keymap.set("v", "<leader>dx", function()
         require("dbt-power.execute").execute_selection()
       end, { desc = "Execute SQL selection", silent = false })
 
@@ -98,6 +98,24 @@ return {
 
       -- Key mappings
       vim.keymap.set("n", "<leader>db", "<cmd>DBUIToggle<cr>", { noremap = true, silent = true, desc = "Toggle DBUI" })
+
+      -- Snowflake connections with private key authentication
+      -- Environment variables are set in devenv.nix (when in Reliance project folder)
+      local snowflake_user = os.getenv("SNOWFLAKE_USER")
+      local snowflake_account = os.getenv("SNOWFLAKE_ACCOUNT")
+      local snowflake_warehouse = os.getenv("SNOWFLAKE_WAREHOUSE")
+      local private_key_path = os.getenv("SNOWFLAKE_PRIVATE_KEY_PATH")
+
+      if snowflake_user and snowflake_account and snowflake_warehouse and private_key_path then
+        vim.g.dbs = {
+          reliance_raw = "snowflake://" .. snowflake_user .. "@" .. snowflake_account .. "/" .. (os.getenv("SNOWFLAKE_RAW_DB") or "RAW") .. "?warehouse=" .. snowflake_warehouse .. "&private_key_path=" .. vim.fn.expand(private_key_path),
+          reliance_analytics = "snowflake://" .. snowflake_user .. "@" .. snowflake_account .. "/" .. (os.getenv("SNOWFLAKE_ANALYTICS_DB") or "ANALYTICS") .. "?warehouse=" .. snowflake_warehouse .. "&private_key_path=" .. vim.fn.expand(private_key_path),
+          reliance_datascience = "snowflake://" .. snowflake_user .. "@" .. snowflake_account .. "/" .. (os.getenv("SNOWFLAKE_DATASCIENCE_DB") or "DATA_SCIENCE") .. "?warehouse=" .. snowflake_warehouse .. "&private_key_path=" .. vim.fn.expand(private_key_path),
+        }
+        vim.g.db_ui_default_connection = "reliance_raw"
+      else
+        vim.notify("[vim-dadbod] Snowflake environment variables not found. Set them in devenv.nix", vim.log.levels.WARN)
+      end
     end,
   },
 
