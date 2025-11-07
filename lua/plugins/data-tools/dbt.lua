@@ -1,5 +1,5 @@
 -- Enhanced dbt configuration for Neovim
--- Combines dbtpal, vim-dadbod, and custom functions for Power User-like experience
+-- Combines dbtpal and dbt-power.nvim for Power User-like experience
 
 return {
   -- dbtpal: Run and test dbt models
@@ -72,77 +72,6 @@ return {
     end,
   },
 
-  -- vim-dadbod: Database interface
-  {
-    "tpope/vim-dadbod",
-    cmd = "DB",
-  },
-
-  -- vim-dadbod-ui: UI for database queries
-  {
-    "kristijanhusak/vim-dadbod-ui",
-    dependencies = {
-      "tpope/vim-dadbod",
-    },
-    cmd = { "DBUI", "DBUIToggle", "DBUIAddConnection" },
-    init = function()
-      -- Database UI config
-      vim.g.db_ui_use_nerd_fonts = 1
-      vim.g.db_ui_show_database_icon = 1
-      vim.g.db_ui_force_echo_notifications = 1
-      vim.g.db_ui_win_position = "right"
-      vim.g.db_ui_winwidth = 40
-
-      -- Auto-execute on save
-      vim.g.db_ui_auto_execute_table_helpers = 1
-
-      -- Key mappings
-      vim.keymap.set("n", "<leader>db", "<cmd>DBUIToggle<cr>", { noremap = true, silent = true, desc = "Toggle DBUI" })
-
-      -- Snowflake connections with private key authentication
-      -- Environment variables are set in devenv.nix (when in Reliance project folder)
-      local snowflake_user = os.getenv("SNOWFLAKE_USER")
-      local snowflake_account = os.getenv("SNOWFLAKE_ACCOUNT")
-      local snowflake_warehouse = os.getenv("SNOWFLAKE_WAREHOUSE")
-      local private_key_path = os.getenv("SNOWFLAKE_PRIVATE_KEY_PATH")
-
-      if snowflake_user and snowflake_account and snowflake_warehouse and private_key_path then
-        vim.g.dbs = {
-          reliance_raw = "snowflake://" .. snowflake_user .. "@" .. snowflake_account .. "/" .. (os.getenv("SNOWFLAKE_RAW_DB") or "RAW") .. "?warehouse=" .. snowflake_warehouse .. "&private_key_path=" .. vim.fn.expand(private_key_path),
-          reliance_analytics = "snowflake://" .. snowflake_user .. "@" .. snowflake_account .. "/" .. (os.getenv("SNOWFLAKE_ANALYTICS_DB") or "ANALYTICS") .. "?warehouse=" .. snowflake_warehouse .. "&private_key_path=" .. vim.fn.expand(private_key_path),
-          reliance_datascience = "snowflake://" .. snowflake_user .. "@" .. snowflake_account .. "/" .. (os.getenv("SNOWFLAKE_DATASCIENCE_DB") or "DATA_SCIENCE") .. "?warehouse=" .. snowflake_warehouse .. "&private_key_path=" .. vim.fn.expand(private_key_path),
-        }
-        vim.g.db_ui_default_connection = "reliance_raw"
-      else
-        vim.notify("[vim-dadbod] Snowflake environment variables not found. Set them in devenv.nix", vim.log.levels.WARN)
-      end
-    end,
-  },
-
-  -- vim-dadbod-completion: Autocomplete for SQL
-  {
-    "kristijanhusak/vim-dadbod-completion",
-    dependencies = { "tpope/vim-dadbod" },
-    ft = { "sql", "mysql", "plsql" },
-    init = function()
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "sql", "mysql", "plsql" },
-        callback = function()
-          -- Check if blink.cmp is available
-          local ok, cmp = pcall(require, "cmp")
-          if ok then
-            cmp.setup.buffer({
-              sources = {
-                { name = "vim-dadbod-completion" },
-                { name = "buffer" },
-              },
-            })
-          end
-        end,
-      })
-    end,
-  },
-
   -- Optional: MattiasMTS/cmp-dbt for dbt-specific autocompletion
   {
     "MattiasMTS/cmp-dbt",
@@ -160,7 +89,6 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope.nvim",
-      "tpope/vim-dadbod",
       "PedramNavid/dbtpal",
     },
     dev = true,
@@ -177,7 +105,7 @@ return {
           inline_results = {
             enabled = true,
             max_rows = 500,
-            max_column_width = 12,  -- Compact column width (was 50)
+            max_column_width = 12,  -- Compact column width
             auto_clear_on_execute = false,
             style = "markdown", -- or "simple"
           },
@@ -187,12 +115,6 @@ return {
             auto_compile = false,
             split_position = "right", -- or "below"
             split_size = 80,
-          },
-
-          -- Database connections (will use vim-dadbod connections)
-          database = {
-            use_dadbod = true,
-            default_connection = nil, -- Use DBUI default
           },
 
           -- AI features (optional)
