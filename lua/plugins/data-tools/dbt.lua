@@ -61,8 +61,8 @@ return {
       end, { desc = "Create ad-hoc temporary model", silent = false })
 
       -- Custom: Execute visual selection
-      -- Use <Cmd> to preserve visual marks while command executes
-      vim.keymap.set("v", "<leader>dx", "<Cmd>lua require('dbt-power.execute').execute_selection()<CR>", { desc = "Execute SQL selection", silent = false })
+      -- Use : form to ensure visual marks are preserved
+      vim.keymap.set("v", "<leader>dx", ":<C-u>lua require('dbt-power.execute').execute_selection()<CR>", { noremap = true, silent = false, desc = "Execute SQL selection" })
 
       -- Custom: Clear inline results
       vim.keymap.set("n", "<leader>dC", function()
