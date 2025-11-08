@@ -5,7 +5,7 @@ return {
     "nvim-telescope/telescope.nvim", -- For file browser
   },
   config = function()
-    require("remote-ssh").setup()
+    require("remote-ssh").setup({})
 
     -- Key mappings for common operations
     vim.keymap.set("n", "<leader>rs", function()
