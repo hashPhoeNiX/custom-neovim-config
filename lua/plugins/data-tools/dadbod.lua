@@ -39,7 +39,7 @@ return {
     cmd = "DB",
     keys = {
       { "<leader>db", "<cmd>DBUIToggle<cr>", desc = "Toggle Database UI" },
-      { "<leader>dB", "<cmd>DB ", desc = "Execute DB command" },
+      { "<leader>dB", "<cmd>DB ",            desc = "Execute DB command" },
     },
   },
 
@@ -103,10 +103,10 @@ return {
 
         -- Get database names from env vars, with defaults
         local databases = {
-          raw = os.getenv("SNOWFLAKE_RAW_DB") or "RAW",
-          analytics = os.getenv("SNOWFLAKE_ANALYTICS_DB") or "ANALYTICS",
-          staging = os.getenv("SNOWFLAKE_STAGING_DB") or "STAGING",
-          dev = os.getenv("SNOWFLAKE_DEV_DB") or "DEV",
+          raw = os.getenv("SNOWFLAKE_RAW_DB") or "RAW_DB",
+          analytics = os.getenv("SNOWFLAKE_ANALYTICS_DB") or "ANALYTICS_DB",
+          staging = os.getenv("SNOWFLAKE_STAGING_DB") or "STAGING_DB",
+          dev = os.getenv("SNOWFLAKE_DEV_DB") or "SANDBOX_DB",
         }
 
         -- Configure connections
