@@ -74,7 +74,7 @@ return {
         local account = os.getenv("SNOWFLAKE_ACCOUNT")
         local warehouse = os.getenv("SNOWFLAKE_WAREHOUSE")
         local private_key_path = os.getenv("SNOWFLAKE_PRIVATE_KEY_PATH")
-        local role = os.getenv("SNOWFLAKE_ROLE") or "TRANSFORMER"
+        local role = os.getenv("SNOWFLAKE_ROLE") or "ENGINEER_ROLE"
 
         if not (user and account and warehouse and private_key_path) then
           vim.notify(
