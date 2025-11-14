@@ -140,6 +140,7 @@ return {
         { "<leader>mc", group = "Cell" },
         { "<leader>mn", group = "Navigate" },
         { "<leader>mo", group = "Output" },
+        { "<leader>mt", group = "Toggle/Theme" },
       })
 
       -- KEYMAPS
@@ -497,6 +498,41 @@ return {
         min_lines_to_truncate = 150,  -- Only truncate outputs longer than this
         delay_ms = 800,  -- Wait time after execution to process output
       })
+
+      -- Configure Molten Cell Borders (visual cell indicators)
+      require("config.molten-cell-borders").setup({
+        enabled = true,
+        border_style = "solid",  -- or 'dashed', 'double'
+        show_in_insert = false,
+        cell_width_percentage = 90,
+        min_cell_width = 40,
+        max_cell_width = 120,
+        colors = {
+          border = "#6272A4",
+        },
+      })
+
+      -- Keybindings for cell borders
+      vim.keymap.set("n", "<leader>mtb", function()
+        require("config.molten-cell-borders").toggle_borders()
+      end, { desc = "Toggle cell borders", silent = true })
+
+      vim.keymap.set("n", "<leader>mtB", function()
+        require("config.molten-cell-borders").refresh_borders()
+      end, { desc = "Refresh cell borders", silent = true })
+
+      -- Border style switching
+      vim.keymap.set("n", "<leader>mts", function()
+        vim.ui.select(
+          { "solid", "dashed", "double" },
+          { prompt = "Border style:" },
+          function(choice)
+            if choice then
+              require("config.molten-cell-borders").set_border_style(choice)
+            end
+          end
+        )
+      end, { desc = "Change border style", silent = true })
     end,
   },
 }
