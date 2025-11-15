@@ -95,15 +95,16 @@ return {
         local expanded_key_path = vim.fn.expand(private_key_path)
 
         -- Build Snowflake connection string
-        -- Format: snowflake://user@account/database?warehouse=X&role=Y&private_key_path=Z
+        -- Note: snowsql CLI has different parameters than the URI format
+        -- We set environment variables for role and use the basic URI format
+        vim.env.SNOWSQL_ROLE = role
         local function build_connection(database)
           return string.format(
-            "snowflake://%s@%s/%s?warehouse=%s&role=%s&private_key_path=%s",
+            "snowflake://%s@%s/%s?warehouse=%s&private_key_path=%s",
             user,
             account,
             database,
             warehouse,
-            role,
             expanded_key_path
           )
         end
