@@ -70,6 +70,13 @@ return {
 
       -- Setup Snowflake connections from environment variables
       local function setup_snowflake_connections()
+        -- Ensure snowsql is in PATH
+        local snowsql_path = "/Applications/SnowSQL.app/Contents/MacOS"
+        local current_path = vim.env.PATH or ""
+        if not current_path:find(snowsql_path, 1, true) then
+          vim.env.PATH = snowsql_path .. ":" .. current_path
+        end
+
         local user = os.getenv("SNOWFLAKE_USER")
         local account = os.getenv("SNOWFLAKE_ACCOUNT")
         local warehouse = os.getenv("SNOWFLAKE_WAREHOUSE")

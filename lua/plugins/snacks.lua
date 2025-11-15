@@ -141,6 +141,8 @@ return {
     -- { "<leader>ss", function() Snacks.picker.lsp_symbols() end, desc = "LSP Symbols" },
     -- { "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
     { "<leader>ft", function() Snacks.terminal.toggle() end, desc = "Toggle Terminal" },
+    { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
+    { "<leader>fr", function() Snacks.picker.recent() end, desc = "Recent" },
     { "<leader>wm", function() Snacks.zen.zoom() end, desc = "Toggle Zoom" },
   },
 }
