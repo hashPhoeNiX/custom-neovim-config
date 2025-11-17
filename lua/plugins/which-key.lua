@@ -38,7 +38,8 @@ return {
       { "<leader>dA", desc = "Toggle auto-compile" },
       { "<leader>dq", desc = "Preview CTE" },
       { "<leader>da", desc = "Create ad-hoc model" },
-      { "<leader>dx", desc = "Execute selection" },
+      { "<leader>dx", desc = "Execute selection (inline)" },
+      { "<leader>dX", desc = "Execute selection (buffer)" },
       { "<leader>dP", desc = "Execute direct (buffer)" },
       { "<leader>dp", desc = "Execute direct (inline)" },
       -- dbt-power: build
