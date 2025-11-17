@@ -23,16 +23,30 @@ return {
     -- dbt keymaps
     wk.add({
       { "<leader>d", group = "dbt" },
+      -- dbtpal: run/test/compile
       { "<leader>dr", desc = "Run current model" },
       { "<leader>dR", desc = "Run all models" },
       { "<leader>dt", desc = "Test current model" },
       { "<leader>dT", desc = "Test all models" },
       { "<leader>dc", desc = "Compile current model" },
       { "<leader>dm", desc = "Find dbt model (Telescope)" },
+      -- dbt-power: execute/preview
       { "<leader>dv", desc = "Preview compiled SQL" },
+      { "<leader>ds", desc = "Execute inline" },
+      { "<leader>dS", desc = "Execute buffer" },
       { "<leader>dC", desc = "Clear query results" },
       { "<leader>dA", desc = "Toggle auto-compile" },
-      { "<leader>db", desc = "Toggle Database UI" },
+      { "<leader>dq", desc = "Preview CTE" },
+      { "<leader>da", desc = "Create ad-hoc model" },
+      { "<leader>dx", desc = "Execute selection" },
+      { "<leader>dP", desc = "Execute direct (buffer)" },
+      { "<leader>dp", desc = "Execute direct (inline)" },
+      -- dbt-power: build
+      { "<leader>db", group = "build" },
+      { "<leader>dbm", desc = "Build current model" },
+      { "<leader>dbu", desc = "Build upstream" },
+      { "<leader>dbd", desc = "Build downstream" },
+      { "<leader>dba", desc = "Build all dependencies" },
     })
   end,
 }
