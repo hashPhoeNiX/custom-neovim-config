@@ -24,7 +24,7 @@ return {
       -- Load telescope extension
       require("telescope").load_extension("dbtpal")
 
-      -- Key mappings (non-overlapping)
+      -- dbtpal keymaps (non-overlapping with dbt-power)
       local dbt_keymap = vim.api.nvim_set_keymap
       local opts = { noremap = true, silent = false }
 
@@ -34,40 +34,6 @@ return {
       dbt_keymap("n", "<leader>dm", "<cmd>lua require('dbtpal.telescope').dbt_picker()<cr>", opts)
       dbt_keymap("n", "<leader>dR", "<cmd>lua require('dbtpal').run_all_models()<cr>", opts)
       dbt_keymap("n", "<leader>dT", "<cmd>lua require('dbtpal').test_all_models()<cr>", opts)
-
-      -- Custom: Show compiled SQL in split
-      vim.keymap.set("n", "<leader>dv", function()
-        require("dbt-power.preview").show_compiled_sql()
-      end, { desc = "Preview compiled SQL", silent = false })
-
-      -- Custom: Execute using dbt show with inline results
-      vim.keymap.set("n", "<leader>ds", function()
-        require("dbt-power.execute").execute_with_dbt_show_command()
-      end, { desc = "Execute query - inline results", silent = false })
-
-      -- Custom: Execute using dbt show with buffer output (full results)
-      vim.keymap.set("n", "<leader>dS", function()
-        require("dbt-power.execute").execute_with_dbt_show_buffer()
-      end, { desc = "Execute query - buffer results", silent = false })
-
-      -- Custom: Preview CTE with picker
-      vim.keymap.set("n", "<leader>dq", function()
-        require("dbt-power.dbt.cte_preview").show_cte_picker()
-      end, { desc = "Preview CTE", silent = false })
-
-      -- Custom: Create ad-hoc temporary model
-      vim.keymap.set("n", "<leader>da", function()
-        require("dbt-power.dbt.adhoc").create_adhoc_model()
-      end, { desc = "Create ad-hoc temporary model", silent = false })
-
-      -- Custom: Execute visual selection
-      -- Use : form to ensure visual marks are preserved
-      vim.keymap.set("v", "<leader>dx", ":<C-u>lua require('dbt-power.execute').execute_selection()<CR>", { noremap = true, silent = false, desc = "Execute SQL selection" })
-
-      -- Custom: Clear inline results
-      vim.keymap.set("n", "<leader>dC", function()
-        require("dbt-power.ui.inline_results").clear_all()
-      end, { desc = "Clear query results", silent = false })
     end,
   },
 
@@ -107,6 +73,12 @@ return {
             max_column_width = 12,  -- Compact column width
             auto_clear_on_execute = false,
             style = "markdown", -- or "simple"
+          },
+
+          -- Direct query configuration (snowsql execution, bypasses dbt show truncation)
+          direct_query = {
+            max_rows = 100,  -- Default limit for direct query results
+            buffer_split_size = 10,  -- Height of results buffer in lines (configurable)
           },
 
           -- Compiled SQL preview
