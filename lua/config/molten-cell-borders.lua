@@ -164,21 +164,32 @@ function M._find_all_cells(bufnr)
   while current_line <= total_lines do
     local line = vim.api.nvim_buf_get_lines(bufnr, current_line - 1, current_line, false)[1] or ""
 
-    -- Skip empty lines
-    if not line:match("^%s*$") then
-      local cell_start, cell_end = M._find_cell_bounds(bufnr, current_line)
+    -- Skip empty lines to find cell start
+    if line:match("^%s*$") then
+      current_line = current_line + 1
+    else
+      -- Found start of cell (non-empty line)
+      local cell_start = current_line
+      local cell_end = current_line
 
-      -- Add cell if not already added
-      if #cells == 0 or cells[#cells].end_ < cell_start then
-        table.insert(cells, {
-          start = cell_start,
-          end_ = cell_end,
-        })
+      -- Find end of cell (scan forward until empty line or EOF)
+      while cell_end < total_lines do
+        local next_line = vim.api.nvim_buf_get_lines(bufnr, cell_end, cell_end + 1, false)[1] or ""
+        if next_line:match("^%s*$") then
+          -- Hit empty line, cell ends
+          break
+        end
+        cell_end = cell_end + 1
       end
 
+      -- Add cell
+      table.insert(cells, {
+        start = cell_start,
+        end_ = cell_end,
+      })
+
+      -- Move past this cell and its trailing empty lines
       current_line = cell_end + 1
-    else
-      current_line = current_line + 1
     end
   end
 
@@ -229,20 +240,37 @@ function M._render_cell_borders(bufnr, cell_start, cell_end)
   local width = M._calculate_cell_width()
   local top_border = M._create_top_border(width)
   local bottom_border = M._create_bottom_border(width)
+  local chars = config.border_chars[config.border_style]
 
-  -- Add top border
+  -- Add top border (placed before the first line of the cell)
   local top_mark = vim.api.nvim_buf_set_extmark(bufnr, vim.api.nvim_create_namespace("molten_cell_borders"), cell_start - 1, 0, {
     virt_lines = { { { top_border, "MoltenCellBorder" } } },
     virt_lines_leftcol = true,
   })
+  table.insert(state.border_extmarks[bufnr], top_mark)
 
-  -- Add bottom border
+  -- Add left and right borders on each line of the cell
+  for line_num = cell_start, cell_end do
+    -- Left border at the start of the line
+    local left_mark = vim.api.nvim_buf_set_extmark(bufnr, vim.api.nvim_create_namespace("molten_cell_borders"), line_num - 1, 0, {
+      virt_text = { { chars.vertical, "MoltenCellBorder" } },
+      virt_text_pos = "inline",
+    })
+    table.insert(state.border_extmarks[bufnr], left_mark)
+
+    -- Right border at the end of the line
+    local right_mark = vim.api.nvim_buf_set_extmark(bufnr, vim.api.nvim_create_namespace("molten_cell_borders"), line_num - 1, -1, {
+      virt_text = { { chars.vertical, "MoltenCellBorder" } },
+      virt_text_pos = "inline",
+    })
+    table.insert(state.border_extmarks[bufnr], right_mark)
+  end
+
+  -- Add bottom border (placed after the last line of the cell)
   local bottom_mark = vim.api.nvim_buf_set_extmark(bufnr, vim.api.nvim_create_namespace("molten_cell_borders"), cell_end - 1, 0, {
     virt_lines = { { { bottom_border, "MoltenCellBorder" } } },
     virt_lines_leftcol = true,
   })
-
-  table.insert(state.border_extmarks[bufnr], top_mark)
   table.insert(state.border_extmarks[bufnr], bottom_mark)
 end
 

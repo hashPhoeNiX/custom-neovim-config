@@ -41,14 +41,14 @@ Configure in `lua/plugins/data-tools/molten.lua`:
 
 ```lua
 require("config.molten-cell-borders").setup({
-  enabled = true,                  -- Start with borders enabled
-  border_style = "solid",          -- 'solid', 'dashed', or 'double'
-  show_in_insert = false,          -- Hide borders while in insert mode
-  cell_width_percentage = 90,      -- Border width as % of window
-  min_cell_width = 40,             -- Minimum border width
-  max_cell_width = 120,            -- Maximum border width
+  enabled = true,              -- Start with borders enabled
+  border_style = "solid",      -- 'solid', 'dashed', or 'double'
+  show_in_insert = false,      -- Hide borders while in insert mode
+  cell_width_percentage = 90,  -- Border width as % of window
+  min_cell_width = 40,         -- Minimum border width
+  max_cell_width = 120,        -- Maximum border width
   colors = {
-    border = "#6272A4",            -- Border color (hex or hl group)
+    border = "#6272A4",        -- Border color (hex or hl group)
   },
 })
 ```

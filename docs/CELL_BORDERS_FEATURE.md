@@ -31,29 +31,35 @@ Detects cell boundaries by:
 - Markdown headings (`#`)
 - Code fences (` ``` `)
 
-### 2. Unicode Border Rendering ✓
+### 2. Full Unicode Box Borders ✓
 
-Three pre-configured styles:
+Three pre-configured styles - works on all file types:
 
 **Solid** (default)
 ```
-┌──────────────────────┐
-│ Python code here     │
-└──────────────────────┘
+┌──────────────────────────────────────┐
+│ Python code here                     │
+│ More code                            │
+│ Even more code                       │
+└──────────────────────────────────────┘
 ```
 
 **Dashed**
 ```
-┏━━━━━━━━━━━━━━━━━━━━━┓
-┃ Python code here     ┃
-┗━━━━━━━━━━━━━━━━━━━━━┛
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Python code here                     ┃
+┃ More code                            ┃
+┃ Even more code                       ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ```
 
 **Double**
 ```
-╔══════════════════════╗
-║ Python code here     ║
-╚══════════════════════╝
+╔══════════════════════════════════════╗
+║ Python code here                     ║
+║ More code                            ║
+║ Even more code                       ║
+╚══════════════════════════════════════╝
 ```
 
 ### 3. Smart Display Modes ✓
@@ -247,13 +253,15 @@ require("config.molten-cell-borders").setup({
 
 | Feature | notebook_style.nvim | molten-cell-borders |
 |---------|-------------------|-------------------|
-| Visual borders | ✓ | ✓ |
-| Cell detection | ✓ (cell markers) | ✓ (flexible) |
+| Visual boxes | ✓ | ✓ |
+| Cell detection | ✓ (# %% markers) | ✓ (flexible: fences, empty lines, headings) |
 | Border styles | 3 | 3 |
 | Insert mode hiding | ✓ | ✓ |
-| Works with execution | ✗ | ✓ Molten |
-| Python-only | ✓ | ✗ (multi-format) |
-| Configuration | Basic | Advanced |
+| Works with execution | ✗ (visualization only) | ✓ Integrates with Molten |
+| Python-only | ✓ | ✗ (Python, Markdown, Quarto, Jupyter) |
+| Configuration options | Limited | Extensive |
+| Markdown support | ✗ | ✓ |
+| Jupyter notebooks | ✗ | ✓ |
 
 ## Technical Architecture
 
