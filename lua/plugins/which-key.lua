@@ -47,6 +47,10 @@ return {
       { "<leader>dbu", desc = "Build upstream" },
       { "<leader>dbd", desc = "Build downstream" },
       { "<leader>dba", desc = "Build all dependencies" },
+      -- vim-dadbod: database
+      { "<leader>dB", group = "database" },
+      { "<leader>dBu", desc = "Toggle Database UI" },
+      { "<leader>dBc", desc = "Execute DB command" },
     })
   end,
 }

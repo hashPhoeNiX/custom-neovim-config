@@ -38,8 +38,8 @@ return {
     "tpope/vim-dadbod",
     cmd = "DB",
     keys = {
-      { "<leader>db", "<cmd>DBUIToggle<cr>", desc = "Toggle Database UI" },
-      { "<leader>dB", "<cmd>DB ",            desc = "Execute DB command" },
+      { "<leader>dBu", "<cmd>DBUIToggle<cr>", desc = "Toggle Database UI" },
+      { "<leader>dBc", "<cmd>DB ",            desc = "Execute DB command" },
     },
   },
 
@@ -120,12 +120,19 @@ return {
           dev = os.getenv("SNOWFLAKE_DEV_DB") or "SANDBOX_DB",
         }
 
-        -- Configure connections
+        -- Configure connections - use simple URI without private_key_path
+        -- snowsql will use ~/.snowsql/config for authentication details
+        local function build_connection(database, conn_name)
+          -- Return just the connection name from config
+          -- Format: snowflake://conn_name
+          return "snowflake://" .. conn_name
+        end
+
         vim.g.dbs = {
-          snowflake_raw = build_connection(databases.raw),
-          snowflake_analytics = build_connection(databases.analytics),
-          snowflake_staging = build_connection(databases.staging),
-          snowflake_dev = build_connection(databases.dev),
+          snowflake_raw = build_connection(databases.raw, "snowflake_prod"),
+          snowflake_analytics = build_connection(databases.analytics, "snowflake_prod"),
+          snowflake_staging = build_connection(databases.staging, "snowflake_prod"),
+          snowflake_dev = build_connection(databases.dev, "snowflake_dev"),
         }
 
         -- Set default connection
