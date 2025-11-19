@@ -31,7 +31,7 @@ return {
       { "<leader>dc", desc = "Compile current model" },
       { "<leader>dm", desc = "Find dbt model (Telescope)" },
       -- dbt-power: execute/preview
-      { "<leader>dv", desc = "Preview compiled SQL" },
+      { "<leader>dv", desc = "Preview compiled SQL (model/selection)" },
       { "<leader>ds", desc = "Execute inline" },
       { "<leader>dS", desc = "Execute buffer" },
       { "<leader>dC", desc = "Clear query results" },
