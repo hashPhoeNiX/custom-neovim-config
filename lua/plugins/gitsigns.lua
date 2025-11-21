@@ -76,14 +76,14 @@ return {
         -- map('n', '<leader>hq', gitsigns.setqflist)
 
         -- Toggles
-        map('n', '<leader>tb', gitsigns.toggle_current_line_blame, { desc = "Toggle blame line" })
-        -- map('n', '<leader>tw', gitsigns.toggle_word_diff)
+        map('n', '<leader>thb', gitsigns.toggle_current_line_blame, { desc = "Toggle blame line" })
+        map('n', '<leader>thw', gitsigns.toggle_word_diff, { desc = "Toggle word diff" })
 
         -- Text object
         map({ 'o', 'x' }, 'ih', gitsigns.select_hunk, { desc = "Select hunk" })
 
         -- Auto hunk preview on cursor move (inline)
-        map('n', '<leader>ha', function()
+        map('n', '<leader>thp', function()
           auto_hunk_preview_enabled = not auto_hunk_preview_enabled
 
           if auto_hunk_preview_enabled then
@@ -106,7 +106,7 @@ return {
                 end, 300) -- 300ms debounce
               end,
             })
-            vim.notify("[gitsigns] Auto hunk preview (inline) enabled", vim.log.levels.INFO)
+            vim.notify("[gitsigns] Auto hunk preview inline enabled", vim.log.levels.INFO)
           else
             -- Disable autocmd
             vim.api.nvim_del_augroup_by_name('GitSignsAutoPreview' .. bufnr)
@@ -114,12 +114,12 @@ return {
               hunk_preview_timer:stop()
               hunk_preview_timer = nil
             end
-            vim.notify("[gitsigns] Auto hunk preview (inline) disabled", vim.log.levels.INFO)
+            vim.notify("[gitsigns] Auto hunk preview inline disabled", vim.log.levels.INFO)
           end
-        end, { desc = "Toggle auto hunk preview (inline)" })
+        end, { desc = "Toggle auto hunk preview inline" })
 
         -- Auto hunk preview on cursor move (window)
-        map('n', '<leader>hA', function()
+        map('n', '<leader>thP', function()
           auto_hunk_preview_window_enabled = not auto_hunk_preview_window_enabled
 
           if auto_hunk_preview_window_enabled then
@@ -142,7 +142,7 @@ return {
                 end, 300) -- 300ms debounce
               end,
             })
-            vim.notify("[gitsigns] Auto hunk preview (window) enabled", vim.log.levels.INFO)
+            vim.notify("[gitsigns] Auto hunk preview window enabled", vim.log.levels.INFO)
           else
             -- Disable autocmd
             vim.api.nvim_del_augroup_by_name('GitSignsAutoPreviewWindow' .. bufnr)
@@ -150,9 +150,9 @@ return {
               hunk_preview_window_timer:stop()
               hunk_preview_window_timer = nil
             end
-            vim.notify("[gitsigns] Auto hunk preview (window) disabled", vim.log.levels.INFO)
+            vim.notify("[gitsigns] Auto hunk preview window disabled", vim.log.levels.INFO)
           end
-        end, { desc = "Toggle auto hunk preview (window)" })
+        end, { desc = "Toggle auto hunk preview window" })
       end,
     })
   end,

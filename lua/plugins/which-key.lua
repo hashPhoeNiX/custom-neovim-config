@@ -58,9 +58,7 @@ return {
     -- gitsigns keymaps
     wk.add({
       { "<leader>h", group = "git hunks" },
-      { "<leader>ha", desc = "Toggle auto hunk preview (inline)" },
-      { "<leader>hA", desc = "Toggle auto hunk preview (window)" },
-      { "<leader>hp", desc = "Preview hunk" },
+      { "<leader>hp", desc = "Preview hunk (window)" },
       { "<leader>hi", desc = "Preview hunk inline" },
       { "<leader>hb", desc = "Blame line (full)" },
       { "<leader>hd", desc = "Diff this" },
@@ -72,7 +70,11 @@ return {
     -- toggles
     wk.add({
       { "<leader>t", group = "toggle" },
-      { "<leader>tb", desc = "Toggle blame line" },
+      { "<leader>th", group = "gitsign" },
+      { "<leader>thb", desc = "Toggle blame line" },
+      { "<leader>thp", desc = "Toggle auto hunk preview inline" },
+      { "<leader>thP", desc = "Toggle auto hunk preview window" },
+      { "<leader>thw", desc = "Toggle word diff" },
     })
   end,
 }
