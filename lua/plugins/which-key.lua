@@ -54,5 +54,23 @@ return {
       { "<leader>dBu", desc = "Toggle Database UI" },
       { "<leader>dBc", desc = "Execute DB command" },
     })
+
+    -- gitsigns keymaps
+    wk.add({
+      { "<leader>h", group = "git hunks" },
+      { "<leader>hp", desc = "Preview hunk" },
+      { "<leader>hi", desc = "Preview hunk inline" },
+      { "<leader>hb", desc = "Blame line (full)" },
+      { "<leader>hd", desc = "Diff this" },
+      { "<leader>hD", desc = "Diff this (previous)" },
+      { "]c", desc = "Next hunk" },
+      { "[c", desc = "Previous hunk" },
+    })
+
+    -- toggles
+    wk.add({
+      { "<leader>t", group = "toggle" },
+      { "<leader>tb", desc = "Toggle blame line" },
+    })
   end,
 }
