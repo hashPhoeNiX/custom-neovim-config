@@ -58,6 +58,7 @@ return {
     -- gitsigns keymaps
     wk.add({
       { "<leader>h", group = "git hunks" },
+      { "<leader>ha", desc = "Toggle auto hunk preview" },
       { "<leader>hp", desc = "Preview hunk" },
       { "<leader>hi", desc = "Preview hunk inline" },
       { "<leader>hb", desc = "Blame line (full)" },

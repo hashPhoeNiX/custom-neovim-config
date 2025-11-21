@@ -1,6 +1,9 @@
 return {
   "lewis6991/gitsigns.nvim",
   config = function()
+    local auto_hunk_preview_enabled = false
+    local hunk_preview_timer = nil
+
     require("gitsigns").setup({
       -- numhl = true,
       -- linehl = false,
@@ -76,6 +79,42 @@ return {
 
         -- Text object
         map({ 'o', 'x' }, 'ih', gitsigns.select_hunk, { desc = "Select hunk" })
+
+        -- Auto hunk preview on cursor move
+        map('n', '<leader>ha', function()
+          auto_hunk_preview_enabled = not auto_hunk_preview_enabled
+
+          if auto_hunk_preview_enabled then
+            -- Setup autocmd for auto-preview
+            vim.api.nvim_create_autocmd('CursorMoved', {
+              group = vim.api.nvim_create_augroup('GitSignsAutoPreview' .. bufnr, { clear = true }),
+              buffer = bufnr,
+              callback = function()
+                -- Debounce to avoid previewing on every move
+                if hunk_preview_timer then
+                  hunk_preview_timer:stop()
+                end
+
+                hunk_preview_timer = vim.defer_fn(function()
+                  -- Only preview if we're on a hunk
+                  local hunk = gitsigns.get_hunks()[1]
+                  if hunk then
+                    gitsigns.preview_hunk_inline()
+                  end
+                end, 300) -- 300ms debounce
+              end,
+            })
+            vim.notify("[gitsigns] Auto hunk preview enabled", vim.log.levels.INFO)
+          else
+            -- Disable autocmd
+            vim.api.nvim_del_augroup_by_name('GitSignsAutoPreview' .. bufnr)
+            if hunk_preview_timer then
+              hunk_preview_timer:stop()
+              hunk_preview_timer = nil
+            end
+            vim.notify("[gitsigns] Auto hunk preview disabled", vim.log.levels.INFO)
+          end
+        end, { desc = "Toggle auto hunk preview" })
       end,
     })
   end,
