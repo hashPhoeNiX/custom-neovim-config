@@ -59,16 +59,16 @@ return {
 
         -- map('n', '<leader>hS', gitsigns.stage_buffer)
         -- map('n', '<leader>hR', gitsigns.reset_buffer)
-        map('n', '<leader>hp', gitsigns.preview_hunk, { desc = "Preview hunk" })
-        map('n', '<leader>hi', gitsigns.preview_hunk_inline, { desc = "Preview hunk inline" })
+        map('n', '<leader>ghp', gitsigns.preview_hunk_inline, { desc = "Preview hunk inline" })
+        map('n', '<leader>ghP', gitsigns.preview_hunk, { desc = "Preview hunk (window)" })
 
-        map('n', '<leader>hb', function()
+        map('n', '<leader>gb', function()
           gitsigns.blame_line({ full = true })
         end, { desc = "Blame line (full)" })
 
-        map('n', '<leader>hd', gitsigns.diffthis, { desc = "Diff this" })
+        map('n', '<leader>gd', gitsigns.diffthis, { desc = "Diff this" })
 
-        map('n', '<leader>hD', function()
+        map('n', '<leader>gD', function()
           gitsigns.diffthis('~')
         end, { desc = "Diff this (previous)" })
 
@@ -76,14 +76,14 @@ return {
         -- map('n', '<leader>hq', gitsigns.setqflist)
 
         -- Toggles
-        map('n', '<leader>thb', gitsigns.toggle_current_line_blame, { desc = "Toggle blame line" })
-        map('n', '<leader>thw', gitsigns.toggle_word_diff, { desc = "Toggle word diff" })
+        map('n', '<leader>tgb', gitsigns.toggle_current_line_blame, { desc = "Toggle blame line" })
+        map('n', '<leader>tgw', gitsigns.toggle_word_diff, { desc = "Toggle word diff" })
 
         -- Text object
         map({ 'o', 'x' }, 'ih', gitsigns.select_hunk, { desc = "Select hunk" })
 
         -- Auto hunk preview on cursor move (inline)
-        map('n', '<leader>thp', function()
+        map('n', '<leader>tgp', function()
           auto_hunk_preview_enabled = not auto_hunk_preview_enabled
 
           if auto_hunk_preview_enabled then
@@ -119,7 +119,7 @@ return {
         end, { desc = "Toggle auto hunk preview inline" })
 
         -- Auto hunk preview on cursor move (window)
-        map('n', '<leader>thP', function()
+        map('n', '<leader>tgP', function()
           auto_hunk_preview_window_enabled = not auto_hunk_preview_window_enabled
 
           if auto_hunk_preview_window_enabled then
