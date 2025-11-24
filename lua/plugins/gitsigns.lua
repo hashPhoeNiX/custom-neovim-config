@@ -2,7 +2,7 @@ return {
   "lewis6991/gitsigns.nvim",
   config = function()
     local auto_hunk_preview_enabled = false
-    local auto_hunk_preview_window_enabled = false
+    local auto_hunk_preview_window_enabled = true
     local hunk_preview_timer = nil
     local hunk_preview_window_timer = nil
 
@@ -82,6 +82,33 @@ return {
         -- Text object
         map({ 'o', 'x' }, 'ih', gitsigns.select_hunk, { desc = "Select hunk" })
 
+        -- Helper function to setup window preview
+        local function setup_window_preview()
+          vim.api.nvim_create_autocmd('CursorMoved', {
+            group = vim.api.nvim_create_augroup('GitSignsAutoPreviewWindow' .. bufnr, { clear = true }),
+            buffer = bufnr,
+            callback = function()
+              -- Debounce to avoid previewing on every move
+              if hunk_preview_window_timer then
+                hunk_preview_window_timer:stop()
+              end
+
+              hunk_preview_window_timer = vim.defer_fn(function()
+                -- Only preview if we're on a hunk
+                local hunk = gitsigns.get_hunks()[1]
+                if hunk then
+                  gitsigns.preview_hunk()
+                end
+              end, 300) -- 300ms debounce
+            end,
+          })
+        end
+
+        -- Initialize window preview if enabled by default
+        if auto_hunk_preview_window_enabled then
+          setup_window_preview()
+        end
+
         -- Auto hunk preview on cursor move (inline)
         map('n', '<leader>tgp', function()
           auto_hunk_preview_enabled = not auto_hunk_preview_enabled
@@ -123,25 +150,7 @@ return {
           auto_hunk_preview_window_enabled = not auto_hunk_preview_window_enabled
 
           if auto_hunk_preview_window_enabled then
-            -- Setup autocmd for auto-preview in floating window
-            vim.api.nvim_create_autocmd('CursorMoved', {
-              group = vim.api.nvim_create_augroup('GitSignsAutoPreviewWindow' .. bufnr, { clear = true }),
-              buffer = bufnr,
-              callback = function()
-                -- Debounce to avoid previewing on every move
-                if hunk_preview_window_timer then
-                  hunk_preview_window_timer:stop()
-                end
-
-                hunk_preview_window_timer = vim.defer_fn(function()
-                  -- Only preview if we're on a hunk
-                  local hunk = gitsigns.get_hunks()[1]
-                  if hunk then
-                    gitsigns.preview_hunk()
-                  end
-                end, 300) -- 300ms debounce
-              end,
-            })
+            setup_window_preview()
             vim.notify("[gitsigns] Auto hunk preview window enabled", vim.log.levels.INFO)
           else
             -- Disable autocmd
