@@ -28,6 +28,27 @@ return {
           vim.keymap.set(mode, l, r, opts)
         end
 
+        -- Helper function to preview hunk with window positioned below current line
+        local function preview_hunk_below()
+          gitsigns.preview_hunk()
+
+          -- Find and reposition the preview window
+          vim.schedule(function()
+            local win_list = vim.api.nvim_list_wins()
+            for _, win in ipairs(win_list) do
+              local cfg = vim.api.nvim_win_get_config(win)
+              -- Check if this is a floating window (preview window)
+              if cfg.relative ~= '' then
+                -- Position window below current line
+                cfg.row = 1  -- One row below the current line
+                cfg.col = 0
+                vim.api.nvim_win_set_config(win, cfg)
+                break
+              end
+            end
+          end)
+        end
+
         -- Navigation
         map('n', ']c', function()
           if vim.wo.diff then
@@ -60,7 +81,7 @@ return {
         -- map('n', '<leader>hS', gitsigns.stage_buffer)
         -- map('n', '<leader>hR', gitsigns.reset_buffer)
         map('n', '<leader>ghp', gitsigns.preview_hunk_inline, { desc = "Preview hunk inline" })
-        map('n', '<leader>ghP', gitsigns.preview_hunk, { desc = "Preview hunk (window)" })
+        map('n', '<leader>ghP', preview_hunk_below, { desc = "Preview hunk (window)" })
 
         map('n', '<leader>gb', function()
           gitsigns.blame_line({ full = true })
@@ -97,7 +118,7 @@ return {
                 -- Only preview if we're on a hunk
                 local hunk = gitsigns.get_hunks()[1]
                 if hunk then
-                  gitsigns.preview_hunk()
+                  preview_hunk_below()
                 end
               end, 300) -- 300ms debounce
             end,
