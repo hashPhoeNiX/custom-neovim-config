@@ -90,7 +90,7 @@ return {
 
           -- Model picker configuration (replaces broken dbtpal picker)
           picker = {
-            default = "telescope", -- "telescope" or "fzf"
+            default = "fzf", -- "telescope" or "fzf"
           },
 
           -- AI features (optional)
