@@ -31,7 +31,7 @@ return {
       dbt_keymap("n", "<leader>dr", "<cmd>lua require('dbtpal').run_model()<cr>", opts)
       dbt_keymap("n", "<leader>dt", "<cmd>lua require('dbtpal').test_model()<cr>", opts)
       dbt_keymap("n", "<leader>dc", "<cmd>lua require('dbtpal').compile_model()<cr>", opts)
-      dbt_keymap("n", "<leader>dm", "<cmd>lua require('dbtpal.telescope').dbt_picker()<cr>", opts)
+      -- Note: <leader>dm picker now handled by dbt-power (see below)
       dbt_keymap("n", "<leader>dR", "<cmd>lua require('dbtpal').run_all_models()<cr>", opts)
       dbt_keymap("n", "<leader>dT", "<cmd>lua require('dbtpal').test_all_models()<cr>", opts)
     end,
@@ -88,6 +88,11 @@ return {
             split_size = 80,
           },
 
+          -- Model picker configuration (replaces broken dbtpal picker)
+          picker = {
+            default = "telescope", -- "telescope" or "fzf"
+          },
+
           -- AI features (optional)
           ai = {
             enabled = false,
@@ -101,6 +106,7 @@ return {
             execute_inline = "<C-CR>",
             clear_results = "<leader>dC",
             toggle_auto_compile = "<leader>dA",
+            model_picker = "<leader>dm",
           },
         })
       end
