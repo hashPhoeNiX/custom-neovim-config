@@ -2,7 +2,7 @@ return {
   "lewis6991/gitsigns.nvim",
   config = function()
     local auto_hunk_preview_enabled = false
-    local auto_hunk_preview_window_enabled = true
+    local auto_hunk_preview_window_enabled = false
     local hunk_preview_timer = nil
     local hunk_preview_window_timer = nil
 
