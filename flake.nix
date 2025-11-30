@@ -50,10 +50,11 @@
       url = "github:MattiasMTS/cmp-dbt";
       flake = false;
     };
-    plugins-dbt-power = {
-      url = "path:/Users/oluwapelumiadeosun/Projects/dbt-power.nvim";
-      flake = false;
-    };
+    # Uncomment
+    # plugins-dbt-power = {
+    #   url = "path:/Users/oluwapelumiadeosun/Projects/dbt-power.nvim";
+    #   flake = false;
+    # };
 
     # plugins-at-popup = {
     #   url = "path:/Users/oluwapelumiadeosun/Projects/lua-tutorials/at-popup/";
@@ -208,17 +209,20 @@
                 name = "cmp-dbt";
                 plugin = cmp-dbt;
               }
-              {
-                name = "dbt-power.nvim";
-                plugin = dbt-power;
-              }
+              # {
+              #   name = "dbt-power.nvim";
+              #   plugin = dbt-power;
+              # }
               {
                 name = "remote-ssh.nvim";
                 plugin = remote-ssh-nvim;
               }
               # at-popup
               # { name = "at-popup"; plugin = at-popup; }
-            ];
+            ] ++ (pkgs.lib.optionals (pkgs ? neovimPlugins.dbt-power) [{
+      name = "dbt-power.nvim";
+      plugin = dbt-power;
+    }]);
             general = with pkgs.vimPlugins; [
               catppuccin-nvim
               # { plugin = catppuccin-nvim; name = "catpuccin"; }

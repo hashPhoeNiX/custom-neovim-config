@@ -47,19 +47,6 @@
         "type": "github"
       }
     },
-    "plugins-dbt-power": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1761829743,
-        "narHash": "sha256-aE33PtmczhMLxGMF2O2984HfC0j/iRGnO/VlYZZgtfc=",
-        "path": "/Users/oluwapelumiadeosun/Projects/dbt-power.nvim",
-        "type": "path"
-      },
-      "original": {
-        "path": "/Users/oluwapelumiadeosun/Projects/dbt-power.nvim",
-        "type": "path"
-      }
-    },
     "plugins-dbtpal": {
       "flake": false,
       "locked": {
@@ -146,7 +133,6 @@
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs",
         "plugins-cmp-dbt": "plugins-cmp-dbt",
-        "plugins-dbt-power": "plugins-dbt-power",
         "plugins-dbtpal": "plugins-dbtpal",
         "plugins-molten-nvim": "plugins-molten-nvim",
         "plugins-obsidian-nvim": "plugins-obsidian-nvim",
