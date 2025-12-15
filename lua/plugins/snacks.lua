@@ -61,19 +61,32 @@ return {
     explorer = { enabled = true },
     indent = { enabled = true },
     input = { enabled = true },
+    gh = {
+      -- your gh configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
     picker = {
       enabled = true,
-      hidden =  true,
+      hidden = true,
       ignored = true,
-      -- sources = {
-      --   files = {
-      --     hidden = true,
-      --     ignored = true,
-      --     -- exclude = {
-      --     -- "**/.git/*",
-      --     --},
-      --   },
-      -- },
+      sources = {
+        gh_issue = {
+          -- your gh_issue picker configuration comes here
+          -- or leave it empty to use the default settings
+        },
+        gh_pr = {
+          -- your gh_pr picker configuration comes here
+          -- or leave it empty to use the default settings
+        }
+        --   files = {
+        --     hidden = true,
+        --     ignored = true,
+        --     -- exclude = {
+        --     -- "**/.git/*",
+        --     --},
+        --   },
+      },
     },
     notifier = { enabled = true },
     quickfile = { enabled = true },
@@ -81,9 +94,9 @@ return {
     scroll = { enabled = true },
     statuscolumn = { enabled = true },
     words = { enabled = true },
-    terminal = { 
-      win = { style = "terminal" }, 
-      enabled = true 
+    terminal = {
+      win = { style = "terminal" },
+      enabled = true
     },
     zen = {
       ---@class snacks.zen.Config
@@ -125,12 +138,12 @@ return {
   },
   keys = {
     -- Top Pickers & Explorer
-    { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
-    { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
-    { "<leader>/", function() Snacks.picker.grep() end, desc = "Grep" },
-    { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
-    { "<leader>n", function() Snacks.picker.notifications() end, desc = "Notification History" },
-    { "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
+    { "<leader><space>", function() Snacks.picker.smart() end,                     desc = "Smart Find Files" },
+    { "<leader>,",       function() Snacks.picker.buffers() end,                   desc = "Buffers" },
+    { "<leader>/",       function() Snacks.picker.grep() end,                      desc = "Grep" },
+    { "<leader>:",       function() Snacks.picker.command_history() end,           desc = "Command History" },
+    { "<leader>n",       function() Snacks.picker.notifications() end,             desc = "Notification History" },
+    { "<leader>e",       function() Snacks.explorer() end,                         desc = "File Explorer" },
 
     -- LSP: Disabled in favor of native LSP from lsp-keymaps.lua for better dbt-language-server support
     -- { "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition" },
@@ -140,9 +153,15 @@ return {
     -- { "gy", function() Snacks.picker.lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
     -- { "<leader>ss", function() Snacks.picker.lsp_symbols() end, desc = "LSP Symbols" },
     -- { "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
-    { "<leader>ft", function() Snacks.terminal.toggle() end, desc = "Toggle Terminal" },
-    { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
-    { "<leader>fr", function() Snacks.picker.recent() end, desc = "Recent" },
-    { "<leader>wm", function() Snacks.zen.zoom() end, desc = "Toggle Zoom" },
+    { "<leader>ft",      function() Snacks.terminal.toggle() end,                  desc = "Toggle Terminal" },
+    { "<leader>fp",      function() Snacks.picker.projects() end,                  desc = "Projects" },
+    { "<leader>fr",      function() Snacks.picker.recent() end,                    desc = "Recent" },
+    { "<leader>wm",      function() Snacks.zen.zoom() end,                         desc = "Toggle Zoom" },
+
+    -- GitHub
+    { "<leader>gi",      function() Snacks.picker.gh_issue() end,                  desc = "GitHub Issues (open)" },
+    { "<leader>gI",      function() Snacks.picker.gh_issue({ state = "all" }) end, desc = "GitHub Issues (all)" },
+    { "<leader>gp",      function() Snacks.picker.gh_pr() end,                     desc = "GitHub Pull Requests (open)" },
+    { "<leader>gP",      function() Snacks.picker.gh_pr({ state = "all" }) end,    desc = "GitHub Pull Requests (all)" },
   },
 }

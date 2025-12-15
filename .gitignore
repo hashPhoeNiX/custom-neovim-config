@@ -12,6 +12,7 @@ test.md
 
 # Python
 */.DS_Store
+.DS_Store
 *.ipynb
 
 # Compiled Lua sources
