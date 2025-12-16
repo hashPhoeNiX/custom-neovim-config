@@ -59,7 +59,22 @@ return {
     bigfile = { enabled = true },
     dashboard = { enabled = true },
     explorer = { enabled = true },
-    indent = { enabled = true },
+    indent = {
+      enabled = true,
+      indent = {
+        enabled = true,
+        only_scope = false,         -- show all indents, not just scope
+        only_current = false,       -- show indents for all lines, not just current
+        hl = "IndentBlanklineChar", -- dimmer highlight for regular indents
+      },
+      scope = {
+        enabled = true,                    -- highlight current scope
+        hl = "IndentBlanklineContextChar", -- brighter highlight for current scope
+      },
+      chunk = {
+        enabled = true, -- visualize code chunks
+      },
+    },
     input = { enabled = true },
     gh = {
       -- your gh configuration comes here
@@ -136,6 +151,13 @@ return {
       },
     }
   },
+  config = function(_, opts)
+    require("snacks").setup(opts)
+
+    -- Set up dimmer colors for non-focused indent lines
+    vim.api.nvim_set_hl(0, "IndentBlanklineChar", { fg = "#2a2e36", nocombine = true })
+    vim.api.nvim_set_hl(0, "IndentBlanklineContextChar", { fg = "#4a5057", nocombine = true })
+  end,
   keys = {
     -- Top Pickers & Explorer
     { "<leader><space>", function() Snacks.picker.smart() end,                     desc = "Smart Find Files" },

@@ -182,47 +182,58 @@
               # python312Packages.dbt-snowflake
               # gumbo
               # lua51Packages.luasocket
+
+              # DevOps LSP Servers
+              dockerfile-language-server # Docker LSP
+              docker-compose-language-service # Docker Compose LSP
+              terraform-ls # Terraform LSP
+              yaml-language-server # YAML LSP
             ];
           };
 
           # This is for plugins that will load at startup without using packadd:
           startupPlugins = {
-            gitPlugins = with pkgs.neovimPlugins; [
-              {
-                name = "obsidian.nvim";
-                plugin = obsidian-nvim;
-              }
-              {
-                name = "molten-nvim";
-                plugin = molten-nvim;
-              }
-              {
-                name = "youversion-linker";
-                plugin = youversion-linker-nvim;
-              }
-              # dbt-related plugins from GitHub
-              {
-                name = "dbtpal";
-                plugin = dbtpal;
-              }
-              {
-                name = "cmp-dbt";
-                plugin = cmp-dbt;
-              }
-              # {
-              #   name = "dbt-power.nvim";
-              #   plugin = dbt-power;
-              # }
-              {
-                name = "remote-ssh.nvim";
-                plugin = remote-ssh-nvim;
-              }
-              # at-popup
-              # { name = "at-popup"; plugin = at-popup; }
-            ] ++ (pkgs.lib.optionals (pkgs ? neovimPlugins.dbt-power) [{
-      name = "dbt-power.nvim";
-      plugin = dbt-power;
-    }]);
+            gitPlugins =
+              with pkgs.neovimPlugins;
+              [
+                {
+                  name = "obsidian.nvim";
+                  plugin = obsidian-nvim;
+                }
+                {
+                  name = "molten-nvim";
+                  plugin = molten-nvim;
+                }
+                {
+                  name = "youversion-linker";
+                  plugin = youversion-linker-nvim;
+                }
+                # dbt-related plugins from GitHub
+                {
+                  name = "dbtpal";
+                  plugin = dbtpal;
+                }
+                {
+                  name = "cmp-dbt";
+                  plugin = cmp-dbt;
+                }
+                # {
+                #   name = "dbt-power.nvim";
+                #   plugin = dbt-power;
+                # }
+                {
+                  name = "remote-ssh.nvim";
+                  plugin = remote-ssh-nvim;
+                }
+                # at-popup
+                # { name = "at-popup"; plugin = at-popup; }
+              ]
+              ++ (pkgs.lib.optionals (pkgs ? neovimPlugins.dbt-power) [
+                {
+                  name = "dbt-power.nvim";
+                  plugin = dbt-power;
+                }
+              ]);
             general = with pkgs.vimPlugins; [
               catppuccin-nvim
               # { plugin = catppuccin-nvim; name = "catpuccin"; }
@@ -242,6 +253,12 @@
               # blink-cmp
               # mini-pairs
               nvim-treesitter.withAllGrammars
+
+              # Enhanced editing and navigation
+              nvim-ufo # Advanced code folding with treesitter
+              promise-async # Required by nvim-ufo
+              todo-comments-nvim # Highlight and search TODO comments
+              grug-far-nvim # Search and replace across project
               # This is for if you only want some of the grammars
               # (nvim-treesitter.withPlugins (
               #   plugins: with plugins; [

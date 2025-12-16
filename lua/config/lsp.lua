@@ -5,6 +5,11 @@ local lsp_servers = {
   "lua_ls",
   "nixd",
   "dbt",
+  -- DevOps LSPs
+  "docker",
+  "docker-compose",
+  "terraform",
+  "yaml",
 }
 
 -- Register each LSP server with vim.lsp.config()
