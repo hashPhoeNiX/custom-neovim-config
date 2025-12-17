@@ -1,8 +1,10 @@
+-- DISABLED: Replaced by distant.nvim (better macOS support, no kernel extensions)
 return {
   "inhesrom/remote-ssh.nvim",
+  enabled = false,
   dependencies = {
-    "nvim-lua/plenary.nvim",       -- Required dependency
-    "nvim-telescope/telescope.nvim", -- For file browser
+    "nvim-lua/plenary.nvim",
+    "nvim-telescope/telescope.nvim",
   },
   config = function()
     require("remote-ssh").setup({})
