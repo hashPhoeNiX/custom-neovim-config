@@ -40,6 +40,10 @@
       url = "github:inhesrom/remote-ssh.nvim";
       flake = false;
     };
+    plugins-sshfs-nvim = {
+      url = "github:uhs-robert/sshfs.nvim";
+      flake = false;
+    };
 
     # dbt-related plugins
     plugins-dbtpal = {
@@ -152,6 +156,7 @@
             general = with pkgs; [
               fd
               ripgrep
+              sshfs
               # NOTE:
               # lazygit
               # Apparently lazygit when launched via snacks cant create its own config file
@@ -222,9 +227,13 @@
                 #   plugin = dbt-power;
                 # }
                 {
-                  name = "remote-ssh.nvim";
-                  plugin = remote-ssh-nvim;
+                  name = "sshfs.nvim";
+                  plugin = sshfs-nvim;
                 }
+                # {
+                #   name = "remote-ssh.nvim";
+                #   plugin = remote-ssh-nvim;
+                # }
                 # at-popup
                 # { name = "at-popup"; plugin = at-popup; }
               ]

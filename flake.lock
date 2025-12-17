@@ -17,11 +17,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1765772535,
-        "narHash": "sha256-aq+dQoaPONOSjtFIBnAXseDm9TUhIbe215TPmkfMYww=",
+        "lastModified": 1765934234,
+        "narHash": "sha256-pJjWUzNnjbIAMIc5gRFUuKCDQ9S1cuh3b2hKgA7Mc4A=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "09b8fda8959d761445f12b55f380d90375a1d6bb",
+        "rev": "af84f9d270d404c17699522fab95bbf928a2d92f",
         "type": "github"
       },
       "original": {
@@ -111,6 +111,22 @@
         "type": "github"
       }
     },
+    "plugins-sshfs-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1765927605,
+        "narHash": "sha256-BmK6NAa/k3EW2aF2hoCl3YyFwYVS0oQNo1U1gJGGGso=",
+        "owner": "uhs-robert",
+        "repo": "sshfs.nvim",
+        "rev": "36b031f1e6416c37e2b501b6fe9468893dde980b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "uhs-robert",
+        "repo": "sshfs.nvim",
+        "type": "github"
+      }
+    },
     "plugins-youversion-linker-nvim": {
       "flake": false,
       "locked": {
@@ -137,6 +153,7 @@
         "plugins-molten-nvim": "plugins-molten-nvim",
         "plugins-obsidian-nvim": "plugins-obsidian-nvim",
         "plugins-remote-ssh-nvim": "plugins-remote-ssh-nvim",
+        "plugins-sshfs-nvim": "plugins-sshfs-nvim",
         "plugins-youversion-linker-nvim": "plugins-youversion-linker-nvim"
       }
     }
