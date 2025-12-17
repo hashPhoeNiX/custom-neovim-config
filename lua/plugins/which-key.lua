@@ -61,7 +61,7 @@ return {
       { "<leader>rc", desc = "Connect to distant server" },
       { "<leader>rd", desc = "Disconnect from distant server" },
       { "<leader>rf", desc = "Open distant file" },
-      { "<leader>re", desc = "Explore distant files" },
+      { "<leader>re", desc = "Open distant file (explore)" },
       { "<leader>rm", desc = "Make distant directory" },
       { "<leader>rt", desc = "Open distant shell" },
       { "<leader>ri", desc = "Distant info/version" },

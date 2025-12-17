@@ -25,7 +25,7 @@ return {
 
     -- File operations
     map("n", "<leader>rf", "<cmd>DistantOpen<cr>", vim.tbl_extend("force", opts, { desc = "Remote Open File" }))
-    map("n", "<leader>re", "<cmd>Telescope distant<cr>", vim.tbl_extend("force", opts, { desc = "Remote Explore" }))
+    map("n", "<leader>re", "<cmd>DistantOpen<cr>", vim.tbl_extend("force", opts, { desc = "Remote Explore (same as open)" }))
 
     -- Directory operations
     map("n", "<leader>rm", "<cmd>DistantMkdir<cr>", vim.tbl_extend("force", opts, { desc = "Remote Make Directory" }))
