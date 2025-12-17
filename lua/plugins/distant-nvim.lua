@@ -1,19 +1,37 @@
 return {
   "chipsenkbeil/distant.nvim",
-  branch = "v0.3",           -- Use stable v0.3 branch
+  branch = "v0.3",
   dependencies = {
-    "nvim-lua/plenary.nvim", -- Required dependency
+    "nvim-lua/plenary.nvim",
   },
   config = function()
-    require("distant"):setup()
-
-    -- Key mappings for common distant operations
-    vim.keymap.set("n", "<leader>dc", function()
-      vim.cmd("DistantConnect")
-    end, { noremap = true, silent = true, desc = "Connect to distant server" })
-
-    vim.keymap.set("n", "<leader>do", function()
-      vim.cmd("DistantOpen")
-    end, { noremap = true, silent = true, desc = "Open distant file" })
+    require("distant"):setup({
+      -- Use SSH by default
+      ["*"] = {
+        ssh = {
+          -- Use your SSH config
+          config_file = vim.fn.expand("~/.ssh/config"),
+        },
+      },
+    })
   end,
+
+  keys = {
+    -- Connection management
+    { "<leader>dc", "<cmd>DistantConnect<cr>", desc = "Distant Connect" },
+    { "<leader>dd", "<cmd>DistantDisconnect<cr>", desc = "Distant Disconnect" },
+
+    -- File operations (matches sshfs.nvim pattern)
+    { "<leader>df", "<cmd>DistantOpen<cr>", desc = "Distant Open File" },
+    { "<leader>de", "<cmd>Telescope distant<cr>", desc = "Distant Explore" },
+
+    -- Directory operations
+    { "<leader>dm", "<cmd>DistantMkdir<cr>", desc = "Distant Make Directory" },
+
+    -- Shell
+    { "<leader>dt", "<cmd>DistantShell<cr>", desc = "Distant Shell" },
+
+    -- System info
+    { "<leader>di", "<cmd>DistantClientVersion<cr>", desc = "Distant Info" },
+  },
 }

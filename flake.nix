@@ -156,7 +156,7 @@
             general = with pkgs; [
               fd
               ripgrep
-              sshfs
+              # sshfs # Disabled: Requires macFUSE kernel extension on macOS
               # NOTE:
               # lazygit
               # Apparently lazygit when launched via snacks cant create its own config file
@@ -226,10 +226,12 @@
                 #   name = "dbt-power.nvim";
                 #   plugin = dbt-power;
                 # }
-                {
-                  name = "sshfs.nvim";
-                  plugin = sshfs-nvim;
-                }
+                # Disabled: Requires macFUSE kernel extension on macOS
+                # Use distant.nvim instead for remote file access
+                # {
+                #   name = "sshfs.nvim";
+                #   plugin = sshfs-nvim;
+                # }
                 # {
                 #   name = "remote-ssh.nvim";
                 #   plugin = remote-ssh-nvim;

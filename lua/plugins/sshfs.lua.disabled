@@ -1,3 +1,26 @@
+-- DISABLED: sshfs.nvim requires macFUSE kernel extension on macOS
+--
+-- This plugin is disabled because it requires macFUSE, which needs kernel-level
+-- permissions on macOS. Apple is phasing out kernel extensions for security reasons.
+--
+-- ALTERNATIVES:
+-- 1. Use distant.nvim (recommended, already configured)
+--    - No kernel extension needed
+--    - User-level permissions only
+--    - See: lua/plugins/distant-nvim.lua
+--
+-- 2. Install macFUSE manually (not recommended)
+--    - brew install --cask macfuse
+--    - Allow kernel extension in System Settings → Privacy & Security
+--    - Restart your Mac
+--    - Re-enable this plugin in flake.nix
+--
+-- TO RE-ENABLE (if on Linux or after installing macFUSE):
+-- 1. Rename this file back to sshfs.lua
+-- 2. Uncomment sshfs.nvim in flake.nix (startupPlugins section)
+-- 3. Uncomment sshfs in flake.nix (lspsAndRuntimeDeps section)
+-- 4. Rebuild: nix build .#nvim
+
 return {
   "uhs-robert/sshfs.nvim",
   dependencies = { "nvim-telescope/telescope.nvim" },
