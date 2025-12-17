@@ -55,6 +55,18 @@ return {
       { "<leader>dBc", desc = "Execute DB command" },
     })
 
+    -- distant.nvim keymaps
+    wk.add({
+      { "<leader>r", group = "remote (distant)" },
+      { "<leader>rc", desc = "Connect to distant server" },
+      { "<leader>rd", desc = "Disconnect from distant server" },
+      { "<leader>rf", desc = "Open distant file" },
+      { "<leader>re", desc = "Explore distant files" },
+      { "<leader>rm", desc = "Make distant directory" },
+      { "<leader>rt", desc = "Open distant shell" },
+      { "<leader>ri", desc = "Distant info/version" },
+    })
+
     -- gitsigns keymaps
     wk.add({
       { "<leader>g", group = "git" },

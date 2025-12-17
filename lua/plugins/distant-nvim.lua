@@ -17,21 +17,21 @@ return {
   end,
 
   keys = {
-    -- Connection management
-    { "<leader>dc", "<cmd>DistantConnect<cr>", desc = "Distant Connect" },
-    { "<leader>dd", "<cmd>DistantDisconnect<cr>", desc = "Distant Disconnect" },
+    -- Connection management (using <leader>r for "remote")
+    { "<leader>rc", "<cmd>DistantConnect<cr>", desc = "Remote Connect" },
+    { "<leader>rd", "<cmd>DistantDisconnect<cr>", desc = "Remote Disconnect" },
 
-    -- File operations (matches sshfs.nvim pattern)
-    { "<leader>df", "<cmd>DistantOpen<cr>", desc = "Distant Open File" },
-    { "<leader>de", "<cmd>Telescope distant<cr>", desc = "Distant Explore" },
+    -- File operations
+    { "<leader>rf", "<cmd>DistantOpen<cr>", desc = "Remote Open File" },
+    { "<leader>re", "<cmd>Telescope distant<cr>", desc = "Remote Explore" },
 
     -- Directory operations
-    { "<leader>dm", "<cmd>DistantMkdir<cr>", desc = "Distant Make Directory" },
+    { "<leader>rm", "<cmd>DistantMkdir<cr>", desc = "Remote Make Directory" },
 
     -- Shell
-    { "<leader>dt", "<cmd>DistantShell<cr>", desc = "Distant Shell" },
+    { "<leader>rt", "<cmd>DistantShell<cr>", desc = "Remote Shell" },
 
     -- System info
-    { "<leader>di", "<cmd>DistantClientVersion<cr>", desc = "Distant Info" },
+    { "<leader>ri", "<cmd>DistantClientVersion<cr>", desc = "Remote Info" },
   },
 }
