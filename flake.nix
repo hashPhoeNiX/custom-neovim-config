@@ -153,47 +153,52 @@
           # at RUN TIME for plugins. Will be available to PATH within neovim terminal
           # this includes LSPs
           lspsAndRuntimeDeps = {
-            general = with pkgs; [
-              fd
-              ripgrep
-              # sshfs # Disabled: Requires macFUSE kernel extension on macOS
-              # NOTE:
-              # lazygit
-              # Apparently lazygit when launched via snacks cant create its own config file
-              # but we can add one from nix!
-              (pkgs.writeShellScriptBin "lazygit" ''
-                exec ${pkgs.lazygit}/bin/lazygit --use-config-file ${pkgs.writeText "lazygit_config.yml" ""} "$@"
-              '')
-              nixd
-              ruff
-              pyright
-              basedpyright
-              nixfmt
-              imagemagick
-              python312Packages.jupytext
-              lua-language-server
-              lua51Packages.lua
-              lua51Packages.luarocks
-              # dbt Language Server for LSP features (completion, hover, go-to-def)
-              dbt-language-server
-              # dbt CLI for dbt-power plugin
-              # Note: nixpkgs 'dbt' is dbt-core, not dbt Cloud CLI
-              # For dbt Cloud CLI, install manually: https://docs.getdbt.com/docs/cloud/cloud-cli-installation
-              # Uncomment one if using dbt-core locally:
-              # dbt
-              # python312Packages.dbt-core
-              # python312Packages.dbt-postgres
-              # python312Packages.dbt-bigquery
-              # python312Packages.dbt-snowflake
-              # gumbo
-              # lua51Packages.luasocket
+            general =
+              with pkgs;
+              [
+                fd
+                ripgrep
+                # sshfs # Disabled: Requires macFUSE kernel extension on macOS
+                # NOTE:
+                # lazygit
+                # Apparently lazygit when launched via snacks cant create its own config file
+                # but we can add one from nix!
+                (pkgs.writeShellScriptBin "lazygit" ''
+                  exec ${pkgs.lazygit}/bin/lazygit --use-config-file ${pkgs.writeText "lazygit_config.yml" ""} "$@"
+                '')
+                nixd
+                ruff
+                pyright
+                basedpyright
+                nixfmt
+                imagemagick
+                python312Packages.jupytext
+                lua-language-server
+                lua51Packages.lua
+                lua51Packages.luarocks
+                # dbt Language Server for LSP features (completion, hover, go-to-def)
+                # dbt-language-server # This is only needed for my MacOS for now
+                # dbt CLI for dbt-power plugin
+                # Note: nixpkgs 'dbt' is dbt-core, not dbt Cloud CLI
+                # For dbt Cloud CLI, install manually: https://docs.getdbt.com/docs/cloud/cloud-cli-installation
+                # Uncomment one if using dbt-core locally:
+                # dbt
+                # python312Packages.dbt-core
+                # python312Packages.dbt-postgres
+                # python312Packages.dbt-bigquery
+                # python312Packages.dbt-snowflake
+                # gumbo
+                # lua51Packages.luasocket
 
-              # DevOps LSP Servers
-              dockerfile-language-server # Docker LSP
-              docker-compose-language-service # Docker Compose LSP
-              terraform-ls # Terraform LSP
-              yaml-language-server # YAML LSP
-            ];
+                # DevOps LSP Servers
+                dockerfile-language-server # Docker LSP
+                docker-compose-language-service # Docker Compose LSP
+                terraform-ls # Terraform LSP
+                yaml-language-server # YAML LSP
+              ]
+              ++ lib.optionals pkgs.stdenv.isDarwin [
+                dbt-language-server
+              ];
           };
 
           # This is for plugins that will load at startup without using packadd:

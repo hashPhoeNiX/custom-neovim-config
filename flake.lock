@@ -114,11 +114,11 @@
     "plugins-sshfs-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1765927605,
-        "narHash": "sha256-BmK6NAa/k3EW2aF2hoCl3YyFwYVS0oQNo1U1gJGGGso=",
+        "lastModified": 1765982783,
+        "narHash": "sha256-SNhvDok6hEHkZRAiNk2NXKx+L+UrPzNZnHfaawu1LZA=",
         "owner": "uhs-robert",
         "repo": "sshfs.nvim",
-        "rev": "36b031f1e6416c37e2b501b6fe9468893dde980b",
+        "rev": "4d487430c3680f73f91ec43a2f599847e446bc24",
         "type": "github"
       },
       "original": {
