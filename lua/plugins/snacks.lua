@@ -58,7 +58,17 @@ return {
     -- refer to the configuration section below
     bigfile = { enabled = true },
     dashboard = { enabled = true },
-    explorer = { enabled = true },
+    explorer = {
+      enabled = true,
+      replace_netrw = true, -- Replace netrw with snacks explorer
+      ---@type snacks.explorer.Config
+      ---@diagnostic disable-next-line: missing-fields
+      opts = {
+        win = {
+          style = "explorer",
+        },
+      },
+    },
     indent = {
       enabled = true,
       indent = {
