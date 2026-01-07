@@ -88,6 +88,13 @@ return {
             split_size = 80,
           },
 
+          -- Database connections (NEW: now configurable instead of hardcoded)
+          database = {
+            use_dadbod = true,
+            default_connection = nil,
+            snowsql_connection = "snowflake_dev", -- Connection name from ~/.snowsql/config
+          },
+
           -- Model picker configuration (replaces broken dbtpal picker)
           picker = {
             default = "fzf", -- "telescope" or "fzf"
