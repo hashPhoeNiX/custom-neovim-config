@@ -1,5 +1,10 @@
 -- Enhanced dbt configuration for Neovim
 -- Combines dbtpal and dbt-power.nvim for Power User-like experience
+--
+-- dbt-power.nvim now supports multiple database adapters:
+--   - Snowflake, PostgreSQL, BigQuery, Redshift, DuckDB, Databricks
+--   - Auto-detects from dbt profiles (dbt Core) or uses dbt Cloud connections
+--   - Falls back to dbt show if direct CLI not available
 
 return {
   -- dbtpal: Run and test dbt models
@@ -51,6 +56,7 @@ return {
   {
     dir = "~/Projects/dbt-power.nvim",
     name = "dbt-power",
+    -- "hashPhoeNiX/dbt-power.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope.nvim",
@@ -70,15 +76,15 @@ return {
           inline_results = {
             enabled = true,
             max_rows = 500,
-            max_column_width = 12,  -- Compact column width
+            max_column_width = 12, -- Compact column width
             auto_clear_on_execute = false,
-            style = "markdown", -- or "simple"
+            style = "markdown",    -- or "simple"
           },
 
-          -- Direct query configuration (snowsql execution, bypasses dbt show truncation)
+          -- Direct query configuration (direct CLI execution, bypasses dbt show truncation)
           direct_query = {
-            max_rows = 100,  -- Default limit for direct query results
-            buffer_split_size = 10,  -- Height of results buffer in lines (configurable)
+            max_rows = 100,         -- Default limit for direct query results
+            buffer_split_size = 10, -- Height of results buffer in lines (configurable)
           },
 
           -- Compiled SQL preview
@@ -88,11 +94,51 @@ return {
             split_size = 80,
           },
 
-          -- Database connections (NEW: now configurable instead of hardcoded)
+          -- Database adapter configuration (auto-detects from ~/.dbt/profiles.yml)
           database = {
+            -- Adapter selection: nil (auto-detect) or specify: "snowflake", "postgres", "bigquery", etc.
+            adapter = nil, -- Auto-detect from profiles.yml (recommended)
+
+            -- Adapter-specific configurations
+            snowflake = {
+              connection_name = "snowflake_dev", -- Connection name from ~/.snowsql/config
+            },
+
+            postgres = {
+              host = "localhost",
+              port = 5432,
+              database = nil,
+              user = nil,
+              connection_string = nil, -- Alternative: full connection string
+            },
+
+            bigquery = {
+              project_id = nil,
+              dataset = nil,
+              location = "US",
+            },
+
+            duckdb = {
+              database_path = ":memory:",
+            },
+
+            redshift = {
+              host = nil,
+              port = 5439,
+              database = nil,
+              user = nil,
+              connection_string = nil,
+            },
+
+            databricks = {
+              host = nil,
+              http_path = nil,
+              token = nil,
+            },
+
+            -- Legacy vim-dadbod support (optional)
             use_dadbod = true,
             default_connection = nil,
-            snowsql_connection = "snowflake_dev", -- Connection name from ~/.snowsql/config
           },
 
           -- Model picker configuration (replaces broken dbtpal picker)
