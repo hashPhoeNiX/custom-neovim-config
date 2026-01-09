@@ -94,10 +94,12 @@ return {
             split_size = 80,
           },
 
-          -- Database adapter configuration (auto-detects from ~/.dbt/profiles.yml)
+          -- Database adapter configuration
+          -- For dbt Core: auto-detects from profiles.yml
+          -- For dbt Cloud CLI: must specify manually (adapter info not available locally)
           database = {
             -- Adapter selection: nil (auto-detect) or specify: "snowflake", "postgres", "bigquery", etc.
-            adapter = nil, -- Auto-detect from profiles.yml (recommended)
+            adapter = "snowflake", -- Set to nil for auto-detect (dbt Core), or specify for dbt Cloud CLI
 
             -- Adapter-specific configurations
             snowflake = {
