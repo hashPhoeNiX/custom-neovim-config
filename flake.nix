@@ -54,6 +54,10 @@
       url = "github:MattiasMTS/cmp-dbt";
       flake = false;
     };
+    plugins-dbt-power-nvim = {
+      url = "github:hashPhoeNiX/dbt-power.nvim"; # /feat/config-validation-and-improvements";
+      flake = false;
+    };
     # Uncomment
     # plugins-dbt-power = {
     #   url = "path:/Users/oluwapelumiadeosun/Projects/dbt-power.nvim";
@@ -228,8 +232,8 @@
                   plugin = cmp-dbt;
                 }
                 # {
-                #   name = "dbt-power.nvim";
-                #   plugin = dbt-power;
+                #   name = "dbt-power";
+                #   plugin = dbt-power-nvim;
                 # }
                 # Disabled: Requires macFUSE kernel extension on macOS
                 # Use distant.nvim instead for remote file access
@@ -246,8 +250,8 @@
               ]
               ++ (pkgs.lib.optionals (pkgs ? neovimPlugins.dbt-power) [
                 {
-                  name = "dbt-power.nvim";
-                  plugin = dbt-power;
+                  name = "dbt-power";
+                  plugin = dbt-power-nvim;
                 }
               ]);
             general = with pkgs.vimPlugins; [
