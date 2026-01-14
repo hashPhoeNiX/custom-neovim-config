@@ -55,7 +55,7 @@
       flake = false;
     };
     plugins-dbt-power-nvim = {
-      url = "github:hashPhoeNiX/dbt-power.nvim"; # /feat/config-validation-and-improvements";
+      url = "github:hashPhoeNiX/dbt-power.nvim/feat/config-validation-and-improvements";
       flake = false;
     };
     # Uncomment
