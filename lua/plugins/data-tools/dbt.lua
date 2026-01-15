@@ -104,6 +104,9 @@ return {
             -- Adapter-specific configurations
             snowflake = {
               connection_name = "snowflake_dev", -- Connection name from ~/.snowsql/config
+              login_timeout = 30,                 -- Connection timeout in seconds (default: 30)
+              connection_timeout = 30,            -- Query timeout in seconds (default: 30)
+              debug_on_error = true,              -- Enable debug logging on errors (default: true)
             },
 
             postgres = {
