@@ -6,11 +6,13 @@ return {
   },
   config = function()
     require("distant"):setup({
-      -- Use SSH by default
-      ["*"] = {
-        ssh = {
-          -- Use your SSH config
-          config_file = vim.fn.expand("~/.ssh/config"),
+      servers = {
+        -- Use SSH by default
+        ["*"] = {
+          ssh = {
+            -- Use your SSH config
+            config_file = vim.fn.expand("~/.ssh/config"),
+          },
         },
       },
     })

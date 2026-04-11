@@ -24,7 +24,11 @@ return {
         workspaceDelay = -1,
       },
       workspace = {
-        -- library = vim.api.nvim_get_runtime_file('', true),
+        -- library = vim.api.nvim_get_runtime_file("", true),
+        library = {
+          vim.env.VIMRUNTIME,
+          "${3rd}/luv/library",
+        },
         maxPreload = 1000,
         preloadFileSize = 1000,
         checkThirdParty = false,

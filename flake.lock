@@ -2,11 +2,11 @@
   "nodes": {
     "nixCats": {
       "locked": {
-        "lastModified": 1765766809,
-        "narHash": "sha256-3Xp41+Sb1zIzASa1Uu1k1RMUoJ9CGyYb0GtvvpRPBqg=",
+        "lastModified": 1774835836,
+        "narHash": "sha256-6ok7iv/9R82vl6MYe3Lwyyb6S5bmW2PxEZtmjzlqyPs=",
         "owner": "BirdeeHub",
         "repo": "nixCats-nvim",
-        "rev": "fe157e3ed69ed14b55ca81f597eac282caed58a2",
+        "rev": "ebb9f279a55ca60ff4e37e4accf6518dc627aa8d",
         "type": "github"
       },
       "original": {
@@ -17,11 +17,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1765934234,
-        "narHash": "sha256-pJjWUzNnjbIAMIc5gRFUuKCDQ9S1cuh3b2hKgA7Mc4A=",
+        "lastModified": 1775793324,
+        "narHash": "sha256-omax7atcZbol+6HJ2RLpP+ZCFcPa5bZ65Hn71RufeWQ=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "af84f9d270d404c17699522fab95bbf928a2d92f",
+        "rev": "9d29d5f667d7467f98efc31881e824fa586c927e",
         "type": "github"
       },
       "original": {
@@ -47,6 +47,23 @@
         "type": "github"
       }
     },
+    "plugins-dbt-power-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1767981116,
+        "narHash": "sha256-mkEi+yKJowXeJl1dLutBZ66OeqIVVLQu8++vaaTXDLs=",
+        "owner": "hashPhoeNiX",
+        "repo": "dbt-power.nvim",
+        "rev": "7b72e4ed8388fff2a7a9ccac4d075447f2984362",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hashPhoeNiX",
+        "ref": "feat/config-validation-and-improvements",
+        "repo": "dbt-power.nvim",
+        "type": "github"
+      }
+    },
     "plugins-dbtpal": {
       "flake": false,
       "locked": {
@@ -66,11 +83,11 @@
     "plugins-molten-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1762386932,
-        "narHash": "sha256-7+OXmwYue7nfE50836jkuxkviT761aHvH+Ca+zyMFPQ=",
+        "lastModified": 1772331792,
+        "narHash": "sha256-FsDtd50Ehyd6EVdyU3fIDefkZJsOIi5bMPPdV3rKZw0=",
         "owner": "benlubas",
         "repo": "molten-nvim",
-        "rev": "4fd7be6a12b5efda5179db642f13bad60893acca",
+        "rev": "c1db39e78fe18559d8f2204bf5c4d476bdc80d3e",
         "type": "github"
       },
       "original": {
@@ -82,11 +99,11 @@
     "plugins-obsidian-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1765837034,
-        "narHash": "sha256-tajK7sBcvvZt0WPBXYLNTR7KGchw9SHc85/xmLu4ADQ=",
+        "lastModified": 1775832636,
+        "narHash": "sha256-7JGMfthHU0u9y9D2e6yAb9sNPa8z240mD0P57+h8Sp4=",
         "owner": "obsidian-nvim",
         "repo": "obsidian.nvim",
-        "rev": "ecc7884fbfb8c1ee91ea5e346424040a01a8dece",
+        "rev": "f816915e0bf2f60f44d23a5e3d59658fa8a20094",
         "type": "github"
       },
       "original": {
@@ -98,11 +115,11 @@
     "plugins-remote-ssh-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1761777053,
-        "narHash": "sha256-SjMetcWGK38MVgixP+SLpyt3s+MokNvad35MRUzTrEc=",
+        "lastModified": 1771825463,
+        "narHash": "sha256-sLUZd8zBdLpZwvZAbNzsZLakhDPdgqxLUXZVGBpgLew=",
         "owner": "inhesrom",
         "repo": "remote-ssh.nvim",
-        "rev": "3caf35ad6e571786c8b2ddfdb59d2e04e824c896",
+        "rev": "b0fc5c8452b83a81bdf9bf19db3afacb26e41720",
         "type": "github"
       },
       "original": {
@@ -114,11 +131,11 @@
     "plugins-sshfs-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1765982783,
-        "narHash": "sha256-SNhvDok6hEHkZRAiNk2NXKx+L+UrPzNZnHfaawu1LZA=",
+        "lastModified": 1772306764,
+        "narHash": "sha256-WUt5+rMwc/InMUUV0TtcCWC7KjO2fLvrVQTtomimOq4=",
         "owner": "uhs-robert",
         "repo": "sshfs.nvim",
-        "rev": "4d487430c3680f73f91ec43a2f599847e446bc24",
+        "rev": "6071224a845d4bb6d70a0ed912797281a80e109d",
         "type": "github"
       },
       "original": {
@@ -149,6 +166,7 @@
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs",
         "plugins-cmp-dbt": "plugins-cmp-dbt",
+        "plugins-dbt-power-nvim": "plugins-dbt-power-nvim",
         "plugins-dbtpal": "plugins-dbtpal",
         "plugins-molten-nvim": "plugins-molten-nvim",
         "plugins-obsidian-nvim": "plugins-obsidian-nvim",

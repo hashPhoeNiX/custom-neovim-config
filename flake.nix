@@ -123,6 +123,21 @@
           (utils.standardPluginOverlay inputs)
           # Custom packages overlay
           (final: prev: import ./pkgs { pkgs = final; })
+          # Workaround: upstream nixpkgs Python packages have flaky/broken tests on macOS
+          # causing a cascade failure through jupyter-server -> jupytext -> neovim
+          (final: prev: {
+            python312 = prev.python312.override {
+              packageOverrides = pyFinal: pyPrev: {
+                twisted = pyPrev.twisted.overridePythonAttrs (_: {
+                  doCheck = false;
+                });
+                jupyter-server = pyPrev.jupyter-server.overridePythonAttrs (_: {
+                  doCheck = false;
+                });
+              };
+            };
+            python312Packages = final.python312.pkgs;
+          })
           # add any other flake overlays here.
 
           # when other people mess up their overlays by wrapping them with system,
