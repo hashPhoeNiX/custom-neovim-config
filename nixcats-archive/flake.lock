@@ -1,46 +1,27 @@
 {
   "nodes": {
-    "nix-wrapper-modules": {
-      "inputs": {
-        "nixpkgs": "nixpkgs"
-      },
+    "nixCats": {
       "locked": {
-        "lastModified": 1777671051,
-        "narHash": "sha256-h215lfBUcT4/HlY7v56hjS90rjAbhKgRGxT6tuq5icc=",
+        "lastModified": 1777273601,
+        "narHash": "sha256-xBUa8Tl9V7IXI+VmLEuDc81La/EhoSn1C3EVSnJ3cfU=",
         "owner": "BirdeeHub",
-        "repo": "nix-wrapper-modules",
-        "rev": "5eeeb153ad8869f584e949541e858f3be76e761a",
+        "repo": "nixCats-nvim",
+        "rev": "f69ea013e328841a7def7037ed59788a76be8816",
         "type": "github"
       },
       "original": {
         "owner": "BirdeeHub",
-        "repo": "nix-wrapper-modules",
+        "repo": "nixCats-nvim",
         "type": "github"
       }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1775579569,
-        "narHash": "sha256-/m3yyS/EnXqoPGBJYVy4jTOsirdgsEZ3JdN2gGkBr14=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "dfd9566f82a6e1d55c30f861879186440614696e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_2": {
-      "locked": {
-        "lastModified": 1777548390,
-        "narHash": "sha256-WacE23EbHTsBKvr8cu+1DFNbP6Rh1brHUH5SDUI0NQI=",
+        "lastModified": 1777425547,
+        "narHash": "sha256-d57AbflkNfZNoFaZDzssEq1RfPoM9dLtOGI2O+N/68Q=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "7aaa00e7cc9be6c316cb5f6617bd740dd435c59d",
+        "rev": "ebc08544afa77957cc348ba72dc490ec73b87f68",
         "type": "github"
       },
       "original": {
@@ -147,6 +128,38 @@
         "type": "github"
       }
     },
+    "plugins-remote-ssh-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1771825463,
+        "narHash": "sha256-sLUZd8zBdLpZwvZAbNzsZLakhDPdgqxLUXZVGBpgLew=",
+        "owner": "inhesrom",
+        "repo": "remote-ssh.nvim",
+        "rev": "b0fc5c8452b83a81bdf9bf19db3afacb26e41720",
+        "type": "github"
+      },
+      "original": {
+        "owner": "inhesrom",
+        "repo": "remote-ssh.nvim",
+        "type": "github"
+      }
+    },
+    "plugins-sshfs-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1772306764,
+        "narHash": "sha256-WUt5+rMwc/InMUUV0TtcCWC7KjO2fLvrVQTtomimOq4=",
+        "owner": "uhs-robert",
+        "repo": "sshfs.nvim",
+        "rev": "6071224a845d4bb6d70a0ed912797281a80e109d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "uhs-robert",
+        "repo": "sshfs.nvim",
+        "type": "github"
+      }
+    },
     "plugins-youversion-linker-nvim": {
       "flake": false,
       "locked": {
@@ -166,14 +179,16 @@
     },
     "root": {
       "inputs": {
-        "nix-wrapper-modules": "nix-wrapper-modules",
-        "nixpkgs": "nixpkgs_2",
+        "nixCats": "nixCats",
+        "nixpkgs": "nixpkgs",
         "plugins-bento-nvim": "plugins-bento-nvim",
         "plugins-cmp-dbt": "plugins-cmp-dbt",
         "plugins-dbt-power-nvim": "plugins-dbt-power-nvim",
         "plugins-dbtpal": "plugins-dbtpal",
         "plugins-molten-nvim": "plugins-molten-nvim",
         "plugins-obsidian-nvim": "plugins-obsidian-nvim",
+        "plugins-remote-ssh-nvim": "plugins-remote-ssh-nvim",
+        "plugins-sshfs-nvim": "plugins-sshfs-nvim",
         "plugins-youversion-linker-nvim": "plugins-youversion-linker-nvim"
       }
     }

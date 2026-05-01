@@ -225,7 +225,7 @@
   # ============================================================================
 
   # Wrap the config directory (replaces wrapRc = true + luaPath)
-  settings.config_directory = "${./..}";
+  settings.config_directory = "${./.}";
 
   # Shell aliases for the nvim binary (replaces aliases = [ "vim" "nv" ])
   settings.aliases = [ "vim" "nv" ];
