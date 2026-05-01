@@ -45,6 +45,11 @@
       flake = false;
     };
 
+    plugins-bento-nvim = {
+      url = "github:serhez/bento.nvim";
+      flake = false;
+    };
+
     # dbt-related plugins
     plugins-dbtpal = {
       url = "github:PedramNavid/dbtpal";
@@ -264,6 +269,10 @@
                 # }
                 # at-popup
                 # { name = "at-popup"; plugin = at-popup; }
+                {
+                  name = "bento.nvim";
+                  plugin = bento-nvim;
+                }
               ]
               ++ (pkgs.lib.optionals (pkgs ? neovimPlugins.dbt-power) [
                 {

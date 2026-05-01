@@ -31,6 +31,22 @@
         "type": "github"
       }
     },
+    "plugins-bento-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1769867259,
+        "narHash": "sha256-4HM0Ewx7AJFiprIPGriv+mY0l/BnRL/xHy1ROJtcTK0=",
+        "owner": "serhez",
+        "repo": "bento.nvim",
+        "rev": "aee8a542bc1839ff1764992ef2aa41c981d0bba4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "serhez",
+        "repo": "bento.nvim",
+        "type": "github"
+      }
+    },
     "plugins-cmp-dbt": {
       "flake": false,
       "locked": {
@@ -165,6 +181,7 @@
       "inputs": {
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs",
+        "plugins-bento-nvim": "plugins-bento-nvim",
         "plugins-cmp-dbt": "plugins-cmp-dbt",
         "plugins-dbt-power-nvim": "plugins-dbt-power-nvim",
         "plugins-dbtpal": "plugins-dbtpal",

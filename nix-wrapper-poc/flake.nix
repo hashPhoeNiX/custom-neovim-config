@@ -34,6 +34,10 @@
       url = "github:hashPhoeNiX/dbt-power.nvim/feat/config-validation-and-improvements";
       flake = false;
     };
+    plugins-bento-nvim = {
+      url = "github:serhez/bento.nvim";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, nix-wrapper-modules, ... }@inputs:

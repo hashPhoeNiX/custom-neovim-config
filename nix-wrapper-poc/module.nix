@@ -126,6 +126,7 @@
     (config.nvim-lib.mkPlugin "dbtpal"                 inputs.plugins-dbtpal)
     (config.nvim-lib.mkPlugin "cmp-dbt"                inputs.plugins-cmp-dbt)
     (config.nvim-lib.mkPlugin "dbt-power-nvim"         inputs.plugins-dbt-power-nvim)
+    (config.nvim-lib.mkPlugin "bento-nvim"             inputs.plugins-bento-nvim)
     # (config.nvim-lib.mkPlugin "sshfs-nvim"           inputs.plugins-sshfs-nvim)
     # (config.nvim-lib.mkPlugin "remote-ssh-nvim"      inputs.plugins-remote-ssh-nvim)
   ];
