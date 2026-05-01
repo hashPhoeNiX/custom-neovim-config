@@ -1,121 +1,143 @@
-# nix-wrapper-modules Neovim configuration module
-# This is where your nixCats "categoryDefinitions" and "packageDefinitions" merge
-# Using the Nix module system instead of custom categories
+# nix-wrapper-modules Neovim configuration
+# Full mirror of the main nixCats flake — all categories, deps, and settings.
 #
-# NOTE: This POC uses only nixpkgs plugins for simplicity
-# Your full config has custom GitHub plugins - those can be added later
+# nixCats → nix-wrapper-modules translation map:
+#   categoryDefinitions.startupPlugins   → specs.*
+#   categoryDefinitions.lspsAndRuntimeDeps → extraPackages
+#   categoryDefinitions.python3.libraries  → hosts.python3.withPackages
+#   categoryDefinitions.extraLuaPackages   → settings.nvim_lua_env
+#   categoryDefinitions.environmentVariables → env.*
+#   categoryDefinitions.extraWrapperArgs   → env.* (--set becomes a plain assignment)
+#   categoryDefinitions.bashBeforeWrapper  → runShell (list of { data = "..."; })
+#   packageDefinitions.settings.aliases   → settings.aliases
+#   packageDefinitions.settings.wrapRc    → settings.config_directory
+#   packageDefinitions.settings.hosts.*   → hosts.*.nvim-host.enable
 
 { wlib, config, pkgs, lib, enableDataTools, ... }:
 
 {
-  # Import the neovim wrapper module
   imports = [ wlib.wrapperModules.neovim ];
 
   # ============================================================================
-  # PLUGINS (replaces nixCats categoryDefinitions.startupPlugins)
+  # PLUGINS (replaces nixCats startupPlugins)
   # ============================================================================
 
-  # General plugins from nixpkgs
-  specs.general = with pkgs.vimPlugins; [
-    # Core
-    catppuccin-nvim
-    telescope-nvim
-    plenary-nvim
-    lazydev-nvim
-    noice-nvim
-    mini-nvim
+  # nixpkgs plugins (was: startupPlugins.general)
+  specs.general = with pkgs.vimPlugins;
+    [
+      catppuccin-nvim
+      telescope-nvim
+      plenary-nvim
+      lazydev-nvim
+      noice-nvim
+      mini-nvim
+      neodev-nvim
+      copilot-lua
+      vim-tmux-navigator
+      conform-nvim
+      gitsigns-nvim
+      project-nvim
+      distant-nvim
 
-    # LSP and completion
-    blink-cmp
-    nvim-lspconfig
-    copilot-lua
+      # Treesitter: grammars only — native Neovim 0.12 API handles highlighting.
+      # nixpkgs maintains this independently from the archived upstream plugin.
+      nvim-treesitter.withAllGrammars
+      # (nvim-treesitter.withPlugins (
+      #   plugins: with plugins; [ nix lua python ]
+      # ))
 
-    # UI and navigation
-    vim-tmux-navigator
-    nvim-ufo
-    promise-async
-    todo-comments-nvim
-    grug-far-nvim
+      # Enhanced editing and navigation
+      nvim-ufo
+      promise-async
+      todo-comments-nvim
+      grug-far-nvim
+    ]
+    ++ lib.optionals enableDataTools [
+      # Data Engineering, Science and Analysis
+      quarto-nvim
+      image-nvim
+      jupytext-nvim
+      otter-nvim
 
-    # Git
-    gitsigns-nvim
+      # Database and dbt
+      vim-dadbod
+      vim-dadbod-ui
+      vim-dadbod-completion
+    ];
 
-    # Utilities
-    project-nvim
-    distant-nvim
-    conform-nvim
-
-    # Treesitter
-    nvim-treesitter.withAllGrammars
-  ] ++ lib.optionals enableDataTools [
-    # Data Engineering plugins (conditionally included)
-    quarto-nvim
-    image-nvim
-    jupytext-nvim
-    otter-nvim
-    vim-dadbod
-    vim-dadbod-ui
-    vim-dadbod-completion
-  ];
-
-  # Custom plugins from GitHub (built by the neovimPlugins overlay in flake.nix)
-  specs.gitPlugins = with pkgs.neovimPlugins; [
-    obsidian-nvim
-    molten-nvim
-    youversion-linker-nvim
-    dbtpal
-    cmp-dbt
-    dbt-power-nvim
-  ];
-
-  # ============================================================================
-  # RUNTIME DEPENDENCIES (replaces nixCats lspsAndRuntimeDeps)
-  # ============================================================================
-
-  extraPackages = with pkgs; [
-    # Core tools
-    fd
-    ripgrep
-
-    # Formatters and linters
-    nixd
-    nixfmt
-    ruff
-
-    # LSP servers
-    lua-language-server
-    pyright
-    basedpyright
-
-    # DevOps LSPs
-    dockerfile-language-server
-    docker-compose-language-service
-    terraform-ls
-    yaml-language-server
-
-    # Misc tools
-    imagemagick
-    python312Packages.jupytext
-    lua51Packages.lua
-    lua51Packages.luarocks
-
-    # lazygit with custom config
-    (pkgs.writeShellScriptBin "lazygit" ''
-      exec ${pkgs.lazygit}/bin/lazygit --use-config-file ${pkgs.writeText "lazygit_config.yml" ""} "$@"
-    '')
-  ] ++ lib.optionals pkgs.stdenv.isDarwin [
-    dbt-language-server
-  ];
+  # GitHub plugins (was: startupPlugins.gitPlugins)
+  specs.gitPlugins = with pkgs.neovimPlugins;
+    [
+      obsidian-nvim
+      molten-nvim
+      youversion-linker-nvim
+      dbtpal
+      cmp-dbt
+      # sshfs-nvim    # Disabled: Requires macFUSE kernel extension on macOS
+      # remote-ssh-nvim
+    ]
+    ++ lib.optionals (pkgs ? neovimPlugins.dbt-power-nvim) [
+      dbt-power-nvim
+    ];
 
   # ============================================================================
-  # PYTHON ENVIRONMENT (replaces nixCats python3.libraries)
+  # RUNTIME DEPENDENCIES (replaces nixCats lspsAndRuntimeDeps.general)
   # ============================================================================
 
-  # nix-wrapper-modules uses hosts.python3.withPackages (pynvim is added automatically)
+  extraPackages = with pkgs;
+    [
+      fd
+      ripgrep
+
+      # lazygit needs a writable config file; supply an empty one from Nix
+      (pkgs.writeShellScriptBin "lazygit" ''
+        exec ${pkgs.lazygit}/bin/lazygit --use-config-file ${pkgs.writeText "lazygit_config.yml" ""} "$@"
+      '')
+
+      # Language servers and formatters
+      nixd
+      ruff
+      pyright
+      basedpyright
+      nixfmt
+      imagemagick
+      python312Packages.jupytext
+      lua-language-server
+      lua51Packages.lua
+      lua51Packages.luarocks
+
+      # DevOps LSP servers
+      dockerfile-language-server
+      docker-compose-language-service
+      terraform-ls
+      yaml-language-server
+
+      # dbt CLI note: nixpkgs 'dbt' is dbt-core, not dbt Cloud CLI.
+      # For dbt Cloud CLI install manually: https://docs.getdbt.com/docs/cloud/cloud-cli-installation
+      # dbt
+      # python312Packages.dbt-core
+      # python312Packages.dbt-postgres
+      # python312Packages.dbt-bigquery
+      # python312Packages.dbt-snowflake
+    ]
+    ++ lib.optionals pkgs.stdenv.isDarwin [
+      dbt-language-server
+    ];
+
+  # ============================================================================
+  # PYTHON HOST (replaces nixCats python3.libraries.general + hosts.python3.enable)
+  # ============================================================================
+
+  hosts.python3.nvim-host.enable = true;
+
+  # pynvim is added automatically by the host; list the rest here
   hosts.python3.withPackages = ps: with ps; [
+    pynvim
     jupyter-client
-    cairosvg
-    pnglatex
+    cairosvg    # image rendering
+    pnglatex    # image rendering
+    # plotly    # image rendering
+    # kaleido   # image rendering
     pyperclip
     nbformat
     jupytext
@@ -124,11 +146,19 @@
   ];
 
   # ============================================================================
-  # LUA PACKAGES (replaces nixCats extraLuaPackages)
+  # NODE HOST (replaces nixCats hosts.node.enable)
   # ============================================================================
 
-  # nix-wrapper-modules uses settings.nvim_lua_env (takes a single function, not a list)
+  hosts.node.nvim-host.enable = true;
+
+  # ============================================================================
+  # LUA PACKAGES (replaces nixCats extraLuaPackages.general + .test)
+  # ============================================================================
+
   settings.nvim_lua_env = lp: with lp; [
+    magick        # general: image rendering via imagemagick
+
+    # test category packages
     luasocket
     luasec
     lrexlib-pcre
@@ -136,79 +166,47 @@
     penlight
     jsregexp
     busted
-    magick
   ];
 
   # ============================================================================
-  # CONFIGURATION DIRECTORY
+  # SETTINGS (replaces nixCats packageDefinitions.nvim.settings)
   # ============================================================================
 
-  # Point to your existing lua config directory
-  # This can be:
-  # - An in-store path: "${./../lua}"
-  # - Your entire config: "${./..}"
-  # - A generated config
+  # Wrap the config directory (replaces wrapRc = true + luaPath)
   settings.config_directory = "${./..}";
 
-  # ============================================================================
-  # ENVIRONMENT VARIABLES (replaces nixCats environmentVariables)
-  # ============================================================================
-
-  # Environment variables available to Neovim (nix-wrapper-modules uses `env`, not `extraEnvVars`)
-  env = {
-    CATTESTVAR = "It works!";
-  };
+  # Shell aliases for the nvim binary (replaces aliases = [ "vim" "nv" ])
+  settings.aliases = [ "vim" "nv" ];
 
   # ============================================================================
-  # WRAPPER ARGS (replaces nixCats extraWrapperArgs)
+  # ENVIRONMENT VARIABLES (replaces nixCats environmentVariables.test)
   # ============================================================================
 
-  # Additional wrapper arguments
-  # extraMakeWrapperArgs = [
-  #   "--set CATTESTVAR2 \"It works again!\""
-  # ];
+  env.CATTESTVAR = "It worked!";
+  # replaces extraWrapperArgs.test = [ ''--set CATTESTVAR2 "It worked again!"'' ]
+  env.CATTESTVAR2 = "It worked again!";
 
   # ============================================================================
-  # ADVANCED OPTIONS (new in nix-wrapper-modules)
+  # PRE-START HOOK (replaces nixCats bashBeforeWrapper.general)
+  # Install the Jupyter ipykernel on first run so molten-nvim can find it.
+  #
+  # NOTE: In nix-wrapper-modules the wrapped python host binary name differs
+  # from nixCats' "${name}-python3". Update the binary path below once confirmed.
+  # The host binary is typically available via $NVIM_PYTHON3_HOST or at
+  # hosts.python3.nvim-host.package in the Nix derivation.
   # ============================================================================
 
-  # Python 3 and Node hosts are enabled by default in nix-wrapper-modules.
-  # Use hosts.python3.nvim-host.enable / hosts.node.nvim-host.enable to toggle.
-  # hosts.python3.nvim-host.enable = true;  # default
-  # hosts.node.nvim-host.enable = true;     # default
-
-  # Aliases (like nixCats settings.aliases)
-  # Note: In nix-wrapper-modules, you typically install the package
-  # and create aliases in your shell or home-manager
-
-  # ============================================================================
-  # CUSTOM MODULE OPTIONS (the power of modules!)
-  # ============================================================================
-
-  # Note: enableDataTools is passed as a parameter from flake.nix
-  # In a full module, you could define custom options here using:
-  # options.enableDataTools = lib.mkOption { ... };
-  # But for POC simplicity, we use function parameters instead
-
-  # ============================================================================
-  # HOOKS (new capability in nix-wrapper-modules)
-  # ============================================================================
-
-  # Pre-wrapper hooks (like nixCats bashBeforeWrapper)
-  # preWrap = ''
-  #   if [ ! -d "$HOME/Library/Jupyter/kernels/nixcats-python" ]; then
-  #     ${config.python3}/bin/python3 -m ipykernel install \
-  #       --user \
-  #       --name "nixCats-python" \
-  #       --display-name "NixCats Python"
-  #   fi
-  # '';
-
-  # ============================================================================
-  # SHARED LIBRARIES (replaces nixCats sharedLibraries)
-  # ============================================================================
-
-  # extraSharedLibraries = with pkgs; [
-  #   # libgit2
-  # ];
+  runShell = [
+    {
+      name = "install-jupyter-kernel";
+      data = ''
+        if [ ! -d "$HOME/Library/Jupyter/kernels/nixcats-python" ]; then
+          "$NVIM_PYTHON3_HOST" -m ipykernel install \
+            --user \
+            --name "nixCats-python" \
+            --display-name "NixCats Python"
+        fi
+      '';
+    }
+  ];
 }
