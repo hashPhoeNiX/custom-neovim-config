@@ -1,8 +1,11 @@
 # nix-wrapper-modules Neovim configuration module
 # This is where your nixCats "categoryDefinitions" and "packageDefinitions" merge
 # Using the Nix module system instead of custom categories
+#
+# NOTE: This POC uses only nixpkgs plugins for simplicity
+# Your full config has custom GitHub plugins - those can be added later
 
-{ wlib, config, pkgs, lib, inputs ? {}, enableDataTools ? true, ... }:
+{ wlib, config, pkgs, lib, enableDataTools, ... }:
 
 {
   # Import the neovim wrapper module
@@ -23,8 +26,9 @@
     mini-nvim
 
     # LSP and completion
-    # blink-cmp
-    # nvim-lspconfig
+    blink-cmp
+    nvim-lspconfig
+    copilot-lua
 
     # UI and navigation
     vim-tmux-navigator
@@ -54,14 +58,14 @@
     vim-dadbod-completion
   ];
 
-  # Custom plugins from GitHub
+  # Custom plugins from GitHub (built by the neovimPlugins overlay in flake.nix)
   specs.gitPlugins = with pkgs.neovimPlugins; [
-    obsidian-nvim
-    molten-nvim
-  ] ++ lib.optionals enableDataTools [
-    dbtpal
-    cmp-dbt
-    dbt-power-nvim
+    { name = "obsidian.nvim";         plugin = obsidian-nvim; }
+    { name = "molten-nvim";           plugin = molten-nvim; }
+    { name = "youversion-linker";     plugin = youversion-linker-nvim; }
+    { name = "dbtpal";                plugin = dbtpal; }
+    { name = "cmp-dbt";               plugin = cmp-dbt; }
+    { name = "dbt-power";             plugin = dbt-power-nvim; }
   ];
 
   # ============================================================================
@@ -100,7 +104,6 @@
       exec ${pkgs.lazygit}/bin/lazygit --use-config-file ${pkgs.writeText "lazygit_config.yml" ""} "$@"
     '')
   ] ++ lib.optionals pkgs.stdenv.isDarwin [
-    # macOS-specific packages
     dbt-language-server
   ];
 
@@ -108,8 +111,8 @@
   # PYTHON ENVIRONMENT (replaces nixCats python3.libraries)
   # ============================================================================
 
-  extraPython3Packages = ps: with ps; [
-    pynvim
+  # nix-wrapper-modules uses hosts.python3.withPackages (pynvim is added automatically)
+  hosts.python3.withPackages = ps: with ps; [
     jupyter-client
     cairosvg
     pnglatex
@@ -124,17 +127,16 @@
   # LUA PACKAGES (replaces nixCats extraLuaPackages)
   # ============================================================================
 
-  extraLuaPackages = [
-    (lr: with lr; [
-      luasocket
-      luasec
-      lrexlib-pcre
-      cjson
-      penlight
-      jsregexp
-      busted
-      magick
-    ])
+  # nix-wrapper-modules uses settings.nvim_lua_env (takes a single function, not a list)
+  settings.nvim_lua_env = lp: with lp; [
+    luasocket
+    luasec
+    lrexlib-pcre
+    cjson
+    penlight
+    jsregexp
+    busted
+    magick
   ];
 
   # ============================================================================
@@ -152,8 +154,8 @@
   # ENVIRONMENT VARIABLES (replaces nixCats environmentVariables)
   # ============================================================================
 
-  # Environment variables available to Neovim
-  extraEnvVars = {
+  # Environment variables available to Neovim (nix-wrapper-modules uses `env`, not `extraEnvVars`)
+  env = {
     CATTESTVAR = "It works!";
   };
 
@@ -170,9 +172,10 @@
   # ADVANCED OPTIONS (new in nix-wrapper-modules)
   # ============================================================================
 
-  # Enable Python 3 host
-  settings.withPython3 = true;
-  settings.withNodeJs = true;
+  # Python 3 and Node hosts are enabled by default in nix-wrapper-modules.
+  # Use hosts.python3.nvim-host.enable / hosts.node.nvim-host.enable to toggle.
+  # hosts.python3.nvim-host.enable = true;  # default
+  # hosts.node.nvim-host.enable = true;     # default
 
   # Aliases (like nixCats settings.aliases)
   # Note: In nix-wrapper-modules, you typically install the package
@@ -182,14 +185,10 @@
   # CUSTOM MODULE OPTIONS (the power of modules!)
   # ============================================================================
 
-  # You can define your own options for reusability
-  options = {
-    enableDataTools = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Enable data engineering tools (dbt, jupyter, etc.)";
-    };
-  };
+  # Note: enableDataTools is passed as a parameter from flake.nix
+  # In a full module, you could define custom options here using:
+  # options.enableDataTools = lib.mkOption { ... };
+  # But for POC simplicity, we use function parameters instead
 
   # ============================================================================
   # HOOKS (new capability in nix-wrapper-modules)
