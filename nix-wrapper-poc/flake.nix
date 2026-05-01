@@ -56,6 +56,10 @@
                 pname = name;
                 version = "latest";
                 inherit src;
+                # Disable build-time require check: custom plugins often depend
+                # on other plugins (e.g. cmp-dbt → nvim-cmp) that aren't
+                # present in the build sandbox.
+                nvimRequireCheck = false;
               }
             ) {
               obsidian-nvim        = inputs.plugins-obsidian-nvim;
