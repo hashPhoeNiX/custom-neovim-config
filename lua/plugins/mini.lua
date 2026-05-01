@@ -4,7 +4,8 @@ return {
     version = false,
     config = function()
       require('mini.pairs').setup()
-      require('mini.starter').setup()
+      -- mini.starter conflicts with Snacks.dashboard (both try to own the start screen)
+      -- require('mini.starter').setup()
       require('mini.sessions').setup({
         autoread = true,
         verbose = { read = true, write = true, delete = true },

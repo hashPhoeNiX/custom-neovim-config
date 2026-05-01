@@ -1,6 +1,10 @@
 --- LSP configuration for Neovim
+--
+-- Neovim 0.12: lsp/*.lua files at the runtimepath root are auto-discovered
+-- lazily (loaded when a matching filetype buffer opens). No require() needed.
+-- vim.lsp.enable() below registers which servers to auto-start; their configs
+-- are pulled from lsp/<name>.lua on first use.
 
--- Register LSP server configurations
 local lsp_servers = {
   "lua_ls",
   "nixd",
@@ -12,16 +16,7 @@ local lsp_servers = {
   "yaml",
 }
 
--- Register each LSP server with vim.lsp.config()
-for _, server_name in ipairs(lsp_servers) do
-  local ok, config = pcall(require, "lsp." .. server_name)
-  if ok then
-    -- Register the server configuration
-    vim.lsp.config(server_name, config)
-  end
-end
-
--- Enable all registered LSP servers
+-- Enable all servers — Neovim 0.12 auto-discovers their configs from lsp/*.lua
 vim.lsp.enable(lsp_servers)
 
 --- This file sets up the LSP client, key mappings, and autocommands for LSP features.

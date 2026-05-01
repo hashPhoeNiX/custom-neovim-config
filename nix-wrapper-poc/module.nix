@@ -13,7 +13,7 @@
 #   packageDefinitions.settings.wrapRc    → settings.config_directory
 #   packageDefinitions.settings.hosts.*   → hosts.*.nvim-host.enable
 
-{ wlib, config, pkgs, lib, enableDataTools, ... }:
+{ wlib, config, pkgs, lib, inputs, enableDataTools, ... }:
 
 {
   imports = [ wlib.wrapperModules.neovim ];
@@ -25,26 +25,72 @@
   # nixpkgs plugins (was: startupPlugins.general)
   specs.general = with pkgs.vimPlugins;
     [
+      # Plugin manager (lazy.nvim)
+      lazy-nvim
+
+      # Colorschemes
       catppuccin-nvim
+      github-nvim-theme
+      vim-moonfly-colors
+
+      # Core UI
+      noice-nvim
+      nvim-notify       # required by noice
+      snacks-nvim
+      which-key-nvim
+      bufferline-nvim
+      nvim-web-devicons  # required by bufferline, neo-tree, etc.
+      nui-nvim           # required by neo-tree, hardtime
+      edgy-nvim
+      lualine-nvim
+
+      # Completion
+      blink-cmp
+      blink-cmp-copilot
+      friendly-snippets
+
+      # LSP
+      nvim-lspconfig
+
+      # Telescope
       telescope-nvim
       plenary-nvim
+
+      # File exploration and navigation
+      neo-tree-nvim
+      lazygit-nvim
+
+      # AI coding assistants
+      copilot-lua
+      codecompanion-nvim
+
+      # Editor tools
       lazydev-nvim
-      noice-nvim
       mini-nvim
       neodev-nvim
-      copilot-lua
       vim-tmux-navigator
       conform-nvim
       gitsigns-nvim
       project-nvim
       distant-nvim
+      render-markdown-nvim
+      persistence-nvim
 
-      # Treesitter: grammars only — native Neovim 0.12 API handles highlighting.
-      # nixpkgs maintains this independently from the archived upstream plugin.
-      nvim-treesitter.withAllGrammars
-      # (nvim-treesitter.withPlugins (
-      #   plugins: with plugins; [ nix lua python ]
-      # ))
+      # Habit and navigation aids (optional quality-of-life)
+      hardtime-nvim
+      precognition-nvim
+
+      # Treesitter: include the plugin for its query files (highlights, indent,
+      # textobjects). The Lua layer is unused — native Neovim 0.12 treesitter API
+      # handles highlighting via the FileType autocmd in lua/plugins/treesitter.lua.
+      #
+      # NOTE: Do NOT use nvim-treesitter.withAllGrammars here. That produces a
+      # merged derivation without passthru.isTreesitterGrammar = true, so
+      # nix-wrapper-modules' COLLATE_TS_GRAMMARS mechanism cannot detect the .so
+      # files and they never reach the runtimepath.
+      # Individual grammarPlugins each carry passthru.isTreesitterGrammar = true
+      # and are correctly collated. Added below via builtins.attrValues.
+      nvim-treesitter
 
       # Enhanced editing and navigation
       nvim-ufo
@@ -52,6 +98,10 @@
       todo-comments-nvim
       grug-far-nvim
     ]
+    # Treesitter grammar .so files — each has passthru.isTreesitterGrammar = true
+    # so nix-wrapper-modules' COLLATE_TS_GRAMMARS mechanism picks them up and
+    # symlinks them into the packdir where Neovim's rtp can find the parsers.
+    ++ builtins.attrValues pkgs.vimPlugins.nvim-treesitter.grammarPlugins
     ++ lib.optionals enableDataTools [
       # Data Engineering, Science and Analysis
       quarto-nvim
@@ -66,19 +116,19 @@
     ];
 
   # GitHub plugins (was: startupPlugins.gitPlugins)
-  specs.gitPlugins = with pkgs.neovimPlugins;
-    [
-      obsidian-nvim
-      molten-nvim
-      youversion-linker-nvim
-      dbtpal
-      cmp-dbt
-      # sshfs-nvim    # Disabled: Requires macFUSE kernel extension on macOS
-      # remote-ssh-nvim
-    ]
-    ++ lib.optionals (pkgs ? neovimPlugins.dbt-power-nvim) [
-      dbt-power-nvim
-    ];
+  # Built via config.nvim-lib.mkPlugin — uses pkgs.vimUtils.buildVimPlugin with
+  # doCheck = false, so the require-check sandbox issue doesn't apply.
+  # No overlay needed; inputs are passed directly from flake.nix.
+  specs.gitPlugins = [
+    (config.nvim-lib.mkPlugin "obsidian-nvim"          inputs.plugins-obsidian-nvim)
+    (config.nvim-lib.mkPlugin "molten-nvim"            inputs.plugins-molten-nvim)
+    (config.nvim-lib.mkPlugin "youversion-linker-nvim" inputs.plugins-youversion-linker-nvim)
+    (config.nvim-lib.mkPlugin "dbtpal"                 inputs.plugins-dbtpal)
+    (config.nvim-lib.mkPlugin "cmp-dbt"                inputs.plugins-cmp-dbt)
+    (config.nvim-lib.mkPlugin "dbt-power-nvim"         inputs.plugins-dbt-power-nvim)
+    # (config.nvim-lib.mkPlugin "sshfs-nvim"           inputs.plugins-sshfs-nvim)
+    # (config.nvim-lib.mkPlugin "remote-ssh-nvim"      inputs.plugins-remote-ssh-nvim)
+  ];
 
   # ============================================================================
   # RUNTIME DEPENDENCIES (replaces nixCats lspsAndRuntimeDeps.general)
@@ -95,6 +145,7 @@
       '')
 
       # Language servers and formatters
+      stylua
       nixd
       ruff
       pyright
