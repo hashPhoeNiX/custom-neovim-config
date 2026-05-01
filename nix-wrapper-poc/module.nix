@@ -60,12 +60,12 @@
 
   # Custom plugins from GitHub (built by the neovimPlugins overlay in flake.nix)
   specs.gitPlugins = with pkgs.neovimPlugins; [
-    { name = "obsidian.nvim";         plugin = obsidian-nvim; }
-    { name = "molten-nvim";           plugin = molten-nvim; }
-    { name = "youversion-linker";     plugin = youversion-linker-nvim; }
-    { name = "dbtpal";                plugin = dbtpal; }
-    { name = "cmp-dbt";               plugin = cmp-dbt; }
-    { name = "dbt-power";             plugin = dbt-power-nvim; }
+    obsidian-nvim
+    molten-nvim
+    youversion-linker-nvim
+    dbtpal
+    cmp-dbt
+    dbt-power-nvim
   ];
 
   # ============================================================================
