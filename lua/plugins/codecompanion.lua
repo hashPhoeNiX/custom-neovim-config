@@ -3,7 +3,7 @@ return {
   opts = {},
   dependencies = {
     "nvim-lua/plenary.nvim",
-    "nvim-treesitter/nvim-treesitter",
+    -- nvim-treesitter removed; using Neovim 0.12 built-in treesitter
   },
   config = function()
     require("codecompanion").setup({

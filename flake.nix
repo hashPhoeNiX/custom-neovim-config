@@ -102,7 +102,9 @@
       # will not apply to module imports
       # as that will have your system values
       extra_pkg_config = {
-        # allowUnfree = true;
+        allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [
+          "jupytext.nvim"
+        ];
       };
       # management of the system variable is one of the harder parts of using flakes.
 
@@ -287,14 +289,9 @@
               # nvim-lspconfig
               # blink-cmp
               # mini-pairs
+              # Grammars only — no nvim-treesitter Lua layer, just the compiled parser .so files.
+              # nixpkgs maintains this independently from the archived upstream plugin.
               nvim-treesitter.withAllGrammars
-
-              # Enhanced editing and navigation
-              nvim-ufo # Advanced code folding with treesitter
-              promise-async # Required by nvim-ufo
-              todo-comments-nvim # Highlight and search TODO comments
-              grug-far-nvim # Search and replace across project
-              # This is for if you only want some of the grammars
               # (nvim-treesitter.withPlugins (
               #   plugins: with plugins; [
               #     nix
@@ -302,6 +299,12 @@
               #     python
               #   ]
               # ))
+
+              # Enhanced editing and navigation
+              nvim-ufo # Advanced code folding with treesitter
+              promise-async # Required by nvim-ufo
+              todo-comments-nvim # Highlight and search TODO comments
+              grug-far-nvim # Search and replace across project
 
               # Data Engineering, Science and Analysis
               # molten-nvim

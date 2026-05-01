@@ -316,7 +316,15 @@ return {
       -- ====================
       -- Enhanced Jupyter Commands (from molten-commands.lua)
       -- ====================
-      local molten_cmd = require("config.molten-commands")
+      -- Lazy-require: defer the actual require until keymap is triggered,
+      -- since init() runs before lazy.nvim fully sets up runtimepath.
+      local molten_cmd = setmetatable({}, {
+        __index = function(_, key)
+          return function(...)
+            return require("config.molten-commands")[key](...)
+          end
+        end,
+      })
 
       -- Execution Commands
       vim.keymap.set("n", "<leader>mra", molten_cmd.run_all, {
