@@ -25,9 +25,22 @@
 do
   local ts_path = _G.nixCats and nixCats.pawsible.allPlugins.ts_grammar_path
   if not ts_path or ts_path == "" then
-    for _, packdir in ipairs(vim.opt.packpath:get()) do
-      local start = packdir .. "/pack/myNeovimPackages/start"
-      if vim.fn.isdirectory(start) == 1 then
+    -- Build candidate start/ dirs to scan for grammar plugins.
+    -- nix-wrapper-modules may add the packdir to rtp (not packpath), so
+    -- lazyCat's rtp reset removes it. Use vimPackDir directly as the primary
+    -- source, with packpath as a fallback for non-nix environments.
+    local start_dirs = {}
+    local pack_dir = _G.nixCats and nixCats.vimPackDir
+    if pack_dir and pack_dir ~= "" then
+      table.insert(start_dirs, pack_dir .. "/pack/myNeovimPackages/start")
+    end
+    for _, p in ipairs(vim.opt.packpath:get()) do
+      table.insert(start_dirs, p .. "/pack/myNeovimPackages/start")
+    end
+    local seen = {}
+    for _, start in ipairs(start_dirs) do
+      if not seen[start] and vim.fn.isdirectory(start) == 1 then
+        seen[start] = true
         for _, dir in ipairs(vim.fn.glob(start .. "/*", false, true)) do
           if vim.fn.isdirectory(dir .. "/parser") == 1 then
             vim.opt.rtp:prepend(dir)

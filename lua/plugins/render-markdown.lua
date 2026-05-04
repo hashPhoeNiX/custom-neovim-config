@@ -25,6 +25,9 @@ return {
       blink = {
         enabled = true
       },
-    }
+    },
+    -- Disable features that require parsers/tools not in this Nix build
+    html = { enabled = false },  -- no html treesitter parser
+    latex = { enabled = false }, -- no latex treesitter parser or latex tools
   },
 }
