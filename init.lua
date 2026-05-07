@@ -18,8 +18,11 @@ local lazyOptions = {
   lockfile = getlockfilepath(),
   dev = {
     path = "~/Projects",
-    patterns = {},   -- For example {"folke"}
-    fallback = true, -- Fallback to git when local plugin doesn't exist
+    -- patterns must be nil here so lazyCat.lua's `lazypatterns or { "" }` resolves
+    -- to { "" }, which matches every plugin and directs lazy to the Nix packdir.
+    -- An empty table {} is truthy in Lua and would suppress the default, causing
+    -- lazy to download all plugins from git instead of finding them via Nix.
+    fallback = true,
   }
 }
 -- plugins = require("plugins")
