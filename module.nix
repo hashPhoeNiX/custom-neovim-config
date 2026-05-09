@@ -106,7 +106,8 @@
       # Data Engineering, Science and Analysis
       quarto-nvim
       image-nvim
-      jupytext-nvim
+      # jupytext-nvim removed: not in use and its health.lua calls the removed
+      # vim.health.report_start API, causing a checkhealth error on Neovim 0.12.
       otter-nvim
 
       # Database and dbt
