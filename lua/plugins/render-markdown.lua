@@ -26,8 +26,8 @@ return {
         enabled = true
       },
     },
-    -- Disable features that require parsers/tools not in this Nix build
-    html = { enabled = false },  -- no html treesitter parser
-    latex = { enabled = false }, -- no latex treesitter parser or latex tools
+    -- html parser is available via COLLATED_TS_GRAMMARS; re-enabled.
+    -- latex disabled: parser exists but no latex/pdflatex executable in this build.
+    latex = { enabled = false }, -- no latex tools (pdflatex etc.) in extraPackages
   },
 }
