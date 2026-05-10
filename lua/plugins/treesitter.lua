@@ -27,23 +27,37 @@
 -- This is the most reliable source; nixCats ts_grammar_path and packpath scanning
 -- are kept as fallbacks for nixCats environments and non-Nix setups.
 do
+  local ok, nix_info = pcall(require, "nix-info")
+  if ok and type(nix_info) == "table" then
+    -- Always add nvim-treesitter for its query files (highlights.scm etc).
+    -- lazyCat.lua adds ts_grammar_path to the rtp (parsers), but nvim-treesitter
+    -- itself (which has no parser/ dir) is never added, so queries are missing.
+    local nts = nix_info.plugins
+      and nix_info.plugins.start
+      and nix_info.plugins.start["nvim-treesitter"]
+    -- nvim-treesitter stores queries under runtime/queries/, not queries/ directly.
+    -- Neovim searches {rtp}/queries/, so we must add the runtime/ subdirectory.
+    if nts and nts ~= "" and vim.fn.isdirectory(nts .. "/runtime") == 1 then
+      vim.opt.rtp:prepend(nts .. "/runtime")
+    elseif nts and nts ~= "" and vim.fn.isdirectory(nts) == 1 then
+      vim.opt.rtp:prepend(nts)
+    end
+  end
+
+  -- Only needed when ts_grammar_path isn't already set by lazyCat.lua.
   local ts_path = _G.nixCats and nixCats.pawsible.allPlugins.ts_grammar_path
   if not ts_path or ts_path == "" then
     local start_dirs = {}
 
-    -- nix-wrapper-modules: prefer nix-info for the exact COLLATED_TS_GRAMMARS path.
-    local ok, nix_info = pcall(require, "nix-info")
     if ok and type(nix_info) == "table" then
       local collated = nix_info.plugins
         and nix_info.plugins.start
         and nix_info.plugins.start["COLLATED_TS_GRAMMARS"]
       if collated and collated ~= "" then
-        -- Direct path: just add it, no scan needed.
         if vim.fn.isdirectory(collated .. "/parser") == 1 then
           vim.opt.rtp:prepend(collated)
         end
       end
-      -- Also add the full start dir so any other grammar-bearing plugins are found.
       if nix_info.start_dir and nix_info.start_dir ~= "" then
         table.insert(start_dirs, nix_info.start_dir)
       end
