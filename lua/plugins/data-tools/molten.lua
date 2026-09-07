@@ -424,21 +424,33 @@ return {
         complete = "file",
       })
 
-      -- automatically import output chunks from a jupyter notebook
-      vim.api.nvim_create_autocmd("BufAdd", {
-        pattern = { "*.ipynb" },
-        callback = imb,
-      })
-
-      -- we have to do this as well so that we catch files opened like nvim ./hi.ipynb
-      vim.api.nvim_create_autocmd("BufEnter", {
+      -- notebook-picker: show a plugin-selection menu on every .ipynb open.
+      -- Replaces the old auto-init autocmds (BufAdd/BufEnter below).
+      -- Molten init logic moved to lua/config/notebook-picker.lua.
+      vim.api.nvim_create_autocmd("BufReadPost", {
         pattern = { "*.ipynb" },
         callback = function(e)
-          if vim.api.nvim_get_vvar("vim_did_enter") ~= 1 then
-            imb(e)
-          end
+          require("config.notebook-picker").pick(e)
         end,
       })
+
+      -- auto-init autocmds replaced by notebook-picker above.
+      -- Kept here for reference in case the picker is removed.
+      --
+      -- vim.api.nvim_create_autocmd("BufAdd", {
+      --   pattern = { "*.ipynb" },
+      --   callback = imb,
+      -- })
+      --
+      -- we have to do this as well so that we catch files opened like nvim ./hi.ipynb
+      -- vim.api.nvim_create_autocmd("BufEnter", {
+      --   pattern = { "*.ipynb" },
+      --   callback = function(e)
+      --     if vim.api.nvim_get_vvar("vim_did_enter") ~= 1 then
+      --       imb(e)
+      --     end
+      --   end,
+      -- })
 
       -- automatically export output chunks to a jupyter notebook on write
       -- vim.api.nvim_create_autocmd("BufWritePost", {

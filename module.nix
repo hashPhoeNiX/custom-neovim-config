@@ -146,6 +146,12 @@
         exec ${pkgs.lazygit}/bin/lazygit --use-config-file ${pkgs.writeText "lazygit_config.yml" ""} "$@"
       '')
 
+      # jupynvim (lua/plugins/data-tools/jupynvim.lua) builds its Rust backend
+      # via `cargo build --release` from its lazy.nvim `build` hook; not Nix
+      # packaged, so it needs a real cargo/rustc on PATH to build.
+      cargo
+      rustc
+
       # Language servers and formatters
       stylua
       nixd

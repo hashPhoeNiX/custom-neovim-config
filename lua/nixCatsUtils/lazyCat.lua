@@ -37,12 +37,16 @@ function M.setup(nixLazyPath, lazySpec, opts)
   end
 
   local isNixCats = vim.g[ [[nixCats-special-rtp-entry-nixCats]] ] ~= nil
+  -- nix-wrapper-modules sets this global unconditionally (see its manifestLua),
+  -- so it's the equivalent "are we wrapped by nix" signal nixCats provides via
+  -- the special rtp entry global above.
+  local isNixWrapperModules = not isNixCats and vim.g.nix_info_plugin_name ~= nil
   local lazypath
-  if not isNixCats then
-    -- No nixCats? Not nix. Do it normally
+  if not isNixCats and not isNixWrapperModules then
+    -- Not wrapped by nix at all. Do it normally
     lazypath = regularLazyDownload()
     vim.opt.rtp:prepend(lazypath)
-  else
+  elseif isNixCats then
     local nixCats = require('nixCats')
     -- Else, its nix, so we wrap lazy with a few extra config options
     lazypath = nixLazyPath
@@ -107,6 +111,79 @@ function M.setup(nixLazyPath, lazySpec, opts)
       vim.fn.fnamemodify(vim.v.progpath, ":p:h:h") .. "/lib/nvim",
       cfgdir .. "/after",
     }
+  else
+    -- nix-wrapper-modules: its wrapper already prepended the Nix packdir and
+    -- our config_directory (plus its /after) onto 'runtimepath'/'packpath'
+    -- before init.lua ever ran. lazy.nvim's default performance.rtp.reset
+    -- wipes 'runtimepath' back down to just $VIMRUNTIME + config, dropping
+    -- both permanently for the rest of the session. Disable that reset, and
+    -- point dev.path at the Nix packdir so lazy uses the Nix-provided
+    -- plugins instead of git-cloning duplicates into stdpath("data").
+    local myNeovimPackages
+    for _, p in ipairs(vim.split(vim.o.packpath, ",")) do
+      if p:match("%-packdir$") then
+        myNeovimPackages = p .. "/pack/myNeovimPackages"
+        break
+      end
+    end
+
+    lazypath = nixLazyPath
+    if lazypath == nil and myNeovimPackages and vim.fn.isdirectory(myNeovimPackages .. "/start/lazy.nvim") == 1 then
+      lazypath = myNeovimPackages .. "/start/lazy.nvim"
+    end
+    if lazypath == nil then
+      lazypath = regularLazyDownload()
+    end
+    -- Always prepend explicitly (matching the isNixCats branch above) rather
+    -- than relying on native pack/start auto-loading having put it there:
+    -- lazy.nvim's own performance.reset_packpath (still on by default) wipes
+    -- 'packpath' back to $VIMRUNTIME during its own setup(), and its deferred
+    -- VeryLazy handler (used interactively, unlike the synchronous headless
+    -- path) requires lazy.view.commands late enough that anything relying on
+    -- packpath-driven rtp state by then is no longer reliable.
+    vim.opt.rtp:prepend(lazypath)
+
+    local oldPath
+    local lazypatterns
+    local fallback
+    if type(lazyCFG) == "table" and type(lazyCFG.dev) == "table" then
+      lazypatterns = lazyCFG.dev.patterns
+      fallback = lazyCFG.dev.fallback
+      oldPath = lazyCFG.dev.path
+    end
+
+    local newLazyOpts = {
+      performance = {
+        reset_packpath = false,
+        rtp = {
+          reset = false,
+        },
+      },
+      dev = {
+        path = function(plugin)
+          local path = nil
+          if type(oldPath) == "string" and vim.fn.isdirectory(oldPath .. "/" .. plugin.name) == 1 then
+            path = oldPath .. "/" .. plugin.name
+          elseif type(oldPath) == "function" then
+            path = oldPath(plugin)
+            if type(path) ~= "string" then
+              path = nil
+            end
+          end
+          if path == nil and myNeovimPackages then
+            if vim.fn.isdirectory(myNeovimPackages .. "/start/" .. plugin.name) == 1 then
+              path = myNeovimPackages .. "/start/" .. plugin.name
+            elseif vim.fn.isdirectory(myNeovimPackages .. "/opt/" .. plugin.name) == 1 then
+              path = myNeovimPackages .. "/opt/" .. plugin.name
+            end
+          end
+          return path or ("~/projects/" .. plugin.name)
+        end,
+        patterns = lazypatterns or { "" },
+        fallback = fallback == nil and true or fallback,
+      }
+    }
+    lazyCFG = vim.tbl_deep_extend("force", lazyCFG or {}, newLazyOpts)
   end
 
   if lazySpecs then

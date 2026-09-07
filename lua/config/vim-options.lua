@@ -26,6 +26,17 @@ vim.keymap.set('n', '<leader>lz', function() require('lazy').home() end, { desc 
 vim.keymap.set('i', 'jk', '<Esc>', { desc = 'Insert Escape' })
 vim.keymap.set('i', 'jj', '<Esc>', { desc = 'Insert Escape' })
 vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', { noremap = true, silent = true, desc = "Terminal Escape" })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "markdown", "quarto" },
+  callback = function()
+    vim.opt_local.conceallevel = 2  -- hide ** _ [[ ]] etc., show clean text
+    vim.opt_local.wrap = true
+    vim.opt_local.linebreak = true  -- wrap at word boundaries, not mid-word
+    vim.opt_local.breakindent = true -- preserve indentation on wrapped lines
+    vim.opt_local.scrolloff = 8
+  end,
+})
 -- vim.keymap.set('t', 'jk', '<Esc><Esc>', { desc = 'Terminal Escape' })
 -- Directional window movements
 vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Move to left window' })
