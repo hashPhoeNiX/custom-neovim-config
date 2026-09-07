@@ -43,6 +43,7 @@
       nui-nvim           # required by neo-tree, hardtime
       edgy-nvim
       lualine-nvim
+      dropbar-nvim
 
       # Completion
       blink-cmp
@@ -247,24 +248,37 @@
 
   # ============================================================================
   # PRE-START HOOK (replaces nixCats bashBeforeWrapper.general)
-  # Install the Jupyter ipykernel on first run so molten-nvim can find it.
+  # Install/refresh the Jupyter ipykernel spec so molten-nvim and jupynvim can
+  # find it.
   #
-  # NOTE: In nix-wrapper-modules the wrapped python host binary name differs
-  # from nixCats' "${name}-python3". Update the binary path below once confirmed.
-  # The host binary is typically available via $NVIM_PYTHON3_HOST or at
-  # hosts.python3.nvim-host.package in the Nix derivation.
+  # This always re-runs `ipykernel install` rather than skipping when the
+  # kernel directory already exists: the kernel.json it writes hardcodes an
+  # absolute /nix/store path to the python3 host, which is immutable and gets
+  # garbage-collected once nothing references it. Skipping on "already
+  # installed" meant the kernelspec silently went stale (pointing at a
+  # deleted path) after every `nix-collect-garbage`, breaking kernel startup
+  # with no clear error until it was tracked down manually. `ipykernel
+  # install` just (re)writes a small json file, so re-running it on every
+  # launch is cheap.
+  #
+  # $NVIM_PYTHON3_HOST is not a real variable nix-wrapper-modules sets (it
+  # was never defined anywhere in the generated wrapper — confirmed by
+  # grepping the built script). What actually exists is a sibling
+  # "${binName}-python3" executable installed next to the main binary in the
+  # same output directory (e.g. result/bin/nvim-python3), which execs the
+  # correct python3 host derivation. Reference it relative to $0 so it works
+  # regardless of how the wrapper itself was invoked (absolute path, PATH
+  # lookup, or an alias like nv/vim).
   # ============================================================================
 
   runShell = [
     {
       name = "install-jupyter-kernel";
       data = ''
-        if [ ! -d "$HOME/Library/Jupyter/kernels/nixcats-python" ]; then
-          "$NVIM_PYTHON3_HOST" -m ipykernel install \
-            --user \
-            --name "nixCats-python" \
-            --display-name "NixCats Python"
-        fi
+        "$(dirname "$0")/${config.binName}-python3" -m ipykernel install \
+          --user \
+          --name "nixcats-python" \
+          --display-name "NixCats Python"
       '';
     }
   ];

@@ -77,12 +77,8 @@ return {
       lualine_z = {}
     },
     tabline = {},
-    winbar = {
-      lualine_c = { { 'filename', path = 1 } },
-    },
-    inactive_winbar = {
-      lualine_c = { { 'filename', path = 1 } },
-    },
+    -- winbar is owned by dropbar.nvim (lua/plugins/dropbar.lua); leaving
+    -- these unset keeps lualine from setting vim.wo.winbar and blocking it.
     extensions = {}
   }
 }

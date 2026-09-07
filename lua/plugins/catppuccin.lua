@@ -71,7 +71,6 @@ return {
       show_end_of_buffer = false,
       integration_default = false,
       integrations = {
-        barbecue = { dim_dirname = true, bold_basename = true, dim_context = false, alt_background = false },
         cmp = true,
         gitsigns = true,
         hop = true,
@@ -84,6 +83,7 @@ return {
         treesitter_context = true,
         vimwiki = true,
         which_key = true,
+        bufferline = true,
       },
       highlight_overrides = {
         all = function(colors)
