@@ -174,7 +174,11 @@ return {
     { "<leader>,",       function() Snacks.picker.buffers() end,                   desc = "Buffers" },
     { "<leader>/",       function() Snacks.picker.grep() end,                      desc = "Grep" },
     { "<leader>:",       function() Snacks.picker.command_history() end,           desc = "Command History" },
-    { "<leader>n",       function() Snacks.picker.notifications() end,             desc = "Notification History" },
+    -- "<leader>n" (bare) previously interfered with jupynvim's own default
+    -- "<leader>n*" keymap group (e.g. <leader>nb = "Add cell below"): the
+    -- ambiguous prefix delayed/blocked jupynvim's cell keymaps behind
+    -- 'timeoutlen'. Moved under the same prefix instead of overriding it.
+    { "<leader>nn",      function() Snacks.picker.notifications() end,             desc = "Notification History" },
     { "<leader>e",       function() Snacks.explorer() end,                         desc = "File Explorer" },
 
     -- LSP: Disabled in favor of native LSP from lsp-keymaps.lua for better dbt-language-server support

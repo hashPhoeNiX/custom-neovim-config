@@ -98,6 +98,10 @@
       promise-async
       todo-comments-nvim
       grug-far-nvim
+
+      # REPL sender (VSCode Interactive Window-style): send lines/selections/
+      # "# %%"-delimited blocks to a live ipython/python3 REPL in a split.
+      iron-nvim
     ]
     # Treesitter grammar .so files — each has passthru.isTreesitterGrammar = true
     # so nix-wrapper-modules' COLLATE_TS_GRAMMARS mechanism picks them up and
@@ -152,6 +156,14 @@
       # packaged, so it needs a real cargo/rustc on PATH to build.
       cargo
       rustc
+
+      # iron.nvim (lua/plugins/iron.lua) spawns a plain "ipython"/"python3"
+      # REPL via $PATH, separate from the Jupyter-kernel machinery molten/
+      # jupynvim use. hosts.python3.package is the same withPackages env that
+      # provides the nvim-python3 host binary (has ipykernel -> pulls in
+      # IPython), just also put on PATH generally instead of only exposed as
+      # a sibling "${binName}-python3" wrapper.
+      config.hosts.python3.package
 
       # Language servers and formatters
       stylua
