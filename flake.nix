@@ -42,8 +42,18 @@
 
   outputs = { self, nixpkgs, nix-wrapper-modules, ... }@inputs:
     let
-      system = "aarch64-darwin";  # Apple Silicon
-      pkgs = import nixpkgs {
+      # aarch64-darwin: Apple Silicon (original target).
+      # x86_64-linux / aarch64-linux: general Linux VMs/distros, and
+      # aarch64-linux also covers nix-on-droid (Termux/proot on Android).
+      # Not all packages are meaningful/available on every system —
+      # anything platform-specific (e.g. dbt-language-server, which fetches
+      # a hardcoded darwin-arm64 binary) stays gated behind
+      # pkgs.stdenv.isDarwin in module.nix, unchanged by this.
+      systems = [ "aarch64-darwin" "x86_64-linux" "aarch64-linux" ];
+
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+
+      pkgsFor = system: import nixpkgs {
         inherit system;
         config = {
           allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [
@@ -55,7 +65,8 @@
             dbt-language-server = import ./pkgs/dbt-language-server.nix { pkgs = final; };
           })
           # Workaround: upstream nixpkgs Python packages have flaky/broken tests on macOS
-          # causing a cascade failure through jupyter-server -> jupytext -> neovim
+          # causing a cascade failure through jupyter-server -> jupytext -> neovim.
+          # Harmless to apply on Linux too (just skips tests, doesn't change behavior).
           (final: prev: {
             python312 = prev.python312.override {
               packageOverrides = pyFinal: pyPrev: {
@@ -72,43 +83,50 @@
         ];
       };
 
-      # This is where the magic happens - evaluate the module
-      nvim = nix-wrapper-modules.lib.evalPackage [
-        ./module.nix
+      nvimFor = system:
+        let pkgs = pkgsFor system; in
         {
-          inherit pkgs;
-          _module.args.inputs = inputs;
-          _module.args.enableDataTools = true;
-        }
-      ];
+          # This is where the magic happens - evaluate the module
+          nvim = nix-wrapper-modules.lib.evalPackage [
+            ./module.nix
+            {
+              inherit pkgs;
+              _module.args.inputs = inputs;
+              _module.args.enableDataTools = true;
+            }
+          ];
 
-      # You can create multiple variants easily
-      nvim-light = nix-wrapper-modules.lib.evalPackage [
-        ./module.nix
-        {
-          inherit pkgs;
-          _module.args.inputs = inputs;
-          _module.args.enableDataTools = false;
-        }
-      ];
-
+          # You can create multiple variants easily
+          nvim-light = nix-wrapper-modules.lib.evalPackage [
+            ./module.nix
+            {
+              inherit pkgs;
+              _module.args.inputs = inputs;
+              _module.args.enableDataTools = false;
+            }
+          ];
+        };
     in
     {
       # Export packages for each system
-      packages.${system} = {
-        default = nvim;
-        nvim = nvim;
-        nvim-light = nvim-light;
-      };
+      packages = forAllSystems (system:
+        let inherit (nvimFor system) nvim nvim-light; in
+        {
+          default = nvim;
+          inherit nvim nvim-light;
+        }
+      );
 
       # Development shell
-      devShells.${system}.default = pkgs.mkShell {
-        packages = [ nvim ];
-      };
+      devShells = forAllSystems (system: {
+        default = (pkgsFor system).mkShell {
+          packages = [ (nvimFor system).nvim ];
+        };
+      });
 
       # Can also export as an overlay for use in other flakes
       overlays.default = final: prev: {
-        nvim-custom = nvim;
+        nvim-custom = (nvimFor final.stdenv.hostPlatform.system).nvim;
       };
     };
 }

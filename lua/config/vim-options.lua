@@ -4,6 +4,18 @@ vim.cmd("set softtabstop=2")
 vim.cmd("set shiftwidth=2")
 vim.cmd("set number")
 vim.cmd("set relativenumber")
+-- Termux has no xclip/wl-copy/pbcopy equivalent; it needs Neovim's built-in
+-- g:clipboard provider pointed at termux-clipboard-set/get (from the
+-- separate Termux:API package) instead. Elsewhere, Neovim auto-detects the
+-- right system tool on its own — unnamedplus alone is enough.
+if vim.fn.executable("termux-clipboard-set") == 1 then
+  vim.g.clipboard = {
+    name = "termux-clipboard",
+    copy = { ["+"] = "termux-clipboard-set", ["*"] = "termux-clipboard-set" },
+    paste = { ["+"] = "termux-clipboard-get", ["*"] = "termux-clipboard-get" },
+    cache_enabled = 0,
+  }
+end
 vim.cmd("set clipboard=unnamedplus")
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
