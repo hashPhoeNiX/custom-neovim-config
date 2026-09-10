@@ -65,8 +65,10 @@
             dbt-language-server = import ./pkgs/dbt-language-server.nix { pkgs = final; };
           })
           # Workaround: upstream nixpkgs Python packages have flaky/broken tests on macOS
-          # causing a cascade failure through jupyter-server -> jupytext -> neovim.
-          # Harmless to apply on Linux too (just skips tests, doesn't change behavior).
+          # and nix-on-droid's proot sandbox (no real network interfaces, kernels die
+          # before replying) causing a cascade failure through
+          # jupyter-server/nbconvert -> jupytext -> neovim.
+          # Harmless to apply everywhere (just skips tests, doesn't change behavior).
           (final: prev: {
             python312 = prev.python312.override {
               packageOverrides = pyFinal: pyPrev: {
@@ -74,6 +76,9 @@
                   doCheck = false;
                 });
                 jupyter-server = pyPrev.jupyter-server.overridePythonAttrs (_: {
+                  doCheck = false;
+                });
+                nbconvert = pyPrev.nbconvert.overridePythonAttrs (_: {
                   doCheck = false;
                 });
               };
