@@ -115,6 +115,13 @@ return {
     "benlubas/molten-nvim",
     version = "^1.0.0", -- use version <2.0.0 to avoid breaking changes
     lazy = false,
+    -- Darwin-only: not Nix-provided on Linux (module.nix), and its
+    -- notebook-picker markdown view depends on jupytext, also Darwin-only
+    -- there. `cond = false` tells lazy.nvim to skip it entirely rather than
+    -- fall back to git-cloning it — see module.nix's extraPackages comment
+    -- for the underlying nix-on-droid/proot Yarn Berry build failure this
+    -- avoids.
+    cond = vim.fn.has("mac") == 1,
     dependencies = { "3rd/image.nvim" },
     build = ":UpdateRemotePlugins",
     init = function()
@@ -424,15 +431,13 @@ return {
         complete = "file",
       })
 
-      -- notebook-picker: show a plugin-selection menu on every .ipynb open.
-      -- Replaces the old auto-init autocmds (BufAdd/BufEnter below).
-      -- Molten init logic moved to lua/config/notebook-picker.lua.
-      vim.api.nvim_create_autocmd("BufReadPost", {
-        pattern = { "*.ipynb" },
-        callback = function(e)
-          require("config.notebook-picker").pick(e)
-        end,
-      })
+      -- notebook-picker's BufReadPost trigger used to live here, but it
+      -- offers Jupynvim/Molten/Plain — not Molten-specific — so it can't sit
+      -- inside this plugin's init() now that Molten is Darwin-only (cond
+      -- above skips init() entirely on other platforms, which would have
+      -- silently killed the picker for every notebook, not just the Molten
+      -- option). Moved to vim-options.lua, which always loads regardless of
+      -- platform or plugin state.
 
       -- auto-init autocmds replaced by notebook-picker above.
       -- Kept here for reference in case the picker is removed.

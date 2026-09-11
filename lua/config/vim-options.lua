@@ -17,6 +17,19 @@ if vim.fn.executable("termux-clipboard-set") == 1 then
   }
 end
 vim.cmd("set clipboard=unnamedplus")
+
+-- notebook-picker: show a plugin-selection menu (Jupynvim/Molten/Plain) on
+-- every .ipynb open. Lives here rather than inside a specific plugin's
+-- init() so it always fires regardless of platform or which of those
+-- plugins is actually available (e.g. Molten is Darwin-only — see
+-- lua/plugins/data-tools/molten.lua and module.nix).
+vim.api.nvim_create_autocmd("BufReadPost", {
+  pattern = { "*.ipynb" },
+  callback = function(e)
+    require("config.notebook-picker").pick(e)
+  end,
+})
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 vim.opt.termguicolors = true

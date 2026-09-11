@@ -125,11 +125,19 @@ local function open_with_jupynvim(e)
 end
 
 -- ── Picker ───────────────────────────────────────────────────────────────────
+-- Molten is Darwin-only (see molten.lua/module.nix), so don't offer it where
+-- it was never loaded — picking it would just error with no Molten commands
+-- available. Built with explicit table.insert rather than a nil-in-the-
+-- middle literal: a `{ a, nil, b }` table constructor leaves a hole that
+-- ipairs() (which vim.tbl_map uses) stops at, silently dropping everything
+-- after it — not just the disabled entry.
 local choices = {
   { label = "Jupynvim  (native notebook editor)", handler = open_with_jupynvim },
-  { label = "Molten  (interactive cell execution)", handler = open_with_molten },
-  { label = "Plain  (raw JSON, no plugin)", handler = function() end },
 }
+if vim.fn.has("mac") == 1 then
+  table.insert(choices, { label = "Molten  (interactive cell execution)", handler = open_with_molten })
+end
+table.insert(choices, { label = "Plain  (raw JSON, no plugin)", handler = function() end })
 
 function M.pick(e)
   -- <leader>np re-invokes the picker on demand ("notebook picker" — jupynvim's
@@ -138,7 +146,7 @@ function M.pick(e)
   -- disk first: a prior choice may have left the buffer in a state other
   -- handlers don't expect (e.g. Molten's converted markdown view), and each
   -- handler assumes it's starting from the notebook's actual raw content.
-  -- Don't call M.pick(e) again here: molten.lua's BufReadPost autocmd on
+  -- Don't call M.pick(e) again here: vim-options.lua's BufReadPost autocmd on
   -- *.ipynb already fires from this forced reload and calls pick() itself.
   -- Doing both raced two picker UIs against each other, and the second one
   -- opening would immediately close the first before it could be used.

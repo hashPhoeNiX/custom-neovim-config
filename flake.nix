@@ -81,6 +81,34 @@
                 nbconvert = pyPrev.nbconvert.overridePythonAttrs (_: {
                   doCheck = false;
                 });
+                # NOTE: deliberately NOT overriding jupytext here. `notebook`
+                # (jupytext's nativeCheckInputs, test-time only) is what
+                # crashes under nix-on-droid/proot — proot blocks /proc/stat,
+                # so Node's os.cpus() returns [], and notebook's yarn-berry
+                # frontend build feeds that into a concurrency pool and
+                # crashes ("fastqueue concurrency must be greater than 1",
+                # unpatched upstream: yarnpkg/berry#5635). But jupytext is
+                # now Darwin-only (module.nix) precisely because Molten — its
+                # only consumer — is Darwin-only, and Darwin never hits this
+                # bug at all. overridePythonAttrs'ing jupytext just to flip
+                # doCheck invalidates its binary-cache substitute (the cache
+                # only has the stock build), forcing an expensive full local
+                # rebuild of jupytext + its own build-time JupyterLab
+                # extension deps (jupyterlab, jupyterlab-server, fastapi,
+                # openapi-core) — and risks hitting jupytext's *own* internal
+                # yarn-berry step, the same bug class, on a platform that
+                # never needed the workaround. Leave it at nixpkgs defaults.
+                #
+                # (Also worth noting: jupyter-server and nbconvert above are
+                # only ever reached transitively through jupytext's own
+                # build inputs — nothing else in this config touches them
+                # (jupyter-client, which Molten/Jupynvim both need for real
+                # kernel connections, is a separate, independent package).
+                # So now that jupytext is Darwin-only, this whole doCheck
+                # chain is effectively Darwin-only too: nothing on Linux
+                # references jupytext, so nothing pulls these in there
+                # either. Keeping the overrides is harmless either way —
+                # they just won't matter outside Darwin anymore.)
               };
             };
             python312Packages = final.python312.pkgs;

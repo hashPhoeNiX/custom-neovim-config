@@ -127,7 +127,6 @@
   # No overlay needed; inputs are passed directly from flake.nix.
   specs.gitPlugins = [
     (config.nvim-lib.mkPlugin "obsidian-nvim"          inputs.plugins-obsidian-nvim)
-    (config.nvim-lib.mkPlugin "molten-nvim"            inputs.plugins-molten-nvim)
     (config.nvim-lib.mkPlugin "youversion-linker-nvim" inputs.plugins-youversion-linker-nvim)
     (config.nvim-lib.mkPlugin "dbtpal"                 inputs.plugins-dbtpal)
     (config.nvim-lib.mkPlugin "cmp-dbt"                inputs.plugins-cmp-dbt)
@@ -173,7 +172,6 @@
       basedpyright
       nixfmt
       imagemagick
-      python312Packages.jupytext
       lua-language-server
       lua51Packages.lua
       lua51Packages.luarocks
@@ -194,6 +192,15 @@
     ]
     ++ lib.optionals pkgs.stdenv.isDarwin [
       dbt-language-server
+      # jupytext CLI: only consumer is Molten's notebook-picker markdown
+      # rendering (lua/config/notebook-picker.lua), and Molten itself is
+      # Darwin-only below (its "notebook" test dependency's Yarn Berry
+      # frontend build crashes under nix-on-droid/proot: proot blocks
+      # /proc/stat, so Node's os.cpus() returns [], and yarn-berry feeds
+      # that into a concurrency pool that requires > 1 — unpatched upstream,
+      # see yarnpkg/berry#5635). No consumer on Linux, so just skip it there
+      # rather than fight that bug class.
+      python312Packages.jupytext
     ];
 
   # ============================================================================
@@ -206,15 +213,20 @@
   hosts.python3.withPackages = ps: with ps; [
     pynvim
     jupyter-client
-    cairosvg    # image rendering
-    pnglatex    # image rendering
-    # plotly    # image rendering
-    # kaleido   # image rendering
     pyperclip
     nbformat
-    jupytext
     ipykernel
     pillow
+  ]
+  # cairosvg/pnglatex (Molten's LaTeX/SVG output rendering) and jupytext
+  # (Molten's notebook-picker markdown view) are only used by Molten, which
+  # is Darwin-only (see extraPackages above for why).
+  ++ lib.optionals pkgs.stdenv.isDarwin [
+    ps.cairosvg
+    ps.pnglatex
+    # ps.plotly    # image rendering
+    # ps.kaleido   # image rendering
+    ps.jupytext
   ];
 
   # ============================================================================
