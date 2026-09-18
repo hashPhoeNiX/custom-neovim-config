@@ -103,7 +103,32 @@ return {
         gh_pr = {
           -- your gh_pr picker configuration comes here
           -- or leave it empty to use the default settings
-        }
+        },
+        -- current=false excludes the buffer you're already in (you don't
+        -- need to switch to it anyway). transform excludes every OTHER
+        -- buffer with a non-empty buftype (terminals, jupynvim/Molten
+        -- notebook views, etc — see lua/plugins/data-tools/jupynvim.lua and
+        -- lua/config/notebook-picker.lua's render_as_markdown, both acwrite)
+        -- — current=false alone only covers the ACTIVE buffer; a second,
+        -- unfocused notebook left open reproduced the same bug this is
+        -- fixing for. The picker previews the selected item by loading its
+        -- buffer into a SECOND window via nvim_win_set_buf on the same
+        -- bufnr, firing BufWinEnter for that buffer in a window it doesn't
+        -- own. Buffers with buftype="" (plain files) tolerate that fine;
+        -- jupynvim's notebook UI (single dedicated window per notebook:
+        -- border extmarks, cursor hide/show, statuscolumn) does not, and
+        -- aborted the picker before a selection could be made whenever such
+        -- a buffer was the top/previewed entry. Excluding all of them
+        -- sidesteps the same class of bug for anything else with a special
+        -- buftype too (e.g. a terminal), not just notebooks.
+        buffers = {
+          current = false,
+          transform = function(item)
+            if item.buftype ~= "" then
+              return false
+            end
+          end,
+        },
         --   files = {
         --     hidden = true,
         --     ignored = true,

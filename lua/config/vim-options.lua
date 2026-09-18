@@ -23,16 +23,49 @@ vim.cmd("set clipboard=unnamedplus")
 -- init() so it always fires regardless of platform or which of those
 -- plugins is actually available (e.g. Molten is Darwin-only — see
 -- lua/plugins/data-tools/molten.lua and module.nix).
-vim.api.nvim_create_autocmd("BufReadPost", {
+-- BufReadPost is NOT guaranteed to fire here: once Jupynvim has loaded once
+-- in a session, its OWN global BufReadCmd hijacks every later .ipynb read
+-- directly, and Neovim then skips the normal post-read autocmds entirely
+-- (confirmed empirically — only BufReadCmd/BufEnter/BufWinEnter/BufReadPre
+-- fired for a notebook opened after the first). That silently skipped BOTH
+-- this picker menu (every notebook after the first went straight to
+-- whichever plugin was picked first, with no menu at all) and a tag this
+-- needs to set (below). BufWinEnter fires reliably regardless, so it's
+-- used as the entry point, with a per-buffer guard so it only fires once
+-- (BufWinEnter re-fires on every window switch back to an already-picked
+-- notebook).
+local function notebook_first_show(e)
+  if vim.b[e.buf].__notebook_handled then
+    return
+  end
+  vim.b[e.buf].__notebook_handled = true
+  -- Snacks pickers/explorer (lua/plugins/snacks.lua) resolve their "main"
+  -- (jump-target) window via a search that excludes any window whose
+  -- buffer has buftype ~= "" — Jupynvim and Molten's markdown view both
+  -- set buftype="acwrite" on notebook buffers, so without this tag a
+  -- notebook window is never a valid jump target: a confirmed picker
+  -- selection, or an explorer file-open, silently lands in some OTHER
+  -- window instead, leaving the notebook untouched — looking like it
+  -- "opens in a split".
+  vim.b[e.buf].snacks_main = true
+  require("config.notebook-picker").pick(e)
+end
+
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufWinEnter" }, {
   pattern = { "*.ipynb" },
-  callback = function(e)
-    require("config.notebook-picker").pick(e)
-  end,
+  callback = notebook_first_show,
 })
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 vim.opt.termguicolors = true
+
+-- Caps the native completion popup AND dropbar.nvim's breadcrumb-pick menu
+-- (lua/plugins/dropbar.lua): dropbar falls back to ceil(vim.go.lines / 4)
+-- when pumheight is 0 (the default), and anchors that menu at row 0 of the
+-- window it's opened in — in a short split that overflowed the window
+-- entirely, covering the whole buffer instead of a small dropdown.
+vim.opt.pumheight = 10
 
 -- load the session for the current directory
 vim.keymap.set("n", "<leader>qS", function() require("persistence").load() end)

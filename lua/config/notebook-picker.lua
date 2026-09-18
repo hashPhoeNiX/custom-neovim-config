@@ -121,6 +121,8 @@ local function open_with_jupynvim(e)
     return
   end
   -- Re-edit the file; jupynvim's BufReadCmd is now registered and will take over.
+  -- (Snacks' picker/explorer "main window" tagging for this buffer is done
+  -- in vim-options.lua's BufReadPost handler, not here — see its comment.)
   vim.cmd("edit " .. vim.fn.fnameescape(e.file))
 end
 
@@ -146,11 +148,16 @@ function M.pick(e)
   -- disk first: a prior choice may have left the buffer in a state other
   -- handlers don't expect (e.g. Molten's converted markdown view), and each
   -- handler assumes it's starting from the notebook's actual raw content.
-  -- Don't call M.pick(e) again here: vim-options.lua's BufReadPost autocmd on
-  -- *.ipynb already fires from this forced reload and calls pick() itself.
-  -- Doing both raced two picker UIs against each other, and the second one
-  -- opening would immediately close the first before it could be used.
+  -- Don't call M.pick(e) again here: vim-options.lua's BufReadPost/BufWinEnter
+  -- autocmd on *.ipynb already fires from this forced reload and calls pick()
+  -- itself. Doing both raced two picker UIs against each other, and the
+  -- second one opening would immediately close the first before it could be
+  -- used. That autocmd only fires ONCE per buffer though (guarded, since
+  -- BufWinEnter alone would otherwise re-prompt on every window switch back
+  -- into an already-picked notebook) — clear its guard so the forced reload
+  -- below actually re-triggers it instead of silently doing nothing.
   vim.keymap.set("n", "<leader>np", function()
+    vim.b[e.buf].__notebook_handled = nil
     vim.cmd("edit! " .. vim.fn.fnameescape(e.file))
   end, { buffer = e.buf, desc = "Switch notebook plugin (Jupynvim/Molten/Plain)" })
 
