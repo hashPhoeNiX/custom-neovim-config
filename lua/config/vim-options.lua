@@ -48,7 +48,26 @@ local function notebook_first_show(e)
   -- window instead, leaving the notebook untouched — looking like it
   -- "opens in a split".
   vim.b[e.buf].snacks_main = true
-  require("config.notebook-picker").pick(e)
+  -- Deferred: called synchronously here, the picker's floating menu (backed
+  -- by Snacks' vim.ui.select) gets created WHILE :edit is still mid-flight
+  -- finalizing this window's focus/cursor state — whatever :edit (and, for
+  -- a 2nd+ notebook, Jupynvim's own synchronous BufReadCmd render) does
+  -- right after this autocmd returns then steals focus back to the
+  -- notebook window, leaving the menu visible but unable to receive
+  -- keyboard input until clicked with the mouse. Plain vim.schedule was NOT
+  -- enough here — confirmed empirically the menu still loses focus when
+  -- scheduled from inside this autocmd, since it still runs within the
+  -- same event-loop tick as whatever steals focus afterward; calling
+  -- M.pick directly outside any autocmd context (no scheduling at all)
+  -- worked correctly every time, isolating this as a same-tick ordering
+  -- issue rather than a bug in the picker itself. vim.defer_fn with a
+  -- short real delay forces it onto a genuinely later tick, past that
+  -- same-tick processing — the same fix jupynvim's own keymaps.lua uses
+  -- (vim.defer_fn(..., 300)) for an analogous "wait for things to settle"
+  -- timing issue.
+  vim.defer_fn(function()
+    require("config.notebook-picker").pick(e)
+  end, 50)
 end
 
 vim.api.nvim_create_autocmd({ "BufReadPost", "BufWinEnter" }, {

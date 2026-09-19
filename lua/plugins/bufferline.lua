@@ -2,6 +2,26 @@ return {
   'akinsho/bufferline.nvim',
   version = "*",
   dependencies = 'nvim-tree/nvim-web-devicons',
+  -- No event/keys/ft/cmd field here on purpose: lazy.nvim derives a plugin's
+  -- laziness from whether any of those are present (lua/lazy/core/plugin.lua
+  -- update_state), so bufferline loads eagerly at startup like before,
+  -- keeping the always-on tabline working immediately. A `keys` field here
+  -- (tried first) makes lazy.nvim defer the WHOLE plugin — including its
+  -- opts/config() that builds the tabline itself — until that key is first
+  -- pressed, which is the wrong lifecycle for a persistent UI element.
+  -- <leader>bp is bound below in config() instead, alongside the setup()
+  -- call that already runs eagerly.
+  config = function(_, opts)
+    require("bufferline").setup(opts)
+    -- Snacks' buffers picker (lua/plugins/snacks.lua) deliberately excludes
+    -- any buffer with a non-empty buftype, which includes every Jupynvim/
+    -- Molten notebook view (buftype="acwrite") — so open notebooks never
+    -- show up there. bufferline's own pick just does a direct buffer
+    -- switch (no second-window preview involved), so it isn't affected by
+    -- that exclusion and works for every open buffer, notebooks included.
+    vim.keymap.set("n", "<leader>bp", function() require("bufferline").pick() end,
+      { desc = "Pick buffer (bufferline)" })
+  end,
   opts = {
     options = {
       mode = 'buffers',
