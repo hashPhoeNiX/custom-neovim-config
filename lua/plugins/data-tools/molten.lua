@@ -154,6 +154,25 @@ return {
       -- Run Current cell (only for notebooks and Python files)
       local function setup_cell_execution_keymaps()
         vim.keymap.set("n", "<CR>", function()
+          -- Guard against calling into Molten before it's actually
+          -- initialized in this buffer: MoltenInit (run by the notebook
+          -- picker's Molten choice, lua/config/notebook-picker.lua) is
+          -- deferred via vim.schedule, so there's a brief window right
+          -- after picking Molten where pressing <CR> races it. The first
+          -- attempt below (MoltenReevaluateCell) is pcall-guarded and fails
+          -- silently either way, but its "no existing cell" fallback path
+          -- calls MoltenEvaluateVisual/MoltenEvaluateLine/MoltenNext
+          -- unguarded — those throw a raw E5108 Lua error ("Molten is not
+          -- initialized in this buffer") instead of a friendly message.
+          if require("molten.status").initialized() ~= "Molten" then
+            vim.notify(
+              "Molten: not initialized yet in this buffer (still starting up, "
+                .. "or this isn't a Molten-managed buffer). Run :MoltenInit or "
+                .. "wait a moment and try again.",
+              vim.log.levels.WARN
+            )
+            return
+          end
           -- First, try to re-evaluate the existing cell you are in.
           local status, _ = pcall(vim.cmd, "MoltenReevaluateCell")
           if status then
