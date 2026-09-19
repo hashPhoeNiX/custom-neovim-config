@@ -52,17 +52,28 @@ return {
     end,
   },
 
-  -- Custom dbt power functions (local development plugin)
+  -- Custom dbt power functions. Nix-provided now (module.nix's mkPlugin
+  -- "dbt-power-nvim", sourced from flake.nix's plugins-dbt-power-nvim input,
+  -- pinned to the feat/config-validation-and-improvements branch) instead of
+  -- the local ~/Projects/dbt-power.nvim checkout below.
   {
-    dir = "~/Projects/dbt-power.nvim",
-    name = "dbt-power",
-    -- "hashPhoeNiX/dbt-power.nvim",
+    -- dir = "~/Projects/dbt-power.nvim",
+    -- name = "dbt-power",
+    "hashPhoeNiX/dbt-power.nvim",
+    branch = "feat/config-validation-and-improvements",
+    -- name must be "dbt-power-nvim" (not the "dbt-power.nvim" lazy.nvim
+    -- would derive from the source string above) — nixCatsUtils.lazyCat's
+    -- dev.path resolver looks up the Nix packdir by plugin.name, and the
+    -- built package there is literally named "dbt-power-nvim" (confirmed
+    -- via nvim-packdir/pack/myNeovimPackages/start/), matching mkPlugin's
+    -- registered name exactly.
+    name = "dbt-power-nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope.nvim",
       "PedramNavid/dbtpal",
     },
-    dev = true,
+    -- dev = true, -- was needed to force the local dir= path above; no longer relevant now that it's Nix-provided
     ft = { "sql", "yaml", "md" },
     config = function()
       local ok, dbt_power = pcall(require, "dbt-power")
