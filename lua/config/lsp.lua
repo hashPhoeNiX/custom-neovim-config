@@ -9,6 +9,7 @@ local lsp_servers = {
   "lua_ls",
   "nixd",
   "dbt",
+  "basedpyright",
   -- DevOps LSPs
   "docker",
   "docker-compose",
